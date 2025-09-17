@@ -1,4 +1,4 @@
-public class Mina {
+public class Mine {
   // Resources
   private int stone;
   private int iron;
@@ -6,7 +6,7 @@ public class Mina {
 
   private int workers = 0;
 
-  public Mina() {
+  public Mine() {
     stone = (int) Math.random() * 300;
     iron = (int) Math.random() * 250;
     gold = (int) Math.random() * 100;
