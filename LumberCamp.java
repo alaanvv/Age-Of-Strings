@@ -1,0 +1,30 @@
+public class LumberCamp {
+  private int workers = 0;
+
+  // ---
+
+  // Retorna quantos trabalhadores sobraram (nunca sobra pois não tem limite)
+  public int send_workers(int amount) {
+    workers += amount;
+    return 0;
+  }
+
+  // Retorna quantos trabalhadores foram retirados
+  public int take_workers(int amount) {
+    int _workers = workers;
+    workers = Math.max(0, workers - amount);
+    return _workers - workers;
+  }
+
+  // Extrai madeira equivalente a um turno
+  public int extract_wood() {
+    double efficiency = Math.log(workers + 1); 
+    return (int) (Math.random() * efficiency * 10);
+  }
+
+  // ---
+
+  public String toString() {
+    return String.format("Campo de Lenhadores\nTrabalhadores: %d\n", workers);
+  }
+}
