@@ -28,6 +28,15 @@ public class Empire {
 
   // ---
 
+  public boolean build_house() {
+    if (wood < 5 || gold < 5) return false;
+    wood -= 5;
+    gold -= 5;
+
+    population += 3;
+    return true;
+  }
+
   public boolean build_farm() {
     if (wood < 5 || gold < 2) return false;
     wood -= 5;

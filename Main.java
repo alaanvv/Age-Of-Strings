@@ -15,13 +15,15 @@ public class Main {
 
       switch (parts[0]) {
         case "price":
-          if      (parts[1].equals("farm")) System.out.println("Madeira: 5 \nOuro: 3");
-          else if (parts[1].equals("mine")) System.out.println("Madeira: 15\nOuro: 5");
+          if      (parts[1].equals("farm"))  System.out.println("Madeira: 5 \nOuro: 3");
+          else if (parts[1].equals("mine"))  System.out.println("Madeira: 15\nOuro: 5");
+          else if (parts[1].equals("house")) System.out.println("Madeira: 5 \nOuro: 5");
           break;
 
         case "build":
-          if      (parts[1].equals("farm")) System.out.println(empire.build_farm() ? "Fazenda construída" : "Recursos insuficientes.\nUse `price farm`");
-          else if (parts[1].equals("mine")) System.out.println(empire.build_mine() ? "Mina construída"    : "Recursos insuficientes.\nUse `price mine`");
+          if      (parts[1].equals("farm"))  System.out.println(empire.build_farm() ?  "Fazenda construída" : "Recursos insuficientes.\nUse `price farm`");
+          else if (parts[1].equals("mine"))  System.out.println(empire.build_mine() ?  "Mina construída"    : "Recursos insuficientes.\nUse `price mine`");
+          else if (parts[1].equals("house")) System.out.println(empire.build_house() ? "Casa construída"    : "Recursos insuficientes.\nUse `price mine`");
           break;
 
         case "send":
@@ -90,8 +92,8 @@ public class Main {
 
   private static void print_help() {
     System.out.println("Bem vindo ao Age Of Strings!");
-    System.out.println("price [farm|mine]                   # Ver o custo de construção");
-    System.out.println("build [farm|mine]                   # Faz a construção");
+    System.out.println("price [farm|mine|house]             # Ver o custo de construção");
+    System.out.println("build [farm|mine|house]             # Faz a construção");
     System.out.println("send [lumber|farm|mine] <qtd> <id>  # Enviar trabalhadores");
     System.out.println("take [lumber|farm|mine] <qtd> <id>  # Tirar trabalhadores");
     System.out.println("view [lumber|farms|mines|empire]    # Ver informações");
