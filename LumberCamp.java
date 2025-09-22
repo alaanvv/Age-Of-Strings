@@ -3,10 +3,9 @@ public class LumberCamp {
 
   // ---
 
-  // Retorna quantos trabalhadores sobraram (nunca sobra pois não tem limite)
   public int send_workers(int amount) {
     workers += amount;
-    return 0;
+    return amount;
   }
 
   // Retorna quantos trabalhadores foram retirados
@@ -25,6 +24,6 @@ public class LumberCamp {
   // ---
 
   public String toString() {
-    return String.format("Campo de Lenhadores\nTrabalhadores: %d\n", workers);
+    return String.format("Campo de Lenhadores\nTrabalhadores: %d", workers);
   }
 }

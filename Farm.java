@@ -8,11 +8,11 @@ public class Farm {
 
   // ---
 
-  // Retorna quantos trabalhadores sobraram
+  // Retorna quantos trabalhadores entraram
   public int send_workers(int amount) {
     int _workers = workers;
     workers = Math.min(10, workers + amount);
-    return _workers - workers + amount;
+    return workers - _workers;
   }
 
   // Retorna quantos trabalhadores foram retirados
@@ -31,6 +31,6 @@ public class Farm {
   // ---
 
   public String toString() {
-    return String.format("Fazenda #%d\nTrabalhadores: %d\n", id, workers);
+    return String.format("Fazenda #%d\nTrabalhadores: %d/10", id, workers);
   }
 }

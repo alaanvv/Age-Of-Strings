@@ -6,17 +6,17 @@ public class Mine {
 
   public Mine(int id) {
     this.id = id;
-    iron = (int) Math.random() * 250;
-    gold = (int) Math.random() * 100;
+    iron = (int) (Math.random() * 250);
+    gold = (int) (Math.random() * 100);
   }
 
   // ---
 
-  // Retorna quantos trabalhadores sobraram
+  // Retorna quantos trabalhadores entraram
   public int send_workers(int amount) {
     int _workers = workers;
     workers = Math.min(20, workers + amount);
-    return _workers - workers + amount;
+    return workers - _workers;
   }
 
   // Retorna quantos trabalhadores foram retirados
@@ -45,6 +45,6 @@ public class Mine {
   // ---
 
   public String toString() {
-    return String.format("Mina #%d\nTrabalhadores: %d\nFerro: %d\nOuro: %d\n", id, workers, iron, gold);
+    return String.format("Mina #%d\nTrabalhadores: %d/20\nFerro: %d\nOuro: %d", id, workers, iron, gold);
   }
 }
