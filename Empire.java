@@ -10,9 +10,6 @@ public class Empire {
   private LumberCamp lumber_camp = new LumberCamp();
   private ArrayList<Farm> farms  = new ArrayList<>();
   private ArrayList<Mine> mines  = new ArrayList<>();
-
-  private int farm_count = 0;
-  private int mine_count = 0;
   
   // ---
 
@@ -21,7 +18,7 @@ public class Empire {
     wood -= 5;
     gold -= 2;
 
-    farms.add(new Farm(farm_count++));
+    farms.add(new Farm(farms.size()));
     return 1;
   }
   
@@ -30,7 +27,7 @@ public class Empire {
     wood -= 15;
     gold -= 5;
 
-    mines.add(new Mine(mine_count++));
+    mines.add(new Mine(mines.size()));
     return 1;
   }
 }
