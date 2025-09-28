@@ -1,3 +1,4 @@
+package modelo;
 public class Mine {
   private int id;
   private int iron;

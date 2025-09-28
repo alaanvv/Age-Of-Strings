@@ -1,3 +1,4 @@
+package modelo;
 public class LumberCamp {
   private int workers = 0;
 

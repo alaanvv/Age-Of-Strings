@@ -1,9 +1,10 @@
-public class Farm {
-  private int id;
+package modelo;
+
+public class Farm extends Entidade{
   private int workers = 0;
 
   public Farm(int id) {
-    this.id = id;
+    this.set_id(id);
   }
 
   // ---
@@ -29,8 +30,8 @@ public class Farm {
   }
 
   // ---
-
+  @Override
   public String toString() {
-    return String.format("Fazenda #%d\nTrabalhadores: %d/10", id, workers);
+    return String.format("Fazenda #%d\nTrabalhadores: %d/10", this.get_id(), workers);
   }
 }

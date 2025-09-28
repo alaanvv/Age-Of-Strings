@@ -1,6 +1,7 @@
+package modelo;
 import java.util.ArrayList;
 
-public class Empire {
+public class Empire extends Entidade{
   private int food = 10;
   private int wood = 50;
   private int iron = 0;
@@ -121,7 +122,11 @@ public class Empire {
     mines.forEach(System.out::println);
   }
 
+  @Override
   public String toString() {
-    return String.format("Império\nPopulação: %d\nTrabalhadores: %d\nComida: %d\nMadeira: %d\nFerro: %d\nOuro: %d", population, workers, food, wood, iron, gold);
+    return 
+      super.toString() + " " + 
+      String.format("Império\nPopulação: %d\nTrabalhadores: %d\nComida: %d\nMadeira: %d\nFerro: %d\nOuro: %d",
+      population, workers, food, wood, iron, gold);
   }
 }
