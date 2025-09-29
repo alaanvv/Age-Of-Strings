@@ -1,12 +1,12 @@
 package modelo;
-public class Mine {
-  private int id;
+public class Mine extends Entidade{
   private int iron;
   private int gold;
   private int workers = 0;
-
-  public Mine(int id) {
-    this.id = id;
+  private int idx;
+  public Mine(int idx) {
+    super();
+    this.idx = idx;
     iron = (int) (Math.random() * 250);
     gold = (int) (Math.random() * 100);
   }
@@ -46,6 +46,6 @@ public class Mine {
   // ---
 
   public String toString() {
-    return String.format("Mina #%d\nTrabalhadores: %d/20\nFerro: %d\nOuro: %d", id, workers, iron, gold);
+    return "{" + super.toString() + " | " + String.format("Mina #%d| Trabalhadores: %d/20 | Ferro: %d | Ouro: %d}", idx, workers, iron, gold);
   }
 }

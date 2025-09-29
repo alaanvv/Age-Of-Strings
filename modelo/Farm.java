@@ -2,12 +2,15 @@ package modelo;
 
 public class Farm extends Entidade{
   private int workers = 0;
+  private int idx;
 
-  public Farm(int id) {
-    this.set_id(id);
-  }
-
+  
   // ---
+  
+  public Farm(int idx) {
+    super();
+    this.idx = idx;
+  }
 
   // Retorna quantos trabalhadores entraram
   public int send_workers(int amount) {
@@ -32,6 +35,6 @@ public class Farm extends Entidade{
   // ---
   @Override
   public String toString() {
-    return String.format("Fazenda #%d\nTrabalhadores: %d/10", this.get_id(), workers);
+    return "{" + super.toString() + " | " + String.format("Fazenda #%d | Trabalhadores: %d/10}", idx, workers);
   }
 }

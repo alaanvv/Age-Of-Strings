@@ -1,8 +1,12 @@
 package modelo;
-public class LumberCamp {
+public class LumberCamp extends Entidade{
   private int workers = 0;
 
   // ---
+
+  public LumberCamp(){
+    super();
+  }
 
   public int send_workers(int amount) {
     workers += amount;
@@ -25,6 +29,6 @@ public class LumberCamp {
   // ---
 
   public String toString() {
-    return String.format("Campo de Lenhadores\nTrabalhadores: %d", workers);
+    return "{" + super.toString() + " | " + String.format("Campo de Lenhadores | Trabalhadores: %d}", workers);
   }
 }

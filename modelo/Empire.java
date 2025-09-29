@@ -15,6 +15,10 @@ public class Empire extends Entidade{
   
   // ---
   
+  public Empire(){
+    super();
+  }
+
   public int get_population() {
     return population;
   }
@@ -125,8 +129,8 @@ public class Empire extends Entidade{
   @Override
   public String toString() {
     return 
-      super.toString() + " " + 
-      String.format("Império\nPopulação: %d\nTrabalhadores: %d\nComida: %d\nMadeira: %d\nFerro: %d\nOuro: %d",
+      "{" + super.toString() + " | " + 
+      String.format("Império | População: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
       population, workers, food, wood, iron, gold);
   }
 }

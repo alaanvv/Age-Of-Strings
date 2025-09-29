@@ -1,8 +1,5 @@
 package persistency;
 
-import java.util.HashSet;
-import java.util.Set;
-
 public class Persistente {
    
    private static int count = 0;
