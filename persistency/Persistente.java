@@ -1,4 +1,4 @@
-package persistencia;
+package persistency;
 
 import java.util.HashSet;
 import java.util.Set;
