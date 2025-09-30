@@ -12,6 +12,7 @@ public class Empire extends Entidade{
   private LumberCamp lumber_camp = new LumberCamp();
   private ArrayList<Farm> farms  = new ArrayList<>();
   private ArrayList<Mine> mines  = new ArrayList<>();
+  private ArrayList<Army> armies = new ArrayList<>();
   
   // ---
   
@@ -21,6 +22,18 @@ public class Empire extends Entidade{
 
   public int get_population() {
     return population;
+  }
+
+  void set_population(int amt){
+    population = amt;
+  }
+
+  void get_workers(){
+    return workers;
+  }
+
+  void set_workers(int amt){
+    workers = amt;
   }
 
   public int get_farm_count() {
@@ -109,6 +122,14 @@ public class Empire extends Entidade{
     population += taken;
     return taken;
   }
+
+  // ---
+
+    public void create_army(){
+      
+    }
+  
+
 
   // ---
 
