@@ -2,15 +2,19 @@ package modelo;
 
 public class Army extends Entidade{
    
-   int armory_level = 0;
-   int food_level = 0;
-   int hiring_level = 1;
-   int hiring_cost = 0;
-   
-   int soldiers_amt = 0;
+   int empire_id = -1;
+   int idx = -1;
 
-   public Army(){
+   int armory_level = 1;
+   int food_level = 10;
+   int hiring_level = 1;
+   int hiring_cost = 1;
+   int soldiers_amt = 1;
+
+   public Army(int empire_id, int idx){
       super();
+      this.empire_id = empire_id;
+      this.idx = idx;
    }
    
    /** @return Amount of food spent */
@@ -78,7 +82,7 @@ public class Army extends Entidade{
       //Manages army food supply
       food_level = Math.max(food_level - soldiers_amt, 0);
       if(food_level < 0){
-         soldiers_amt += (food_level/2);
+         soldiers_amt += food_level;
          soldiers_amt = Math.max(soldiers_amt, 0);
       }
       if(empire.food < soldiers){

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class War extends Entidade{
    ArrayList<Battle> current_battles = new ArrayList<Battle>();
    
-
+   
 }
 
 class Battle{
