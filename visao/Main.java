@@ -1,3 +1,4 @@
+package visao;
 import java.util.Scanner;
 
 import modelo.Empire;
