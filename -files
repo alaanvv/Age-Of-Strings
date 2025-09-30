@@ -1,0 +1,89 @@
+[33mcommit d687ef511929e8f774c4d57330496f4841df495e[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Andrew Almeida Farias <andrew.almeida.farias@gmail.com>
+Date:   Tue Sep 30 09:44:37 2025 -0300
+
+    Desenvolvimento da classe army.
+
+[33mcommit af6b54fd07d3737facf814dfec466883a879be00[m
+Author: Andrew Almeida Farias <andrew.almeida.farias@gmail.com>
+Date:   Mon Sep 29 18:08:11 2025 -0300
+
+    Esqueci dessa função de criar pair aqui
+
+[33mcommit ce9ded809b95580b79e900ae14b9cd06946a3d3d[m
+Author: Andrew Almeida Farias <andrew.almeida.farias@gmail.com>
+Date:   Mon Sep 29 18:07:39 2025 -0300
+
+    Mais avanços na classe army.
+
+[33mcommit a17a0396d3b7126196a1978b132083819cdbd80d[m
+Author: Andrew Almeida Farias <andrew.almeida.farias@gmail.com>
+Date:   Mon Sep 29 17:09:27 2025 -0300
+
+    Esqueci de pôr a função que calcula um log arbitrário
+
+[33mcommit 7e82f789b3f824eb4de333653e66a7b083b0c898[m
+Author: Andrew Almeida Farias <andrew.almeida.farias@gmail.com>
+Date:   Mon Sep 29 15:04:27 2025 -0300
+
+    Comecei a implementar a classe de transação War, que terá como composição a classe Battle. Mudei os toStrings para concatenatem com o toString da Entidade. Diferenciei id global e id local para minas e fazendas. Boa parte da classe army já está feita. Deixo para a equipe lidar com a classe persistente o interface.
+
+[33mcommit dfdddbc089ccec154985176576e91272e29958b6[m
+Author: Andrew Almeida Farias <andrew.almeida.farias@gmail.com>
+Date:   Sun Sep 28 21:29:06 2025 -0300
+
+    Adaptei ao template do professor. Iniciei a classe army e persistencia.
+
+[33mcommit 9a7b91495a5d268bc6ec29b9c58a8b5b36489b67[m[33m ([m[1;32madequacoes[m[33m)[m
+Author: Andrew Almeida Farias <andrew.almeida.farias@gmail.com>
+Date:   Sun Sep 28 18:11:45 2025 -0300
+
+    Comecei a adaptar ao template do professor. Comecei a criar a classe de transação 'Battle'. Esbocei um pouco o persistente.
+
+[33mcommit 0dfa26e549682d772620bbc33798195a6e0825d8[m[33m ([m[1;32madequacoes-ao-template[m[33m)[m
+Author: alaanvv <valealan84@gmail.com>
+Date:   Mon Sep 22 19:09:56 2025 -0300
+
+    feat: houses to increase population
+
+[33mcommit 0faeac0daab07755a71eaaf540eaaf171672719f[m
+Author: alaanvv <valealan84@gmail.com>
+Date:   Mon Sep 22 17:49:14 2025 -0300
+
+    feat: loop done
+
+[33mcommit 9a79f4fc31b1c073cac913d73590a864d8543d13[m
+Author: alaanvv <valealan84@gmail.com>
+Date:   Mon Sep 22 15:56:11 2025 -0300
+
+    feat: using size instead of counter
+
+[33mcommit a2c852d26fe51a50ee88f95bdb14c5099970774b[m
+Author: alaanvv <valealan84@gmail.com>
+Date:   Mon Sep 22 11:33:27 2025 -0300
+
+    feat: building methods
+
+[33mcommit 2dabafe89146605e07e85684eb2a4608b88dcb7b[m
+Author: alaanvv <valealan84@gmail.com>
+Date:   Mon Sep 22 11:26:58 2025 -0300
+
+    feat: buildings done
+
+[33mcommit 177dd64408743e4c53606a1ca10fe7af35d842d3[m
+Author: alaanvv <valealan84@gmail.com>
+Date:   Wed Sep 17 10:08:10 2025 -0300
+
+    fix: changin mine name
+
+[33mcommit c83db6ee91c3f1f3db91667d2892d4db5a0e6e22[m
+Author: alaanvv <valealan84@gmail.com>
+Date:   Wed Sep 17 10:03:10 2025 -0300
+
+    feat: empire and mine prototype
+
+[33mcommit 0758e9b7774dc18e38ed070ef2ca76befd9b42c3[m
+Author: alaanvv <valealan84@gmail.com>
+Date:   Wed Sep 17 10:02:41 2025 -0300
+
+    first commit =D

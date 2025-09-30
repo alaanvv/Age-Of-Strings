@@ -23,7 +23,7 @@ public class Army extends Entidade{
          throw new IllegalArgumentException("It's not possible to remove food of an army (they will be angry).");
       }
       int _food_level = food_level;
-      food_level = Math.min(soldiers_amt, food_level + food_supply);
+      food_level = Math.min((int)(1.5*soldiers_amt), food_level + food_supply);
       return food_level - _food_level;
    }
 
@@ -33,17 +33,17 @@ public class Army extends Entidade{
     * @return Amount of points effectively added.
      */
    public final int IRON_COST_ARMORY = 25, GOLD_COST_ARMORY = 5;
-   public Auxiliar.Pair.ii upgrade_armory(int intended_points, Empire empire){
-      int iron = Math.min(empire.iron, intended_points*IRON_COST_ARMORY);
-      int gold = Math.min(empire.gold, intended_points*GOLD_COST_ARMORY);
-      int iron_packs = iron/IRON_COST;
-      int gold_packs = gold/GOLD_COST;
+   public int upgrade_armory(int intended_points, Empire empire){
+      int iron = Math.min(empire.get_iron(), intended_points*IRON_COST_ARMORY);
+      int gold = Math.min(empire.get_gold(), intended_points*GOLD_COST_ARMORY);
+      int iron_packs = iron/IRON_COST_ARMORY;
+      int gold_packs = gold/GOLD_COST_ARMORY;
 
       int points_added = Math.min(iron_packs, gold_packs);
       armory_level += points_added;
       
-      empire.iron -= (IRON_COST_ARMORY*points_added);
-      empire.gold -= (GOLD_COST_ARMORY*points_added);
+      empire.set_iron((empire.get_iron() - IRON_COST_ARMORY*points_added));
+      empire.set_gold(empire.get_gold() - (GOLD_COST_ARMORY*points_added));
 
       return points_added;
    }
@@ -55,7 +55,7 @@ public class Army extends Entidade{
       int prev_hiring_cost = hiring_cost;
 
       hiring_level = (int)Auxiliar.LogCalculator.logb(cyclical_gold, 1.055D);
-      hiring_cost = Math.pow(1.055D, hiring_level);
+      hiring_cost = (int) Math.pow(1.055D, hiring_level);
       return hiring_cost - prev_hiring_cost;
    }
 
@@ -67,16 +67,17 @@ public class Army extends Entidade{
       soldiers_amt += amt;
       empire.set_population(empire.get_population() - amt);
       empire.set_workers(empire.get_workers() + amt);
+      return true;
    }
 
    public void time_update_army(Empire empire){
       
       // Manages army payment
-      if(empire.gold < hiring_cost){
-         change_hiring_funds(empire.gold);
-         empire.gold -= hiring_cost;
+      if(empire.get_gold() < hiring_cost){
+         change_hiring_funds(empire.get_gold());
+         empire.set_gold(empire.get_gold() - hiring_cost);
       }else {
-         empire.gold -= hiring_cost;
+         empire.set_gold(empire.get_gold() - hiring_cost);
       }
 
       //Manages army food supply
@@ -85,10 +86,11 @@ public class Army extends Entidade{
          soldiers_amt += food_level;
          soldiers_amt = Math.max(soldiers_amt, 0);
       }
-      if(empire.food < soldiers){
-         empire.food -= supply_food(empire.food);
+
+      if(empire.get_food() < soldiers_amt){
+         empire.set_food(empire.get_food() - supply_food(empire.get_food()));
       }else{
-         empire.food -= supply_food(soldiers_amt)
+         empire.set_food(empire.get_food() - supply_food(soldiers_amt));
       }
 
       
@@ -162,12 +164,42 @@ public class Army extends Entidade{
       int morale;
       
       public Soldier(General general){
-         hp = (int)(Math.random() * (20 + (food_level*food_level/soldiers_amt/1.25)));
+         hp = (int)(Math.random() * (10 + (food_level*food_level/soldiers_amt/1.25)));
          dexterity = (int) Math.random()*(hiring_level + 20);
          damage = (int) Math.random() * ((hiring_level + armory_level)/10 + 10);
          armor_factor = Math.random() * (Math.min(0.9, Auxiliar.LogCalculator.logb(hiring_level, 200)));
-         morale = 1.5*(food_level/soldiers_amt)*(hiring_level) + general.charisma;
+         morale = (int) 1.5*(food_level/soldiers_amt)*(hiring_level) + general.charisma;
       }
+
+      int get_hp(){
+         return hp;
+      }
+      int get_dexterity(){
+         return dexterity;
+      }
+      int get_damage(){
+         return damage;
+      }
+      public double getArmor_factor() {
+         return armor_factor;
+      }
+
+      public boolean get_hit(int damage){
+         if(damage < 0){
+            throw new IllegalArgumentException("It's not possible to receive negative damage.");
+         }
+   
+         int real_damage = (int) (damage - (damage*armor_factor));
+         hp = Math.max(0, hp - real_damage);
+   
+         if(hp == 0) return true;
+         else return false;
+      }
+
+      public boolean hit(Soldier target){
+         return target.get_hit(damage);
+      }
+      
    }
    
 }

@@ -12,6 +12,10 @@ public class Teste_Interface {
   Coloquei um atributo empire porque ainda não tenho certeza de como iniciar o imperio;
   Não sei se deixo do jeito que estava ou se crio um novo menu onde seja possível criar imperios e escolher
   um desses imperios para controlar.
+
+  Fiz essa classe só para experimentar algumas formas de fazer o programa funcionar. Acho que vou ter que
+  modificar a classe emperio para tirar as listas de fazendas, minas e etc de lá e deixar só no banco de dados. Mas ainda
+  está um pouco confuso 
   */
 
   public Teste_Interface(persistency.BancoDeDados banco){

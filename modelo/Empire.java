@@ -31,12 +31,36 @@ public class Empire extends Entidade{
     population = amt;
   }
 
-  void get_workers(){
+  int get_workers(){
     return workers;
   }
 
   void set_workers(int amt){
     workers = amt;
+  }
+
+  int get_iron(){
+    return iron;
+  }
+
+  void set_iron(int val){
+    iron = val;
+  }
+
+  int get_gold(){
+    return gold;
+  }
+
+  void set_gold(int val){
+    gold = val;
+  }
+
+  int get_food(){
+    return food;
+  }
+
+  void set_food(int val){
+    food = val;
   }
 
   public int get_farm_count() {
@@ -63,13 +87,6 @@ public class Empire extends Entidade{
     wood -= 5;
     gold -= 2;
     
-    System.out.print.format(
-      "Império %d| População: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
-      idx, population, workers, food, wood, iron, gold
-    );
-  }
-
-
     farms.add(new Farm(farms.size()));
     return true;
     
@@ -85,12 +102,13 @@ public class Empire extends Entidade{
   }
 
   public boolean create_army(){
-    if(gold < 20 || food < 1 || iron < 50 ||) return false;
+    if(gold < 20 || food < 1 || iron < 50) return false;
     gold -= 20;
     food -= food;
     iron -= iron;
 
     armies.add(new Army(this.idx, armies.size()));
+    return true;
   }
 
   // ---
@@ -145,8 +163,6 @@ public class Empire extends Entidade{
     population += taken;
     return taken;
   }
-
-  // ---
 
   // ---
 
