@@ -2,6 +2,7 @@ package modelo;
 import java.util.ArrayList;
 
 public class Empire extends Entidade{
+  private int idx;
   private int food = 10;
   private int wood = 50;
   private int iron = 0;
@@ -12,15 +13,30 @@ public class Empire extends Entidade{
   private LumberCamp lumber_camp = new LumberCamp();
   private ArrayList<Farm> farms  = new ArrayList<>();
   private ArrayList<Mine> mines  = new ArrayList<>();
+  private ArrayList<Army> armies = new ArrayList<>();
   
+
   // ---
   
-  public Empire(){
+  public Empire(int idx){
     super();
+    this.idx = idx;
   }
 
   public int get_population() {
     return population;
+  }
+
+  void set_population(int amt){
+    population = amt;
+  }
+
+  void get_workers(){
+    return workers;
+  }
+
+  void set_workers(int amt){
+    workers = amt;
   }
 
   public int get_farm_count() {
@@ -46,6 +62,13 @@ public class Empire extends Entidade{
     if (wood < 5 || gold < 2) return false;
     wood -= 5;
     gold -= 2;
+    
+    System.out.print.format(
+      "Império %d| População: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
+      idx, population, workers, food, wood, iron, gold
+    );
+  }
+
 
     farms.add(new Farm(farms.size()));
     return true;
@@ -58,6 +81,15 @@ public class Empire extends Entidade{
 
     mines.add(new Mine(mines.size()));
     return true;
+  }
+
+  public boolean create_army(){
+    if(gold < 20 || food < 1 || iron < 50 ||) return false;
+    gold -= 20;
+    food -= food;
+    iron -= iron;
+
+    armies.add(new Army(this.idx, armies.size()));
   }
 
   // ---
@@ -78,13 +110,16 @@ public class Empire extends Entidade{
     return amount;
   }
   
-  public int send_workers_to_mine(int amount, int id) {
+  public void send_workers_to_mine(int amount, int id) {
     amount = Math.min(amount, population);
 
     workers += amount;
     population -= amount;
     mines.get(id).send_workers(amount);
-    return 1;
+  }
+
+  public boolean send_workers_to_army(int amount, int idx){
+    return armies.get(idx).allocate_work(this, amount);
   }
 
   // ---
@@ -109,6 +144,8 @@ public class Empire extends Entidade{
     population += taken;
     return taken;
   }
+
+  // ---
 
   // ---
 
