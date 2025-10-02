@@ -134,7 +134,8 @@ public class Empire extends Entidade{
 
     workers += amount;
     population -= amount;
-    return mines.get(id).send_workers(amount);
+    mines.get(id).send_workers(amount);
+    return amount;
   }
 
   public boolean send_workers_to_army(int amount, int idx){
