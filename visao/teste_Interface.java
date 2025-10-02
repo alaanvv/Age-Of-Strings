@@ -1,24 +1,36 @@
 package visao;
-import java.util.Scanner;
 
+import java.util.Scanner;
 import modelo.Empire;
 
-//Aqui está a versão original da main; Modifiquei um pouco ela para se enquadrar no que ele pediu;
+public class Teste_Interface {
+  Scanner scanner;
+  persistency.BancoDeDados banco;
+  modelo.Empire empire;
 
-public class Main {
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-<<<<<<< HEAD
-    Empire empire = new Empire(-1);
-=======
-    modelo.Empire empire = new Empire();
->>>>>>> 077672700d822a4ee6f3598050a1b304450c50d2
+  /*
+  Coloquei um atributo empire porque ainda não tenho certeza de como iniciar o imperio;
+  Não sei se deixo do jeito que estava ou se crio um novo menu onde seja possível criar imperios e escolher
+  um desses imperios para controlar.
 
-    print_help();
+  Fiz essa classe só para experimentar algumas formas de fazer o programa funcionar. Acho que vou ter que
+  modificar a classe emperio para tirar as listas de fazendas, minas e etc de lá e deixar só no banco de dados. Mas ainda
+  está um pouco confuso 
+  */
 
-    while (true) {
+  public Teste_Interface(persistency.BancoDeDados banco){
+    this.banco = banco;
+    this.scanner = new Scanner(System.in);
+    this.empire = new modelo.Empire(persistency.Persistente.generate_id());
+  }
+
+  public void opcao(){
+    while(true){
+      exibirMenuPrincipal();
+
       System.out.print("\n:");
-      String line = sc.nextLine();
+      String line = scanner.nextLine();
+
       System.out.println();
       String[] parts = line.split(" ");
 
@@ -88,26 +100,20 @@ public class Main {
           else if (parts[1].equals("mines"))  empire.view_mines();
           break;
 
-        case "help":
-          print_help();
-          break;
-
         case "exit":
-          sc.close();
+          scanner.close();
           return;
       }
     }
   }
 
-  private static void print_help() {
+  private static void exibirMenuPrincipal() {
     System.out.println("Bem vindo ao Age Of Strings!");
     System.out.println("price [farm|mine|house]             # Ver o custo de construção");
     System.out.println("build [farm|mine|house]             # Faz a construção");
     System.out.println("send [lumber|farm|mine] <qtd> <id>  # Enviar trabalhadores");
     System.out.println("take [lumber|farm|mine] <qtd> <id>  # Tirar trabalhadores");
     System.out.println("view [lumber|farms|mines|empire]    # Ver informações");
-    System.out.println("help                                # Ver esse menu");
     System.out.println("exit                                # Sair do jogo");
   }
 }
-
