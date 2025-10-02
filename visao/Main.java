@@ -8,11 +8,7 @@ import modelo.Empire;
 public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
-<<<<<<< HEAD
     Empire empire = new Empire(-1);
-=======
-    modelo.Empire empire = new Empire();
->>>>>>> 077672700d822a4ee6f3598050a1b304450c50d2
 
     print_help();
 
