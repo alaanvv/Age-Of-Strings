@@ -1,4 +1,4 @@
-package Auxiliar;
+package auxiliar;
 
 public class LogCalculator {
    public static double logb(double x, double b){

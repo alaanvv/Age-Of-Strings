@@ -6,7 +6,7 @@ import modelo.Empire;
 public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
-    Empire empire = new Empire();
+    Empire empire = new Empire(-1);
 
     print_help();
 

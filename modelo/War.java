@@ -44,13 +44,24 @@ class Battle{
       defender_soldiers_alive = defender_soldiers.size();
    }
 
+   /** 
+    * This class simulates a round in which every soldier has the possibility of attacking.
+    * <p>
+    * All alive soldiers are thrown in a priority queue heap of max. The priority factor is randomly determined and directly proportional to each soldier's dexterity.
+    * Then, untill priority queue is not empty, the top of the pq is popped and attacks a random soldier of the opposite army. This soldier does not attack in this round anymore.
+    * There is a chance that a soldier attacks the general of the opposite army.
+    * 
+    * @return -1 if defender won; 0 if there was no winner; 1 if the attacker won. A battle is won when all soldiers of an army has hp <= 0.
+    */
    public int simulate_round(){
+      
       next.clear();
       attacker_soldiers_alive = 0;
       defender_soldiers_alive = 0;
+
       for(int i = 0; i < attacker.soldiers_amt; i++){
          if(attacker_soldiers.get(i).hp <= 0) continue;
-         next.add(new TurnOrder(i, (int) (Math.random()*attacker_soldiers.get(i).dexterity), false));
+         next.add(new TurnOrder(i, (int) (Math.random()*attacker_soldiers.get(i).dexterity), true));
          attacker_soldiers_alive++;
       }
 
@@ -71,13 +82,18 @@ class Battle{
          Army.Soldier current_soldier;
          ArrayList<Army.Soldier> target_army = is_attacker? defender_soldiers : attacker_soldiers;
          current_soldier = is_attacker? attacker_soldiers.get(current_idx) : defender_soldiers.get(current_idx);
+         Army.General gen_enemy = is_attacker? gendefender : genattacker;
 
+         //Decide se o soldado irá fugir
+
+         // Escolhe uma direção aleatória e busca o primeiro soldado com vida nessa direção. Dá a volta no array.
          int direction = Math.random() * 10 < 5? -1 : 1;
          int aim = (current_idx + direction + target_army.size()) % target_army.size();
          for(int i = 0; i < target_army.size(); i++){
             if(target_army.get(aim).hp > 0) break;
             else aim = (aim + direction + target_army.size()) % target_army.size();
          }
+
          if(target_army.get(aim).hp <= 0) continue;
 
          if(current_soldier.hit(target_army.get(aim))){

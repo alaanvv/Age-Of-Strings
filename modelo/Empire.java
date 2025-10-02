@@ -128,12 +128,12 @@ public class Empire extends Entidade{
     return amount;
   }
   
-  public void send_workers_to_mine(int amount, int id) {
+  public int send_workers_to_mine(int amount, int id) {
     amount = Math.min(amount, population);
 
     workers += amount;
     population -= amount;
-    mines.get(id).send_workers(amount);
+    return mines.get(id).send_workers(amount);
   }
 
   public boolean send_workers_to_army(int amount, int idx){

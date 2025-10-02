@@ -54,7 +54,7 @@ public class Army extends Entidade{
    public int change_hiring_funds(int cyclical_gold){
       int prev_hiring_cost = hiring_cost;
 
-      hiring_level = (int)Auxiliar.LogCalculator.logb(cyclical_gold, 1.055D);
+      hiring_level = (int)auxiliar.LogCalculator.logb(cyclical_gold, 1.055D);
       hiring_cost = (int) Math.pow(1.055D, hiring_level);
       return hiring_cost - prev_hiring_cost;
    }
@@ -124,9 +124,9 @@ public class Army extends Entidade{
             throw new IllegalArgumentException("Armor factor must be between 0 inclusive and 1 exclusive.");
          }
          
-         this.armor_factor = (int) Math.min(0.99D, (Auxiliar.LogCalculator.logb(hiring_level, 140)+0.01D));
+         this.armor_factor = (int) Math.min(0.99D, (auxiliar.LogCalculator.logb(hiring_level, 140)+0.01D));
 
-         this.damage = (int) Auxiliar.LogCalculator.logb((2*armory_level + hiring_level)/3, 2);
+         this.damage = (int) auxiliar.LogCalculator.logb((2*armory_level + hiring_level)/3, 2);
       }
    
       public boolean is_dead(){
@@ -167,7 +167,7 @@ public class Army extends Entidade{
          hp = (int)(Math.random() * (10 + (food_level*food_level/soldiers_amt/1.25)));
          dexterity = (int) Math.random()*(hiring_level + 20);
          damage = (int) Math.random() * ((hiring_level + armory_level)/10 + 10);
-         armor_factor = Math.random() * (Math.min(0.9, Auxiliar.LogCalculator.logb(hiring_level, 200)));
+         armor_factor = Math.random() * (Math.min(0.9, auxiliar.LogCalculator.logb(hiring_level, 200)));
          morale = (int) 1.5*(food_level/soldiers_amt)*(hiring_level) + general.charisma;
       }
 
