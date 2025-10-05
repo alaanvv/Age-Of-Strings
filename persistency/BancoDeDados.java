@@ -1,67 +1,67 @@
 package persistency;
 
 public class BancoDeDados {
-    Persistente Army;
-    Persistente Empire;
-    Persistente Farm;
-    Persistente LumberCamp;
-    Persistente Mine;
-    Persistente War;
+    private Persistente army;
+    private Persistente empire;
+    private Persistente farm;
+    private Persistente lumberCamp;
+    private Persistente mine;
+    private Persistente war;
 
     public BancoDeDados(){
-        this.Army = new Persistente();
-        this.Empire = new Persistente();
-        this.Farm = new Persistente();
-        this.LumberCamp = new Persistente();
-        this.Mine = new Persistente();
-        this.War = new Persistente();
+        this.army = new Persistente();
+        this.empire = new Persistente();
+        this.farm = new Persistente();
+        this.lumberCamp = new Persistente();
+        this.mine = new Persistente();
+        this.war = new Persistente();
     }
 
     public Persistente getArmy() {
-        return Army;
+        return army;
     }
 
     public Persistente getEmpire(){
-        return Empire;
+        return empire;
     }
 
     public Persistente getFarm() {
-        return Farm;
+        return farm;
     }
 
     public Persistente getLumberCamp() {
-        return LumberCamp;
+        return lumberCamp;
     }
 
     public Persistente getMine() {
-        return Mine;
+        return mine;
     }
 
     public Persistente getWar() {
-        return War;
+        return war;
     }
 
     public void setArmy(Persistente army){
-        this.Army = army;
+        this.army = army;
     }
 
     public void setEmpire(Persistente empire){
-        this.Empire = empire;
+        this.empire = empire;
     }
 
     public void setFarm(Persistente farm){
-        this.Farm = farm;
+        this.farm = farm;
     }
 
     public void setLumberCamp(Persistente lumberCamp){
-        this.LumberCamp = lumberCamp;
+        this.lumberCamp = lumberCamp;
     }
 
     public void setMine(Persistente mine){
-        this.Mine = mine;
+        this.mine = mine;
     }
 
     public void setWar(Persistente war){
-        this.War = war;
+        this.war = war;
     }
 }

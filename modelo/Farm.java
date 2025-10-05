@@ -1,15 +1,16 @@
 package modelo;
 
+import persistency.BancoDeDados;
+
 public class Farm extends Entidade{
   private int workers = 0;
-  private int idx;
+  private int empire_id;
 
-  
   // ---
   
-  public Farm(int idx) {
-    super();
-    this.idx = idx;
+  public Farm(int empire_id, BancoDeDados banco) {
+    super(banco.getFarm().getSize());
+    this.empire_id = empire_id;
   }
 
   // Retorna quantos trabalhadores entraram
@@ -32,9 +33,17 @@ public class Farm extends Entidade{
     return (int) (Math.random() * efficiency * 20);
   }
 
+  public int getEmpire_id() {
+        return empire_id;
+    }
+
+    public int getWorkers() {
+        return workers;
+    }
+
   // ---
   @Override
   public String toString() {
-    return "{" + super.toString() + " | " + String.format("Fazenda #%d | Trabalhadores: %d/10}", idx, workers);
+    return "{" + super.toString() + " | " + String.format("Fazenda #%d | Trabalhadores: %d/10}", super.get_id(), workers);
   }
 }

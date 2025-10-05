@@ -5,12 +5,6 @@ import java.util.List;
 import modelo.Entidade;
 
 public class Persistente {
-   
-   private static int count = 0;
-
-   public static int generate_id(){
-      return count++;
-   }
 
    private List<modelo.Entidade> listaDeEntidades;
 
@@ -50,6 +44,14 @@ public class Persistente {
          }
       }
       return null;
+   }
+
+   public int getSize(){
+      return listaDeEntidades.size();
+   }
+
+   public List<modelo.Entidade> getListaDeEntidades() {
+       return listaDeEntidades;
    }
 
    @Override

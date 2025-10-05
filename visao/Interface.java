@@ -2,6 +2,7 @@ package visao;
 
 import java.util.Scanner;
 import modelo.Empire;
+import persistency.BancoDeDados;
 
 public class Interface {
   Scanner scanner;
@@ -99,6 +100,35 @@ public class Interface {
         case "exit":
           scanner.close();
           return;
+      }
+    }
+  }
+
+  private static void exibirMenuImperios(Scanner scanner, BancoDeDados banco) {
+    while (true){
+      System.out.println("1-Criar Imperio\n2-Controlar Imperio\n0-Sair");
+      int option = scanner.nextInt();
+
+      if (option == 1){
+          Empire novo = new Empire(banco);
+          banco.getEmpire().inserir(novo);
+          banco.getLumberCamp().inserir(novo.getLumber_camp());
+          System.out.println("ID: " + novo.get_id());
+      }
+      else if (option == 2){
+        System.out.println("Digite o id do imperio:");
+        int idm = scanner.nextInt();
+
+        modelo.Entidade imperio_atual = banco.getEmpire().buscarId(idm);
+
+        if (imperio_atual == null){
+            System.out.println("Imperio nao encontrado");
+        } else{
+          exibirMenuPrincipal();
+        }
+      }
+      else if (option == 0){
+        break;
       }
     }
   }

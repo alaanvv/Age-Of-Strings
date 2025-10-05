@@ -1,9 +1,10 @@
 package modelo;
 
+import persistency.BancoDeDados;
+
 public class Army extends Entidade{
    
    int empire_id = -1;
-   int idx = -1;
 
    int armory_level = 1;
    int food_level = 10;
@@ -11,10 +12,10 @@ public class Army extends Entidade{
    int hiring_cost = 1;
    int soldiers_amt = 1;
 
-   public Army(int empire_id, int idx){
-      super();
+   public Army(int empire_id, BancoDeDados banco){
+      super(banco.getArmy().getSize());
       this.empire_id = empire_id;
-      this.idx = idx;
+      this.general = new General();
    }
    
    /** @return Amount of food spent */
@@ -70,6 +71,12 @@ public class Army extends Entidade{
       return true;
    }
 
+   public int take_soldiers(int amount) {
+    int _soldiers = soldiers_amt;
+    soldiers_amt = Math.max(0, soldiers_amt - amount);
+    return _soldiers - soldiers_amt;
+  }
+
    public void time_update_army(Empire empire){
       
       // Manages army payment
@@ -92,13 +99,21 @@ public class Army extends Entidade{
       }else{
          empire.set_food(empire.get_food() - supply_food(soldiers_amt));
       }
-
-      
    }
 
+   public int getEmpire_id() {
+       return empire_id;
+   }
 
+   public int getSoldiers_amt() {
+       return soldiers_amt;
+   }
 
-   
+   @Override
+   public String toString() {
+      return "{" + super.toString() + " | " + String.format("Army #%d | Armory level: %d | Food level: %d | Hiring level: %d | Hiring cost: %d | Soldiers amount: %d}", 
+      super.get_id(), armory_level, food_level, hiring_level, hiring_cost, soldiers_amt);
+   }
    
    // --- INNER CLASSES
    

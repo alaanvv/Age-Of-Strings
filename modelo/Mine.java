@@ -1,17 +1,19 @@
 package modelo;
+
+import persistency.BancoDeDados;
+
 public class Mine extends Entidade{
   private int iron;
   private int gold;
   private int workers = 0;
-  private int idx;
-  public Mine(int idx) {
-    super();
-    this.idx = idx;
+  private int empire_id;
+
+  public Mine(int empire_id, BancoDeDados banco) {
+    super(banco.getMine().getSize());
     iron = (int) (Math.random() * 250);
     gold = (int) (Math.random() * 100);
+    this.empire_id = empire_id;
   }
-
-  // ---
 
   // Retorna quantos trabalhadores entraram
   public int send_workers(int amount) {
@@ -43,9 +45,17 @@ public class Mine extends Entidade{
     return collected_gold;
   }
 
+  public int getEmpire_id() {
+        return empire_id;
+    }
+
+  public int getWorkers() {
+      return workers;
+  }
+
   // ---
 
   public String toString() {
-    return "{" + super.toString() + " | " + String.format("Mina #%d| Trabalhadores: %d/20 | Ferro: %d | Ouro: %d}", idx, workers, iron, gold);
+    return "{" + super.toString() + " | " + String.format("Mina #%d| Trabalhadores: %d/20 | Ferro: %d | Ouro: %d}", super.get_id(), workers, iron, gold);
   }
 }

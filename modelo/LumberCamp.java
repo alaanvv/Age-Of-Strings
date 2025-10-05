@@ -1,11 +1,16 @@
 package modelo;
+
+import persistency.BancoDeDados;
+
 public class LumberCamp extends Entidade{
   private int workers = 0;
+  private int empire_id;
 
   // ---
 
-  public LumberCamp(){
-    super();
+  public LumberCamp(int empire_id, BancoDeDados banco){
+    super(banco.getLumberCamp().getSize());
+    this.empire_id = empire_id;
   }
 
   public int send_workers(int amount) {
@@ -24,6 +29,14 @@ public class LumberCamp extends Entidade{
   public int extract_wood() {
     double efficiency = Math.log(workers + 1); 
     return (int) (Math.random() * efficiency * 10);
+  }
+
+  public int getWorkers() {
+      return workers;
+  }
+
+  public int getEmpire_id() {
+      return empire_id;
   }
 
   // ---

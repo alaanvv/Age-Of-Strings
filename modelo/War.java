@@ -2,15 +2,30 @@ package modelo;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Collections;
+import persistency.BancoDeDados;
 /* Esta é a classe de transação do projeto. O objeto de composição será batalhas acontecendo.*/
+
 
 public class War extends Entidade{
    ArrayList<Battle> current_battles = new ArrayList<Battle>();
-   
-   
-}
+   int empire_id;
 
-class Battle{
+   public War(int empire_id, BancoDeDados banco){
+      super(banco.getWar().getSize());
+      this.empire_id = empire_id;
+   }
+
+   public boolean criaBatalha(Army attacker, Army defender){
+        Battle novaBatalha = new Battle(attacker, defender);
+        current_battles.add(novaBatalha);
+        return true;
+    }
+
+   public ArrayList<Battle> getCurrent_battles() {
+       return current_battles;
+   }
+
+    public static class Battle{
    Army attacker, defender;
    
    Army.General genattacker;
@@ -23,7 +38,7 @@ class Battle{
 
    PriorityQueue<TurnOrder> next = new PriorityQueue<>(Collections.reverseOrder());
    
-   Battle(Army attacker, Army defender){
+   public Battle(Army attacker, Army defender){
       this.attacker = attacker;
       this.defender = defender;
 
@@ -42,6 +57,22 @@ class Battle{
          defender_soldiers.add(defender.new Soldier(gendefender));
       }
       defender_soldiers_alive = defender_soldiers.size();
+   }
+
+   public Army getAttacker() {
+       return attacker;
+   }
+
+   public Army getDefender() {
+       return defender;
+   }
+
+   public int getAttacker_soldiers_alive() {
+       return attacker_soldiers_alive;
+   }
+
+   public int getDefender_soldiers_alive() {
+       return defender_soldiers_alive;
    }
 
    /** 
@@ -111,7 +142,7 @@ class Battle{
       return 0;
    }
 }
-
+}
 
 class TurnOrder implements Comparable<TurnOrder>{
    int idx;

@@ -1,26 +1,26 @@
 package modelo;
 import java.util.ArrayList;
+import persistency.BancoDeDados;
 
 public class Empire extends Entidade{
-  private int idx;
-  private int food = 10;
+  private int food = 1000;
   private int wood = 50;
-  private int iron = 0;
-  private int gold = 10;
+  private int iron = 100;
+  private int gold = 100;
   private int population = 3;
   private int workers = 0;
+  private BancoDeDados banco;
 
-  private LumberCamp lumber_camp = new LumberCamp();
+  private LumberCamp lumber_camp;
   private ArrayList<Farm> farms  = new ArrayList<>();
   private ArrayList<Mine> mines  = new ArrayList<>();
   private ArrayList<Army> armies = new ArrayList<>();
   
-
-  // ---
   
-  public Empire(int idx){
-    super();
-    this.idx = idx;
+  public Empire(BancoDeDados banco){
+    super(banco.getEmpire().getSize());
+    this.banco = banco;
+    lumber_camp = new LumberCamp(super.get_id(), banco);
   }
 
   public int get_population() {
@@ -29,6 +29,14 @@ public class Empire extends Entidade{
 
   void set_population(int amt){
     population = amt;
+  }
+
+  public int getFood() {
+      return food;
+  }
+
+  public void setFood(int food) {
+      this.food = food;
   }
 
   int get_workers(){
@@ -64,12 +72,16 @@ public class Empire extends Entidade{
   }
 
   public int get_farm_count() {
-    return farms.size();
+    return farms.size()-1;
   }
 
   public int get_mine_count() {
-    return mines.size();
+    return mines.size()-1;
   }
+
+    public LumberCamp getLumber_camp() {
+        return lumber_camp;
+    }
 
   // ---
 
@@ -87,7 +99,10 @@ public class Empire extends Entidade{
     wood -= 5;
     gold -= 2;
     
-    farms.add(new Farm(farms.size()));
+    Farm new_farm = new Farm(super.get_id(), banco);
+
+    farms.add(new_farm);
+    banco.getFarm().inserir(new_farm);
     return true;
     
   }
@@ -97,8 +112,16 @@ public class Empire extends Entidade{
     wood -= 15;
     gold -= 5;
 
-    mines.add(new Mine(mines.size()));
+    Mine new_mine = new Mine(super.get_id(), banco);
+
+    mines.add(new_mine);
+    banco.getMine().inserir(new_mine);
     return true;
+  }
+
+  public void start_war(){
+    War new_war = new War(super.get_id(), banco);
+    banco.getWar().inserir(new_war);
   }
 
   public boolean create_army(){
@@ -107,7 +130,10 @@ public class Empire extends Entidade{
     food -= food;
     iron -= iron;
 
-    armies.add(new Army(this.idx, armies.size()));
+    Army new_army = new Army(super.get_id(), banco);
+
+    armies.add(new_army);
+    banco.getArmy().inserir(new_army);
     return true;
   }
 
@@ -115,7 +141,7 @@ public class Empire extends Entidade{
   
   public int send_workers_to_lumber_camp(int amount) {
     amount = Math.min(amount, population);
-    amount = lumber_camp.send_workers(amount);
+    amount = ((LumberCamp)(banco.getLumberCamp().buscarId(super.get_id()))).send_workers(amount);
     population -= amount;
     workers += amount;
     return amount;
@@ -123,7 +149,7 @@ public class Empire extends Entidade{
   
   public int send_workers_to_farm(int amount, int id) {
     amount = Math.min(amount, population);
-    amount = farms.get(id).send_workers(amount);
+    amount = ((Farm)(banco.getFarm().buscarId(id))).send_workers(amount);
     population -= amount;
     workers += amount;
     return amount;
@@ -134,32 +160,39 @@ public class Empire extends Entidade{
 
     workers += amount;
     population -= amount;
-    mines.get(id).send_workers(amount);
+    ((Mine)(banco.getMine().buscarId(id))).send_workers(amount);
     return amount;
   }
 
-  public boolean send_workers_to_army(int amount, int idx){
-    return armies.get(idx).allocate_work(this, amount);
+  public boolean send_workers_to_army(int amount, int id){
+    return ((Army)(banco.getArmy().buscarId(id))).allocate_work(this, amount);
   }
 
   // ---
 
+  public int take_workers_from_army(int amount, int id){
+    int taken = ((Army)(banco.getArmy().buscarId(id))).take_soldiers(amount);
+    workers -= taken;
+    population += taken;
+    return taken;
+  }
+
   public int take_workers_from_lumber_camp(int amount) {
-    int taken = lumber_camp.take_workers(amount);
+    int taken = ((LumberCamp)(banco.getLumberCamp().buscarId(super.get_id()))).take_workers(amount);
     workers -= taken;
     population += taken;
     return taken;
   }
 
   public int take_workers_from_farm(int amount, int id) {
-    int taken = farms.get(id).take_workers(amount);
+    int taken = ((Farm)(banco.getFarm().buscarId(id))).take_workers(amount);
     workers -= taken;
     population += taken;
     return taken;
   }
 
   public int take_workers_from_mine(int amount, int id) {
-    int taken = mines.get(id).take_workers(amount);
+    int taken = ((Mine)(banco.getMine().buscarId(id))).take_workers(amount);
     workers -= taken;
     population += taken;
     return taken;
@@ -185,7 +218,7 @@ public class Empire extends Entidade{
   public String toString() {
     return 
       "{" + super.toString() + " | " + 
-      String.format("Império | População: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
+      String.format("Imperio | Populacao: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
       population, workers, food, wood, iron, gold);
   }
 }
