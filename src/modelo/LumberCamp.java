@@ -1,6 +1,6 @@
 package modelo;
 
-import persistency.BancoDeDados;
+import persistencia.BancoDeDados;
 
 public class LumberCamp extends Entidade{
   private int workers = 0;

@@ -1,6 +1,6 @@
 package modelo;
 
-import persistency.BancoDeDados;
+import persistencia.BancoDeDados;
 
 public class Mine extends Entidade{
   private int iron;

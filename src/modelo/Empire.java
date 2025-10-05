@@ -1,6 +1,6 @@
 package modelo;
 import java.util.ArrayList;
-import persistency.BancoDeDados;
+import persistencia.BancoDeDados;
 
 public class Empire extends Entidade{
   private int food = 1000;
