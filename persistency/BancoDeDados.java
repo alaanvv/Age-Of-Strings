@@ -6,7 +6,7 @@ public class BancoDeDados {
     private Persistente farm;
     private Persistente lumberCamp;
     private Persistente mine;
-    private Persistente war;
+    private Persistente battles;
 
     public BancoDeDados(){
         this.army = new Persistente();
@@ -14,7 +14,7 @@ public class BancoDeDados {
         this.farm = new Persistente();
         this.lumberCamp = new Persistente();
         this.mine = new Persistente();
-        this.war = new Persistente();
+        this.battles = new Persistente();
     }
 
     public Persistente getArmy() {
@@ -37,8 +37,8 @@ public class BancoDeDados {
         return mine;
     }
 
-    public Persistente getWar() {
-        return war;
+    public Persistente getBattles() {
+        return battles;
     }
 
     public void setArmy(Persistente army){
@@ -61,7 +61,7 @@ public class BancoDeDados {
         this.mine = mine;
     }
 
-    public void setWar(Persistente war){
-        this.war = war;
+    public void setBattles(Persistente war){
+        this.battles = battles;
     }
 }

@@ -33,7 +33,7 @@ public class Programa {
 
                     while(true){
 
-                        System.out.println("1-Construir casa\n2-Farm\n3-Mine\n4-Lumber Camp\n5-Army\n6-Guerra\n0-Voltar");
+                        System.out.println("1-Construir casa\n2-Farm\n3-Mine\n4-Lumber Camp\n5-Army\n6-Batalha\n0-Voltar");
                         option = scanner.nextInt();
 
                         //CONSTRUIR CASA
@@ -72,9 +72,9 @@ public class Programa {
                         else if (option == 5){
                             visao.Terminal.menuArmy((Empire)imperio_atual, banco, scanner);
                         }
-                        //GUERRA
+                        //BATALHA
                         else if (option == 6){
-                            visao.Terminal.menuWar((Empire)imperio_atual, banco, scanner);
+                            visao.Terminal.menuBatalhas((Empire)imperio_atual, banco, scanner);
                         }
                         else if (option == 0){
                             break;

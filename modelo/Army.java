@@ -13,7 +13,8 @@ public class Army extends Entidade{
    protected int hiring_cost = 1;
    protected int soldiers_amt = 1;
    
-
+   Boolean in_battle = false;
+   Battle current_battle;
 
 
    public Army(int empire_id, BancoDeDados banco){

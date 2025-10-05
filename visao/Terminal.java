@@ -3,6 +3,7 @@ package visao;
 import java.util.Scanner;
 
 import modelo.Army;
+import modelo.Battle;
 import modelo.Empire;
 import persistency.BancoDeDados;
 
@@ -317,7 +318,7 @@ public class Terminal {
         }
     }
 
-    public static void menuBatalhas(modelo.Empire empire, modelo.Battle guerra, BancoDeDados banco, Scanner scanner){
+    public static void menuBatalhas(modelo.Empire empire, BancoDeDados banco, Scanner scanner){
         while (true){
             System.out.println("1-Comecar batalha\n2-Ver batalhas em andamento\n0-Voltar");
             int option = scanner.nextInt();
@@ -341,63 +342,36 @@ public class Terminal {
                     System.out.println("Tropa atacante invalida ou pertence ao seu imperio.");
                 }
                 else{
-                    guerra.criaBatalha(attackerArmy, defenderArmy);
+                    Battle new_battle = new Battle(attackerArmy, defenderArmy, banco);
+                    banco.getBattles().inserir(new_battle);
+                    System.out.println("Batalha iniciada!");
                 }
             }      
             }
             else if (option == 2){
-                if (guerra.getCurrent_battles().isEmpty()){
+                if (banco.getBattles().getSize() == 0){
                     System.out.println("Sem batalhas");
                 }
                 else{
-                    for (modelo.War.Battle batalhas : guerra.getCurrent_battles()){
-                        int result = batalhas.simulate_round();
-                        String attackerName = "Army #" + batalhas.getAttacker().get_id();
-                        String defenderName = "Army #" + batalhas.getDefender().get_id();
+                    for (modelo.Entidade batalhas : banco.getBattles().getListaDeEntidades()){
+                        int result = ((Battle)batalhas).simulate_round();
+                        String attackerName = "Army #" + ((Battle)batalhas).getAttacker().get_id();
+                        String defenderName = "Army #" + ((Battle)batalhas).getDefender().get_id();
 
                         System.out.println("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
-                        System.out.println("Soldados Atacantes vivos: " + batalhas.getAttacker_soldiers_alive());
-                        System.out.println("Soldados Defensores vivos: " + batalhas.getDefender_soldiers_alive());
+                        System.out.println("Soldados Atacantes vivos: " + ((Battle)batalhas).getAttacker_soldiers_alive());
+                        System.out.println("Soldados Defensores vivos: " + ((Battle)batalhas).getDefender_soldiers_alive());
                     
                         if (result == 1) {
                             System.out.println(attackerName + " Venceu a batalha! Vitoria dos atacantes.");
-                            guerra.getCurrent_battles().remove(batalhas);
+                            banco.getBattles().remover(batalhas.get_id());
                         } else if (result == -1) {
                             System.out.println(defenderName + " Venceu a batalha! Vitoria dos defensores.");
-                            guerra.getCurrent_battles().remove(batalhas);
+                            banco.getBattles().remover(batalhas.get_id());
                         } else {
                             System.out.println("A batalha continua... Nenhum vencedor nesta rodada.");
                         }
                     }
-                }
-            }
-            else if (option == 0){
-                break;
-            }
-        }
-    }
-
-    public static void menuWar(Empire empire, BancoDeDados banco, Scanner scanner){
-        while (true){
-            System.out.println("--- Gerenciamento de Guerra ---");
-            System.out.println("1-Iniciar Guerra\n2-Batalhar\n0-Voltar");
-            int option = scanner.nextInt();
-
-            if (option == 1){
-                empire.start_war();
-                System.out.println("ID: " + (banco.getWar().getSize()-1));
-            }
-            else if (option == 2){
-                System.out.println("Digite o id da guerra:");
-                int idm = scanner.nextInt();
-
-                modelo.Entidade guerra_atual = banco.getWar().buscarId(idm);
-
-                if (guerra_atual == null){
-                    System.out.println("Essa guerra nao existe");
-                }
-                else{
-                    visao.Terminal.menuBatalhas(empire, ((modelo.War)guerra_atual), banco, scanner);
                 }
             }
             else if (option == 0){

@@ -1,11 +1,12 @@
 package modelo;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
+import persistency.BancoDeDados;
 
 /* This is the transaction class of the project. The composition relation is the soldier class: although not declared here, for sake of organization,
  * it is only instantiated inside Battle class.
 */
-public class Battle{
+public class Battle extends Entidade{
    private Army attacker, defender;
    
    private Army.General genattacker;
@@ -17,7 +18,8 @@ public class Battle{
    private int defender_soldiers_alive;
    
    
-   public Battle(Army attacker, Army defender){
+   public Battle(Army attacker, Army defender, BancoDeDados banco){
+      super(banco.getBattles().getSize());
       this.attacker = attacker;
       this.defender = defender;
       
