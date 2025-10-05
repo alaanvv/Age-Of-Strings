@@ -198,7 +198,7 @@ public class Terminal {
             }
 
             System.out.println("PRECO | Ferro: 50 | Ouro: 20| Comida: 1 |");
-            System.out.println("1-Criar nova tropa\n2-Contratar Soldados\n3-Liberar soldados\n4-Melhorar Armadura\n5-Reabastecer Comida\n0-Voltar");
+            System.out.println("1-Criar nova tropa 2-Contratar Soldados 3-Liberar soldados 4-Melhorar Armadura 5-Reabastecer Comida 0-Voltar");
             int option = scanner.nextInt();
             
             //CRIAR TROPA

@@ -213,7 +213,7 @@ public class Empire extends Entidade{
   public String toString() {
     return 
       "{" + super.toString() + " | " + 
-      String.format("Império %d| População: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
+      String.format("Imperio %d| Populacao: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
       super.get_id(), population, workers, food, wood, iron, gold);
   }
 }
