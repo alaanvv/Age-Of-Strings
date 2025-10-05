@@ -1,4 +1,4 @@
-package persistency;
+package persistencia;
 
 public class BancoDeDados {
     private Persistente army;

@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import modelo.Army;
 import modelo.Empire;
-import persistency.BancoDeDados;
+import persistencia.BancoDeDados;
 
 public class Terminal {
 

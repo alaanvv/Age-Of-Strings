@@ -2,11 +2,11 @@ package visao;
 
 import java.util.Scanner;
 import modelo.Empire;
-import persistency.BancoDeDados;
+import persistencia.BancoDeDados;
 
 public class Interface {
   Scanner scanner;
-  persistency.BancoDeDados banco;
+  persistencia.BancoDeDados banco;
   modelo.Empire empire;
 
   /*
@@ -15,10 +15,10 @@ public class Interface {
   um desses imperios para controlar.
   */
 
-  public Interface(persistency.BancoDeDados banco){
+  public Interface(persistencia.BancoDeDados banco){
     this.banco = banco;
     this.scanner = new Scanner(System.in);
-    this.empire = new modelo.Empire(persistency.Persistente.generate_id());
+    this.empire = new modelo.Empire(persistencia.Persistente.generate_id());
   }
 
   public void opcao(){
