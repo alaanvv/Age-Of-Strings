@@ -3,6 +3,10 @@
 A terminal-based game inspired by Age of Empires,  
 made for a university project.  
 
+## Running
+
+Run `sh run.sh` ou cd into **src**, compile and run **Programa**
+
 ---
 
 A simulação vai funcionar por turnos  
