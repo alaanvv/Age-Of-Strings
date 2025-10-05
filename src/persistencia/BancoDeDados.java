@@ -2,6 +2,7 @@ package persistencia;
 
 public class BancoDeDados {
   private Persistente lumberCamp;
+  private Persistente battle;
   private Persistente empire;
   private Persistente farm;
   private Persistente mine;
@@ -10,6 +11,7 @@ public class BancoDeDados {
 
   public BancoDeDados() {
     this.lumberCamp = new Persistente();
+    this.battle = new Persistente();
     this.empire = new Persistente();
     this.farm = new Persistente();
     this.mine = new Persistente();
@@ -18,6 +20,7 @@ public class BancoDeDados {
   }
 
   public Persistente getLumberCamp() { return lumberCamp; }
+  public Persistente getBattle() { return battle; }
   public Persistente getEmpire() { return empire; }
   public Persistente getFarm() { return farm; }
   public Persistente getMine() { return mine; }
@@ -25,6 +28,7 @@ public class BancoDeDados {
   public Persistente getWar() { return war; }
 
   public void setLumberCamp(Persistente lumberCamp) { this.lumberCamp = lumberCamp; }
+  public void setBattle(Persistente battle) { this.battle = battle; }
   public void setEmpire(Persistente empire) { this.empire = empire; }
   public void setArmy(Persistente army) { this.army = army; }
   public void setFarm(Persistente farm) { this.farm = farm; }

@@ -1,19 +1,13 @@
 package visao;
 
 import java.util.Scanner;
-<<<<<<< Updated upstream
-
-import modelo.Army;
-import modelo.Battle;
-import modelo.Empire;
-=======
->>>>>>> Stashed changes
 import persistencia.BancoDeDados;
+import modelo.Battle;
 import modelo.Empire;
 import modelo.Army;
 
 public class Terminal {
-  public static Scanner scanner = new Scanner(System.in);
+public static Scanner scanner = new Scanner(System.in);
 
   public static void menuPrincipal(BancoDeDados banco) {
     while(true){
@@ -65,89 +59,23 @@ public class Terminal {
             }
             //FARM
             else if (option == 2){
-              Terminal.menuFarm(((Empire)imperio_atual), banco, scanner);
+              menuFarm(((Empire)imperio_atual), banco, scanner);
             }
             //MINE
             else if (option == 3){
-              Terminal.menuMine(((Empire)imperio_atual), banco, scanner);
+              menuMine(((Empire)imperio_atual), banco, scanner);
             }
             //LUMBER
             else if (option == 4){
-              Terminal.menuLumber(((Empire)imperio_atual), banco, scanner);
+              menuLumber(((Empire)imperio_atual), banco, scanner);
             }
             //ARMY
             else if (option == 5){
-              Terminal.menuArmy((Empire)imperio_atual, banco, scanner);
+              menuArmy((Empire)imperio_atual, banco, scanner);
             }
-<<<<<<< Updated upstream
-            //VOLTAR
-            else if (option == 0){
-                return;
-            }
-        }
-    }
-
-    public static void menuBatalhas(modelo.Empire empire, BancoDeDados banco, Scanner scanner){
-        while (true){
-            System.out.println("1-Comecar batalha\n2-Ver batalhas em andamento\n0-Voltar");
-            int option = scanner.nextInt();
-
-            if (option == 1){
-                //TROPA ATACANTE
-                System.out.println("Digite o ID da tropa atacante:");
-                int attackerId = scanner.nextInt();
-                Army attackerArmy = (Army) banco.getArmy().buscarId(attackerId);
-
-                if (attackerArmy == null || attackerArmy.getEmpire_id() != empire.get_id()) {
-                    System.out.println("Tropa atacante invalida ou nao pertence ao seu imperio.");
-                }
-                else{
-                //TROPA DEFENSORA
-                System.out.println("Digite o ID da tropa defensora:");
-                int defenderId = scanner.nextInt();
-                Army defenderArmy = (Army) banco.getArmy().buscarId(defenderId);
-
-                if (defenderArmy == null || defenderArmy.getEmpire_id() == empire.get_id()) {
-                    System.out.println("Tropa atacante invalida ou pertence ao seu imperio.");
-                }
-                else{
-                    Battle new_battle = new Battle(attackerArmy, defenderArmy, banco);
-                    banco.getBattles().inserir(new_battle);
-                    System.out.println("Batalha iniciada!");
-                }
-            }      
-            }
-            else if (option == 2){
-                if (banco.getBattles().getSize() == 0){
-                    System.out.println("Sem batalhas");
-                }
-                else{
-                    for (int i= banco.getBattles().getSize()-1; i >= 0; i--){
-                        Battle batalhas = ((Battle)banco.getBattles().buscarId(i));
-                        int result = batalhas.simulate_round();
-                        String attackerName = "Army #" + batalhas.getAttacker().get_id();
-                        String defenderName = "Army #" + batalhas.getDefender().get_id();
-
-                        System.out.println("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
-                        System.out.println("Soldados Atacantes vivos: " + batalhas.getAttacker_soldiers_alive());
-                        System.out.println("Soldados Defensores vivos: " + batalhas.getDefender_soldiers_alive());
-                    
-                        if (result == 1) {
-                            System.out.println(attackerName + " Venceu a batalha! Vitoria dos atacantes.");
-                            banco.getBattles().remover(batalhas.get_id());
-                        } else if (result == -1) {
-                            System.out.println(defenderName + " Venceu a batalha! Vitoria dos defensores.");
-                            banco.getBattles().remover(batalhas.get_id());
-                        } else {
-                            System.out.println("A batalha continua... Nenhum vencedor nesta rodada.");
-                        }
-                    }
-                }
-=======
             //GUERRA
             else if (option == 6){
-              Terminal.menuWar((Empire)imperio_atual, banco, scanner);
->>>>>>> Stashed changes
+              menuBatalhas((Empire)imperio_atual, banco, scanner);
             }
             else if (option == 0){
               break;
@@ -160,14 +88,11 @@ public class Terminal {
         break;
       }
     }
-<<<<<<< Updated upstream
-=======
   }
-
   public static void menuFarm(Empire empire, BancoDeDados banco, Scanner scanner) {
     while (true) {
       System.out.println("\n--- Gerenciamento de Fazendas ---");
-      for (modelo.Entidade fazendas : banco.getFarm().getListaDeEntidades()) {
+      for (modelo.Entidade fazendas : banco.getFarm().getEntidades()) {
 
         if (((modelo.Farm) fazendas).getEmpire_id() == empire.get_id()) {
           System.out.println(fazendas);
@@ -233,7 +158,7 @@ public class Terminal {
   public static void menuMine(Empire empire, BancoDeDados banco, Scanner scanner) {
     while (true) {
       System.out.println("\n--- Gerenciamento de Minas ---");
-      for (modelo.Entidade minas : banco.getMine().getListaDeEntidades()) {
+      for (modelo.Entidade minas : banco.getMine().getEntidades()) {
 
         if (((modelo.Mine) minas).getEmpire_id() == empire.get_id()) {
           System.out.println(minas);
@@ -299,7 +224,7 @@ public class Terminal {
   public static void menuLumber(Empire empire, BancoDeDados banco, Scanner scanner) {
     while (true) {
       System.out.println("\n--- Gerenciamento de campo de cortar madeira ---");
-      for (modelo.Entidade lumber : banco.getLumberCamp().getListaDeEntidades()) {
+      for (modelo.Entidade lumber : banco.getLumberCamp().getEntidades()) {
 
         if (((modelo.LumberCamp) lumber).getEmpire_id() == empire.get_id()) {
           System.out.println(lumber);
@@ -316,7 +241,7 @@ public class Terminal {
             + empire.get_population() + ")");
         int amount = scanner.nextInt();
 
-        modelo.Entidade a_lumber = banco.getLumberCamp().buscarId(id);
+        //modelo.Entidade a_lumber = banco.getLumberCamp().buscarId(id);
 
         System.out.println(
             String.format("%d trabalhadores enviados pra mina #%d.", empire.send_workers_to_lumber_camp(amount), id));
@@ -341,7 +266,7 @@ public class Terminal {
   public static void menuArmy(Empire empire, BancoDeDados banco, Scanner scanner) {
     while (true) {
       System.out.println("\n--- Gerenciamento do Exercito ---");
-      for (modelo.Entidade armies : banco.getArmy().getListaDeEntidades()) {
+      for (modelo.Entidade armies : banco.getArmy().getEntidades()) {
 
         if (((modelo.Army) armies).getEmpire_id() == empire.get_id()) {
           System.out.println(armies);
@@ -465,7 +390,7 @@ public class Terminal {
     }
   }
 
-  public static void menuBatalhas(modelo.Empire empire, modelo.Battle guerra, BancoDeDados banco, Scanner scanner) {
+  public static void menuBatalhas(modelo.Empire empire, BancoDeDados banco, Scanner scanner) {
     while (true) {
       System.out.println("1-Comecar batalha\n2-Ver batalhas em andamento\n0-Voltar");
       int option = scanner.nextInt();
@@ -487,28 +412,30 @@ public class Terminal {
           if (defenderArmy == null || defenderArmy.getEmpire_id() == empire.get_id()) {
             System.out.println("Tropa atacante invalida ou pertence ao seu imperio.");
           } else {
-            guerra.criaBatalha(attackerArmy, defenderArmy);
+            Battle new_battle = new Battle(attackerArmy, defenderArmy, banco);
+            banco.getBattle().inserir(new_battle);
+            System.out.println("Batalha iniciada!");
           }
         }
       } else if (option == 2) {
-        if (guerra.getCurrent_battles().isEmpty()) {
+        if (banco.getBattle().getSize() == 0) {
           System.out.println("Sem batalhas");
         } else {
-          for (modelo.War.Battle batalhas : guerra.getCurrent_battles()) {
-            int result = batalhas.simulate_round();
-            String attackerName = "Army #" + batalhas.getAttacker().get_id();
-            String defenderName = "Army #" + batalhas.getDefender().get_id();
+          for (modelo.Entidade batalhas : banco.getBattle().getEntidades()) {
+            int result = ((Battle) batalhas).simulate_round();
+            String attackerName = "Army #" + ((Battle) batalhas).getAttacker().get_id();
+            String defenderName = "Army #" + ((Battle) batalhas).getDefender().get_id();
 
             System.out.println("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
-            System.out.println("Soldados Atacantes vivos: " + batalhas.getAttacker_soldiers_alive());
-            System.out.println("Soldados Defensores vivos: " + batalhas.getDefender_soldiers_alive());
+            System.out.println("Soldados Atacantes vivos: " + ((Battle) batalhas).getAttacker_soldiers_alive());
+            System.out.println("Soldados Defensores vivos: " + ((Battle) batalhas).getDefender_soldiers_alive());
 
             if (result == 1) {
               System.out.println(attackerName + " Venceu a batalha! Vitoria dos atacantes.");
-              guerra.getCurrent_battles().remove(batalhas);
+              banco.getBattle().remover(batalhas.get_id());
             } else if (result == -1) {
               System.out.println(defenderName + " Venceu a batalha! Vitoria dos defensores.");
-              guerra.getCurrent_battles().remove(batalhas);
+              banco.getBattle().remover(batalhas.get_id());
             } else {
               System.out.println("A batalha continua... Nenhum vencedor nesta rodada.");
             }
@@ -519,31 +446,4 @@ public class Terminal {
       }
     }
   }
-
-  public static void menuWar(Empire empire, BancoDeDados banco, Scanner scanner) {
-    while (true) {
-      System.out.println("--- Gerenciamento de Guerra ---");
-      System.out.println("1-Iniciar Guerra\n2-Batalhar\n0-Voltar");
-      int option = scanner.nextInt();
-
-      if (option == 1) {
-        empire.start_war();
-        System.out.println("ID: " + (banco.getWar().getSize() - 1));
-      } else if (option == 2) {
-        System.out.println("Digite o id da guerra:");
-        int idm = scanner.nextInt();
-
-        modelo.Entidade guerra_atual = banco.getWar().buscarId(idm);
-
-        if (guerra_atual == null) {
-          System.out.println("Essa guerra nao existe");
-        } else {
-          visao.Terminal.menuBatalhas(empire, ((modelo.War) guerra_atual), banco, scanner);
-        }
-      } else if (option == 0) {
-        break;
-      }
-    }
-  }
->>>>>>> Stashed changes
 }
