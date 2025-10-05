@@ -1,14 +1,22 @@
 package modelo;
 
+
 public class Army extends Entidade{
    
    protected int empire_id = -1;
    protected int idx = -1;
+   
+   Boolean in_battle = false;
+   Battle current_battle;
+
    protected int armory_level = 1;
    protected int food_level = 10;
    protected int hiring_level = 1;
    protected int hiring_cost = 1;
    protected int soldiers_amt = 1;
+   
+
+
 
    public Army(int empire_id, int idx){
       super();
@@ -16,6 +24,11 @@ public class Army extends Entidade{
       this.idx = idx;
    }
    
+   public boolean is_battling(){
+      return in_battle;
+   }
+
+
    /** @return Amount of food spent */
    public int supply_food(int food_supply){
       if(food_supply < 0){
@@ -95,6 +108,15 @@ public class Army extends Entidade{
       
    }
 
+   public int take_workers(int amount){
+      if(in_battle){
+         return 0;
+      }
+
+      int prev_soldiers = soldiers_amt;
+      soldiers_amt = Math.max(0, soldiers_amt - amount);
+      return prev_soldiers - soldiers_amt;
+   }
    // --- INNER CLASSES
    
    /**

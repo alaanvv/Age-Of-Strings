@@ -165,6 +165,13 @@ public class Empire extends Entidade{
     return taken;
   }
 
+  public int take_workers_from_army(int amount, int idx){
+    int taken = armies.get(idx).take_workers(amount);
+    workers -= taken;
+    population += taken;
+    return taken;
+  }
+
   // ---
 
   public void view_lumber_camp() {
@@ -185,7 +192,7 @@ public class Empire extends Entidade{
   public String toString() {
     return 
       "{" + super.toString() + " | " + 
-      String.format("Império | População: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
-      population, workers, food, wood, iron, gold);
+      String.format("Império %d| População: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
+      idx, population, workers, food, wood, iron, gold);
   }
 }
