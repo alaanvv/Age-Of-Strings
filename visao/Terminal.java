@@ -317,7 +317,7 @@ public class Terminal {
         }
     }
 
-    public static void menuBatalhas(modelo.Empire empire, modelo.War guerra, BancoDeDados banco, Scanner scanner){
+    public static void menuBatalhas(modelo.Empire empire, modelo.Battle guerra, BancoDeDados banco, Scanner scanner){
         while (true){
             System.out.println("1-Comecar batalha\n2-Ver batalhas em andamento\n0-Voltar");
             int option = scanner.nextInt();

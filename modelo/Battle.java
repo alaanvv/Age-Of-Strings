@@ -1,52 +1,35 @@
 package modelo;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
-import java.util.Collections;
-import persistency.BancoDeDados;
-/* Esta é a classe de transação do projeto. O objeto de composição será batalhas acontecendo.*/
 
-
-public class War extends Entidade{
-   ArrayList<Battle> current_battles = new ArrayList<Battle>();
-   int empire_id;
-
-   public War(int empire_id, BancoDeDados banco){
-      super(banco.getWar().getSize());
-      this.empire_id = empire_id;
-   }
-
-   public boolean criaBatalha(Army attacker, Army defender){
-        Battle novaBatalha = new Battle(attacker, defender);
-        current_battles.add(novaBatalha);
-        return true;
-    }
-
-   public ArrayList<Battle> getCurrent_battles() {
-       return current_battles;
-   }
-
-    public static class Battle{
-   Army attacker, defender;
+/* This is the transaction class of the project. The composition relation is the soldier class: although not declared here, for sake of organization,
+ * it is only instantiated inside Battle class.
+*/
+public class Battle{
+   private Army attacker, defender;
    
-   Army.General genattacker;
-   Army.General gendefender;
+   private Army.General genattacker;
+   private Army.General gendefender;
    
-   ArrayList<Army.Soldier> attacker_soldiers = new ArrayList<>();
-   int attacker_soldiers_alive;
-   ArrayList<Army.Soldier> defender_soldiers = new ArrayList<>();
-   int defender_soldiers_alive;
-
-   PriorityQueue<TurnOrder> next = new PriorityQueue<>(Collections.reverseOrder());
+   private ArrayList<Army.Soldier> attacker_soldiers = new ArrayList<>();
+   private int attacker_soldiers_alive;
+   private ArrayList<Army.Soldier> defender_soldiers = new ArrayList<>();
+   private int defender_soldiers_alive;
+   
    
    public Battle(Army attacker, Army defender){
       this.attacker = attacker;
       this.defender = defender;
+      
+      attacker.general = attacker. new General();
+      defender.general = defender.new General();
 
       genattacker = attacker.general;
       gendefender = defender.general;
-
-
-
+      attacker_soldiers.add(genattacker);
+      defender_soldiers.add(gendefender);
+      
+      
       for(int i = 0; i < attacker.soldiers_amt; i++){
          attacker_soldiers.add(attacker. new Soldier(genattacker));
          attacker_soldiers.getLast().morale += 5;
@@ -86,46 +69,84 @@ public class War extends Entidade{
     */
    public int simulate_round(){
       
-      next.clear();
+      PriorityQueue<TurnOrder> next = new PriorityQueue<>();
+      populate_queue(next);
+
+      if(defender_soldiers_alive <= 0) return 1;
+      if(attacker_soldiers_alive <= 0) return -1;
+
+      while(next.size() > 0){
+         TurnOrder current_turn = next.poll();
+         int current_idx = current_turn.idx;
+         boolean is_attacker = current_turn.is_attacker;
+         
+         //Relativize targets according to current soldier.
+         ArrayList<Army.Soldier> target_army = is_attacker? defender_soldiers : attacker_soldiers;
+         Army.Soldier current_soldier = is_attacker? attacker_soldiers.get(current_idx) : defender_soldiers.get(current_idx);
+         Army.General gen_ally = !is_attacker? gendefender : genattacker;
+
+         if (current_soldier.get_hp() <= 0) {
+            continue;
+         }
+
+         //Decide se o soldado irá fugir
+         if(soldier_flee(current_soldier, gen_ally, is_attacker)){
+            current_soldier.flee();
+            continue;
+         }
+         
+         // Chooses a random direction and searches fo the first soldier alive in that direction. The searching is circular.
+         int battle_status = attack_adjacent_random_enemy(current_soldier, is_attacker, target_army);
+         
+         //If someone won (last soldier of an army killed), return the winner (attacker 1, defender -1);
+         if (battle_status != 0) {
+            return battle_status;
+         }
+      }
+      return 0;
+   }
+
+   private void populate_queue(PriorityQueue<TurnOrder> next){
       attacker_soldiers_alive = 0;
       defender_soldiers_alive = 0;
-
+      
       for(int i = 0; i < attacker.soldiers_amt; i++){
          if(attacker_soldiers.get(i).hp <= 0) continue;
+         attacker_soldiers.get(i).set_idx(i);
          next.add(new TurnOrder(i, (int) (Math.random()*attacker_soldiers.get(i).dexterity), true));
          attacker_soldiers_alive++;
       }
-
+      
       for(int i = 0; i < defender.soldiers_amt; i++){
          if(defender_soldiers.get(i).hp <= 0) continue;
+         defender_soldiers.get(i).set_idx(i);
          next.add(new TurnOrder(i, (int) Math.random()*defender_soldiers.get(i).get_dexterity(), false));
          defender_soldiers_alive++;
       }
+   }
 
-      if(defender_soldiers_alive <= 0) return 1;
-      else if(attacker_soldiers_alive <= 0) return -1;
+   
+   private boolean soldier_flee(Army.Soldier current_soldier, Army.General gen_ally, boolean is_attacker){
+      if(gen_ally.is_dead()) gen_ally.charisma = 0;
+      int army_diff = is_attacker? defender_soldiers_alive - attacker_soldiers_alive : attacker_soldiers_alive - defender_soldiers_alive;
+      int fear_factor = Math.max(0, army_diff/2 - gen_ally.charisma); 
+      int morale_required = (int)(Math.random() * (fear_factor + 1));
+      
+      return current_soldier.morale < morale_required;
+   }
 
-      while(next.size() > 0){
-         int current_idx = next.element().idx;
-         boolean is_attacker = next.element().is_attacker;
-         next.remove();
-         
-         Army.Soldier current_soldier;
-         ArrayList<Army.Soldier> target_army = is_attacker? defender_soldiers : attacker_soldiers;
-         current_soldier = is_attacker? attacker_soldiers.get(current_idx) : defender_soldiers.get(current_idx);
-         Army.General gen_enemy = is_attacker? gendefender : genattacker;
-
-         //Decide se o soldado irá fugir
-
-         // Escolhe uma direção aleatória e busca o primeiro soldado com vida nessa direção. Dá a volta no array.
-         int direction = Math.random() * 10 < 5? -1 : 1;
-         int aim = (current_idx + direction + target_army.size()) % target_army.size();
+   private int attack_adjacent_random_enemy(Army.Soldier current_soldier, boolean is_attacker, ArrayList<Army.Soldier> target_army){
+      int direction = Math.random() * 10 < 5? -1 : 1;
+         int aim = (current_soldier.get_idx() + direction + target_army.size()) % target_army.size();
          for(int i = 0; i < target_army.size(); i++){
             if(target_army.get(aim).hp > 0) break;
             else aim = (aim + direction + target_army.size()) % target_army.size();
          }
 
-         if(target_army.get(aim).hp <= 0) continue;
+         if(target_army.get(aim).hp <= 0){
+            if(is_attacker) return 1;
+            else return -1;
+         }
 
          if(current_soldier.hit(target_army.get(aim))){
             if(is_attacker){
@@ -137,12 +158,10 @@ public class War extends Entidade{
             }
          }
 
-      }
-      
-      return 0;
+         return 0;
    }
 }
-}
+
 
 class TurnOrder implements Comparable<TurnOrder>{
    int idx;

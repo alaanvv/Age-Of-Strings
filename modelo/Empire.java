@@ -119,11 +119,6 @@ public class Empire extends Entidade{
     return true;
   }
 
-  public void start_war(){
-    War new_war = new War(super.get_id(), banco);
-    banco.getWar().inserir(new_war);
-  }
-
   public boolean create_army(){
     if(gold < 20 || food < 1 || iron < 50) return false;
     gold -= 20;
@@ -218,7 +213,7 @@ public class Empire extends Entidade{
   public String toString() {
     return 
       "{" + super.toString() + " | " + 
-      String.format("Imperio | Populacao: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
-      population, workers, food, wood, iron, gold);
+      String.format("Império %d| População: %d | Trabalhadores: %d | Comida: %d | Madeira: %d | Ferro: %d | Ouro: %d",
+      super.get_id(), population, workers, food, wood, iron, gold);
   }
 }
