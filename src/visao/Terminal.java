@@ -421,14 +421,15 @@ public static Scanner scanner = new Scanner(System.in);
         if (banco.getBattle().getSize() == 0) {
           System.out.println("Sem batalhas");
         } else {
-          for (modelo.Entidade batalhas : banco.getBattle().getEntidades()) {
-            int result = ((Battle) batalhas).simulate_round();
-            String attackerName = "Army #" + ((Battle) batalhas).getAttacker().get_id();
-            String defenderName = "Army #" + ((Battle) batalhas).getDefender().get_id();
+          for (int i = banco.getBattle().getSize()-1; i >= 0; i--) {
+            Battle batalhas = ((Battle)banco.getBattle().buscarId(i));
+            int result = batalhas.simulate_round();
+            String attackerName = "Army #" + batalhas.getAttacker().get_id();
+            String defenderName = "Army #" + batalhas.getDefender().get_id();
 
             System.out.println("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
-            System.out.println("Soldados Atacantes vivos: " + ((Battle) batalhas).getAttacker_soldiers_alive());
-            System.out.println("Soldados Defensores vivos: " + ((Battle) batalhas).getDefender_soldiers_alive());
+            System.out.println("Soldados Atacantes vivos: " + batalhas.getAttacker_soldiers_alive());
+            System.out.println("Soldados Defensores vivos: " + batalhas.getDefender_soldiers_alive());
 
             if (result == 1) {
               System.out.println(attackerName + " Venceu a batalha! Vitoria dos atacantes.");
