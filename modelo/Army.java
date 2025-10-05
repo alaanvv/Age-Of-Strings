@@ -6,7 +6,7 @@ import persistency.BancoDeDados;
 public class Army extends Entidade{
    
    int empire_id = -1;
-
+   Boolean in_battle = false;
    protected int armory_level = 1;
    protected int food_level = 10;
    protected int hiring_level = 1;
