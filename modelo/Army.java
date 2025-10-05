@@ -2,14 +2,13 @@ package modelo;
 
 public class Army extends Entidade{
    
-   int empire_id = -1;
-   int idx = -1;
-
-   int armory_level = 1;
-   int food_level = 10;
-   int hiring_level = 1;
-   int hiring_cost = 1;
-   int soldiers_amt = 1;
+   protected int empire_id = -1;
+   protected int idx = -1;
+   protected int armory_level = 1;
+   protected int food_level = 10;
+   protected int hiring_level = 1;
+   protected int hiring_cost = 1;
+   protected int soldiers_amt = 1;
 
    public Army(int empire_id, int idx){
       super();
@@ -96,13 +95,7 @@ public class Army extends Entidade{
       
    }
 
-
-
-   
-   
    // --- INNER CLASSES
-   
-   
    
    /**
     * The general is the head of an army and can certainly decide the fate of a battle. 
@@ -110,44 +103,41 @@ public class Army extends Entidade{
     * <p>
     * An army shall have at most 1 general, and never engage in battle when having none.
     */
-   class General{
-      int hp;
-      int charisma;
-      double armor_factor;
-      int damage;
-      
-      public General(){
-         this.hp = 20 + (int)(Math.random() * (100 + ((food_level*food_level/soldiers_amt)/2)));
-         this.charisma = (int) Math.min(Math.random() * (5.1*(Math.log(hiring_level) * Math.log(hiring_level))), 100D);
-   
-         if(armor_factor < 0 || 1 < armor_factor){
-            throw new IllegalArgumentException("Armor factor must be between 0 inclusive and 1 exclusive.");
-         }
+    class General extends Soldier{
+       protected int charisma;
+       
+       public General(){
+         this.hp = 20 + (int) (Math.random() * (100 + ((food_level*food_level/soldiers_amt)/2)));
          
-         this.armor_factor = (int) Math.min(0.99D, (auxiliar.LogCalculator.logb(hiring_level, 140)+0.01D));
-
+         this.dexterity = (int) (Math.random()*(hiring_level + 30));
+         
+         this.charisma = (int) Math.min(Math.random() * (5.1*(Math.log(hiring_level) * Math.log(hiring_level))), 100D);
+         
+         this.armor_factor = Math.min(0.99D, (auxiliar.LogCalculator.logb(hiring_level, 140)+0.01D));
+         
          this.damage = (int) auxiliar.LogCalculator.logb((2*armory_level + hiring_level)/3, 2);
+
+         this.morale = hiring_level*100;
       }
    
       public boolean is_dead(){
          return hp <= 0;
       }
-   
-      
-      /**
-       * Update general's hit points given a certain damage.
-       * @return True if hp reaches 0. 
-       * @throws IllegalArgumentException if damage is negative (there are no healers in this game).
-       */
+
+      @Override
+      public void flee(){
+         super.flee();
+         charisma = 0;
+      }
+
+      @Override
       public boolean get_hit(int damage){
-         if(damage < 0){
-            throw new IllegalArgumentException("It's not possible to receive negative damage.");
+         receive_damage(damage);
+   
+         if(hp == 0) {
+            charisma = 0;
+            return true;
          }
-   
-         int real_damage = (int) (damage - (damage*armor_factor));
-         hp = Math.max(0, hp - real_damage);
-   
-         if(hp == 0) return true;
          else return false;
       }
    }
@@ -157,18 +147,21 @@ public class Army extends Entidade{
    
    /** The class soldier is only instantiated inside Battle class. His values are then generated randomly accordingly with his army status. */
    class Soldier{
-      int hp;
-      int dexterity;
-      int damage;
-      double armor_factor;
-      int morale;
+      protected int hp;
+      protected int dexterity;
+      protected int damage;
+      protected double armor_factor;
+      protected int morale;
+      protected int idx;
       
+      public Soldier(){};
+
       public Soldier(General general){
          hp = (int)(Math.random() * (10 + (food_level*food_level/soldiers_amt/1.25)));
-         dexterity = (int) Math.random()*(hiring_level + 20);
-         damage = (int) Math.random() * ((hiring_level + armory_level)/10 + 10);
-         armor_factor = Math.random() * (Math.min(0.9, auxiliar.LogCalculator.logb(hiring_level, 200)));
-         morale = (int) 1.5*(food_level/soldiers_amt)*(hiring_level) + general.charisma;
+         dexterity = (int) (Math.random()*(hiring_level + 20));
+         damage = (int) (Math.random() * ((hiring_level + armory_level)/10 + 10));
+         armor_factor = Math.min(0.9, Math.random() * auxiliar.LogCalculator.logb(hiring_level, 200));
+         morale = (int) (1.5*(food_level/soldiers_amt)*(hiring_level)) + general.charisma;
       }
 
       int get_hp(){
@@ -183,23 +176,35 @@ public class Army extends Entidade{
       public double getArmor_factor() {
          return armor_factor;
       }
+      public int get_idx(){return idx;}
+      public void set_idx(int ind){idx = ind;}
 
+      
       public boolean get_hit(int damage){
+         
+         receive_damage((damage));
+         
+         if(hp == 0) return true;
+         else return false;
+      }
+      
+      protected void receive_damage(int damage){
          if(damage < 0){
             throw new IllegalArgumentException("It's not possible to receive negative damage.");
          }
    
-         int real_damage = (int) (damage - (damage*armor_factor));
+         int real_damage = (int) Math.max((damage - (damage*armor_factor)), 1);
          hp = Math.max(0, hp - real_damage);
-   
-         if(hp == 0) return true;
-         else return false;
       }
 
       public boolean hit(Soldier target){
          return target.get_hit(damage);
       }
       
+      public void flee(){
+         this.hp = 0;
+      }
+
    }
    
 }
