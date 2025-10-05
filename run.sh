@@ -1,2 +1,2 @@
 cd src
-javac Programa.java && java Programa
+javac -d ../bin Programa.java && (cd ../bin && java Programa)
