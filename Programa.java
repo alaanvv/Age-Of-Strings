@@ -1,5 +1,3 @@
-import java.util.Scanner;
-import modelo.Empire;
 import persistency.BancoDeDados;
 import visao.Interface;
 
@@ -10,7 +8,6 @@ public class Programa {
       visao.Interface in = new Interface(banco);
 
       in.opcao();
-      
     } 
 }
 

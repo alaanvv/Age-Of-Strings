@@ -2,8 +2,8 @@ package modelo;
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-/* Esta é a classe de transação do projeto. O objeto de composição constitui basicamente os soldados de cada exército.
- * A classe soldado não é declarada aqui, mas é somente instanciada dentro da classe Battle, se enquadrando como composição.
+/* This is the transaction class of the project. The composition relation is the soldier class: although not declared here, for sake of organization,
+ * it is only instantiated inside Battle class.
 */
 public class Battle{
    private Army attacker, defender;
@@ -64,7 +64,7 @@ public class Battle{
          int current_idx = current_turn.idx;
          boolean is_attacker = current_turn.is_attacker;
          
-         //Relativiza alvos de acordo com o exército do soldado atual.
+         //Relativize targets according to current soldier.
          ArrayList<Army.Soldier> target_army = is_attacker? defender_soldiers : attacker_soldiers;
          Army.Soldier current_soldier = is_attacker? attacker_soldiers.get(current_idx) : defender_soldiers.get(current_idx);
          Army.General gen_ally = !is_attacker? gendefender : genattacker;
@@ -79,10 +79,10 @@ public class Battle{
             continue;
          }
          
-         // Escolhe uma direção aleatória e busca o primeiro soldado com vida nessa direção. Dá a volta no array.
+         // Chooses a random direction and searches fo the first soldier alive in that direction. The searching is circular.
          int battle_status = attack_adjacent_random_enemy(current_soldier, is_attacker, target_army);
          
-         // If the attack resulted in a win/loss, end the round immediately.
+         //If someone won (last soldier of an army killed), return the winner (attacker 1, defender -1);
          if (battle_status != 0) {
             return battle_status;
          }
@@ -109,6 +109,7 @@ public class Battle{
       }
    }
 
+   
    private boolean soldier_flee(Army.Soldier current_soldier, Army.General gen_ally, boolean is_attacker){
       if(gen_ally.is_dead()) gen_ally.charisma = 0;
       int army_diff = is_attacker? defender_soldiers_alive - attacker_soldiers_alive : attacker_soldiers_alive - defender_soldiers_alive;

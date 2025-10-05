@@ -1,7 +1,6 @@
 package visao;
 
 import java.util.Scanner;
-import modelo.Empire;
 
 public class Teste_Interface {
   Scanner scanner;
