@@ -34,7 +34,7 @@ public static Scanner scanner = new Scanner(System.in);
 
           while(true){
 
-            System.out.println("1-Construir casa\n2-Farm\n3-Mine\n4-Lumber Camp\n5-Army\n6-Guerra\n0-Voltar");
+            System.out.println("1-Construir casa\n2-Farm\n3-Mine\n4-Lumber Camp\n5-Army\n6-Guerra\n7-Ver imperio\n0-Voltar");
             option = scanner.nextInt();
 
             //CONSTRUIR CASA
@@ -76,6 +76,10 @@ public static Scanner scanner = new Scanner(System.in);
             //GUERRA
             else if (option == 6){
               menuBatalhas((Empire)imperio_atual, banco, scanner);
+            }
+            //VER MENU
+            else if (option == 7){
+              System.out.println((Empire)imperio_atual);
             }
             else if (option == 0){
               break;
