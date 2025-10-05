@@ -122,8 +122,8 @@ public class Empire extends Entidade{
   public boolean create_army(){
     if(gold < 20 || food < 1 || iron < 50) return false;
     gold -= 20;
-    food -= food;
-    iron -= iron;
+    food -= 1;
+    iron -= 50;
 
     Army new_army = new Army(super.get_id(), banco);
 

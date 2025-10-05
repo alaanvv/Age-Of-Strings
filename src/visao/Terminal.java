@@ -377,6 +377,16 @@ public static Scanner scanner = new Scanner(System.in);
         System.out.println("Quanta comida voce quer transferir para o exercito?");
         int food_supply = scanner.nextInt();
 
+        if (food_supply > empire.getFood()) {
+          System.out.println(empire.getFood());
+          continue;
+        }
+
+        if (food_supply < 0) {
+          System.out.println("menor");
+          continue;
+        }
+
         if (food_supply > empire.getFood() || food_supply < 0) {
           System.out.println("Quantidade invalida.");
           continue;

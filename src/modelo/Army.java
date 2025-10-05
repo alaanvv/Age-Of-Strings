@@ -34,7 +34,7 @@ public class Army extends Entidade{
       }
       int _food_level = food_level;
       food_level = Math.min((int)(1.5*soldiers_amt), food_level + food_supply);
-      return food_level - _food_level;
+      return _food_level - food_level;
    }
 
    /**
