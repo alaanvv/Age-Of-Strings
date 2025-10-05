@@ -1,67 +1,33 @@
 package persistencia;
 
 public class BancoDeDados {
-    private Persistente army;
-    private Persistente empire;
-    private Persistente farm;
-    private Persistente lumberCamp;
-    private Persistente mine;
-    private Persistente battles;
+  private Persistente lumberCamp;
+  private Persistente empire;
+  private Persistente farm;
+  private Persistente mine;
+  private Persistente army;
+  private Persistente war;
 
-    public BancoDeDados(){
-        this.army = new Persistente();
-        this.empire = new Persistente();
-        this.farm = new Persistente();
-        this.lumberCamp = new Persistente();
-        this.mine = new Persistente();
-        this.battles = new Persistente();
-    }
+  public BancoDeDados() {
+    this.lumberCamp = new Persistente();
+    this.empire = new Persistente();
+    this.farm = new Persistente();
+    this.mine = new Persistente();
+    this.army = new Persistente();
+    this.war = new Persistente();
+  }
 
-    public Persistente getArmy() {
-        return army;
-    }
+  public Persistente getLumberCamp() { return lumberCamp; }
+  public Persistente getEmpire() { return empire; }
+  public Persistente getFarm() { return farm; }
+  public Persistente getMine() { return mine; }
+  public Persistente getArmy() { return army; }
+  public Persistente getWar() { return war; }
 
-    public Persistente getEmpire(){
-        return empire;
-    }
-
-    public Persistente getFarm() {
-        return farm;
-    }
-
-    public Persistente getLumberCamp() {
-        return lumberCamp;
-    }
-
-    public Persistente getMine() {
-        return mine;
-    }
-
-    public Persistente getBattles() {
-        return battles;
-    }
-
-    public void setArmy(Persistente army){
-        this.army = army;
-    }
-
-    public void setEmpire(Persistente empire){
-        this.empire = empire;
-    }
-
-    public void setFarm(Persistente farm){
-        this.farm = farm;
-    }
-
-    public void setLumberCamp(Persistente lumberCamp){
-        this.lumberCamp = lumberCamp;
-    }
-
-    public void setMine(Persistente mine){
-        this.mine = mine;
-    }
-
-    public void setBattles(Persistente war){
-        this.battles = battles;
-    }
+  public void setLumberCamp(Persistente lumberCamp) { this.lumberCamp = lumberCamp; }
+  public void setEmpire(Persistente empire) { this.empire = empire; }
+  public void setArmy(Persistente army) { this.army = army; }
+  public void setFarm(Persistente farm) { this.farm = farm; }
+  public void setMine(Persistente mine) { this.mine = mine; }
+  public void setWar(Persistente war) { this.war = war; }
 }
