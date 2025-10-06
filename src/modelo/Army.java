@@ -8,7 +8,6 @@ public class Army extends Entidade{
    int empire_id = -1;
    Boolean in_battle = false;
    protected int armory_level = 1;
-   protected int food_level = 10;
    protected int hiring_level = 1;
    protected int hiring_cost = 1;
    protected int soldiers_amt = 1;
@@ -27,16 +26,6 @@ public class Army extends Entidade{
    }
 
   public int getWorkers() { return soldiers_amt; }
-
-   /** @return Amount of food spent */
-   public int supply_food(int food_supply){
-      if(food_supply < 0){
-         throw new IllegalArgumentException("It's not possible to remove food of an army (they will be angry).");
-      }
-      int _food_level = food_level;
-      food_level = Math.min((int)(1.5*soldiers_amt), food_level + food_supply);
-      return _food_level - food_level;
-   }
 
    /**
     * In order to increase a level of of armory, it is necessary IRON_COST irons and GOLD_COST gold. This method will upgrade as much as it can.
@@ -92,19 +81,6 @@ public class Army extends Entidade{
       }else {
          empire.setGold(empire.getGold() - hiring_cost);
       }
-
-      //Manages army food supply
-      food_level = Math.max(food_level - soldiers_amt, 0);
-      if(food_level < 0){
-         soldiers_amt += food_level;
-         soldiers_amt = Math.max(soldiers_amt, 0);
-      }
-
-      if(empire.getFood() < soldiers_amt){
-         empire.setFood(empire.getFood() - supply_food(empire.getFood()));
-      }else{
-         empire.setFood(empire.getFood() - supply_food(soldiers_amt));
-      }
    }
 
    public int getEmpire_id() {
@@ -117,8 +93,8 @@ public class Army extends Entidade{
 
    @Override
    public String toString() {
-      return "{" + super.toString() + " | " + String.format("Army #%d | Armory level: %d | Food level: %d | Hiring level: %d | Hiring cost: %d | Soldiers amount: %d}", 
-      super.get_id(), armory_level, food_level, hiring_level, hiring_cost, soldiers_amt);
+      return "{" + super.toString() + " | " + String.format("Army #%d | Armory level: %d | Hiring level: %d | Hiring cost: %d | Soldiers amount: %d}", 
+      super.get_id(), armory_level, hiring_level, hiring_cost, soldiers_amt);
    }
    
    // --- INNER CLASSES
@@ -133,7 +109,7 @@ public class Army extends Entidade{
        protected int charisma;
        
        public General(){
-         this.hp = 20 + (int) (Math.random() * (100 + ((food_level*food_level/soldiers_amt)/2)));
+         this.hp = 20 + (int) (Math.random() * 100);
          
          this.dexterity = (int) (Math.random()*(hiring_level + 30));
          
@@ -183,11 +159,11 @@ public class Army extends Entidade{
       public Soldier(){};
 
       public Soldier(General general){
-         hp = (int)(Math.random() * (10 + (food_level*food_level/soldiers_amt/1.25)));
+         hp = (int)(Math.random() * 10);
          dexterity = (int) (Math.random()*(hiring_level + 20));
          damage = (int) (Math.random() * ((hiring_level + armory_level)/10 + 10));
          armor_factor = Math.min(0.9, Math.random() * auxiliar.LogCalculator.logb(hiring_level, 200));
-         morale = (int) (1.5*(food_level/soldiers_amt)*(hiring_level)) + general.charisma;
+         morale = (int) (1.5*(hiring_level)) + general.charisma;
       }
 
       int get_hp(){

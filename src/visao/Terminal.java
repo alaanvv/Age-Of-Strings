@@ -244,7 +244,6 @@ public class Terminal {
     System.out.println("send <amount> <id>  # Envia *amount* tropas pro exercito *id*");
     System.out.println("take <amount> <id>  # Tira *amount* trabalhadores do exercito *id*");
     System.out.println("upgrade <id>        # Melhora a armadura do exercito *id*");
-    System.out.println("feed <amount> <id>  # Envia *amount* comida pro exercito *id*");
     System.out.println("back                # Voltar pro menu anterior");
     String[] cmd = read();
 
@@ -284,21 +283,6 @@ public class Terminal {
         pontos = ((modelo.Army) army).upgrade_armory(pontos, empire);
         if (pontos > 0) System.out.println(String.format("Armadura melhorada em %d ponto(s).\n", pontos));
         else System.out.println("Recursos (Ferro/Ouro) insuficientes para esta melhoria.\n");
-        break;
-
-      case "feed":
-        army = (Army) db.getArmy().buscarId(toint(cmd[2]));
-        if (army == null) System.out.println("Esse exercito nao existe.");
-        else if (army.getEmpire_id() != empire.get_id()) System.out.println("Esse exercito nao pertence a esse imperio.");
-        
-        int food_supply = toint(cmd[1]);
-        if (food_supply > empire.getFood() || food_supply < 0) {
-          System.out.println("Quantidade invalida.");
-          break;
-        }
-        int food_spent = ((modelo.Army) army).supply_food(food_supply);
-        empire.setFood(empire.getFood() - food_spent);
-        System.out.println(String.format("%d de comida transferida.", food_spent));
         break;
       case "back":
         return;
