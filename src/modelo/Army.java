@@ -14,13 +14,20 @@ public class Army extends Entidade{
    
    Battle current_battle;
 
+  private BancoDeDados db;
 
    public Army(int empire_id, BancoDeDados banco){
       super(banco.getArmy().getSize());
+      db = banco;
       this.empire_id = empire_id;
       this.general = new General();
    }
-   
+ 
+
+  public void destroy() {
+    db.getArmy().remover(super.get_id());
+  }  
+
    public boolean is_battling(){
       return in_battle;
    }

@@ -6,14 +6,21 @@ public class Lumber extends Entidade {
   private int workers = 0;
   private int empire_id;
 
+  private BancoDeDados db;
+
   // ---
 
   public Lumber(int empire_id, BancoDeDados db) {
     super(db.getLumber().getSize());
     this.empire_id = empire_id;
+    this.db = db;
   }
 
   public int getWorkers() { return workers; }
+
+  public void destroy() {
+    db.getLumber().remover(super.get_id());
+  }
 
   // Retorna quantos trabalhadores entraram
   public int send_workers(int amount) {

@@ -43,6 +43,10 @@ public class Empire extends Entidade {
 
   // ---
 
+  public void destroy() {
+    db.getEmpire().remover(super.get_id());
+  }
+
   public boolean build_house() {
     if (wood < 5 || gold < 5) return false;
     wood -= 5;

@@ -8,16 +8,23 @@ public class Mine extends Entidade {
   private int workers = 0;
   private int empire_id;
 
+  private BancoDeDados db;
+
   // ---
 
   public Mine(int empire_id, BancoDeDados db) {
     super(db.getMine().getSize());
     this.empire_id = empire_id;
+    this.db = db;
     iron = (int) (Math.random() * 250);
     gold = (int) (Math.random() * 100);
   }
 
   public int getWorkers() { return workers; }
+
+  public void destroy() {
+    db.getMine().remover(super.get_id());
+  }
 
   // Retorna quantos trabalhadores entraram
   public int send_workers(int amount) {
