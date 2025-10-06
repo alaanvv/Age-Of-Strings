@@ -11,7 +11,7 @@ public class Farm extends Entidade {
   // ---
 
   public Farm(int empireId, BancoDeDados db) {
-    super(db.getFarms().getSize());
+    super(db.nextFarm());
     this.empireId = empireId;
     this.db = db;
   }

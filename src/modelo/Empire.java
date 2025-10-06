@@ -20,7 +20,7 @@ public class Empire extends Entidade {
   private BancoDeDados db;
 
   public Empire(BancoDeDados db, String name) {
-    super(db.getEmpires().getSize());
+    super(db.nextEmpire());
     this.name = name;
     this.db = db;
     lumber = new Lumber(super.getId(), db);
