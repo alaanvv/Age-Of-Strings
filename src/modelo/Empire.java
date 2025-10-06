@@ -22,6 +22,7 @@ public class Empire extends Entidade {
     super(db.getEmpire().getSize());
     this.db = db;
     lumber = new Lumber(super.get_id(), db);
+    db.getLumber().inserir(lumber);
   }
 
   public ArrayList<Army> getArmies() { return armies; }
