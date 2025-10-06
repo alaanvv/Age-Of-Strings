@@ -332,12 +332,12 @@ public class Terminal {
         for (Entidade a : db.getArmies().getEntidades()) log(a.toString());
         break;
       case "send":
-        army = (Army) db.getArmies().findById(parseInt(cmd[1]));
+        army = (Army) db.getArmies().findById(parseInt(cmd[2]));
         if (army == null) log("Exercito inexistente.");
         else log(String.format("%d trabalhadores enviados.", ((Empire) db.getEmpires().findById(army.getEmpireId())).sendWorkersToArmy(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
       case "take":
-        army = (Army) db.getArmies().findById(parseInt(cmd[1]));
+        army = (Army) db.getArmies().findById(parseInt(cmd[2]));
         if (army == null) log("Exercito inexistente.");
         else log(String.format("%d trabalhadores retirados.", ((Empire) db.getEmpires().findById(army.getEmpireId())).takeWorkersFromArmy(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
@@ -350,7 +350,7 @@ public class Terminal {
         }
         break;
       case "upgrade":
-        army = (Army) db.getArmies().findById(parseInt(cmd[1]));
+        army = (Army) db.getArmies().findById(parseInt(cmd[2]));
         if (army == null) log("Exercito inexistente.");
         else {
           empire = (Empire) db.getEmpires().findById(army.getEmpireId());
