@@ -26,6 +26,7 @@ public class Army extends Entidade{
       return in_battle;
    }
 
+  public int getWorkers() { return soldiers_amt; }
 
    /** @return Amount of food spent */
    public int supply_food(int food_supply){
@@ -44,16 +45,16 @@ public class Army extends Entidade{
      */
    public final int IRON_COST_ARMORY = 25, GOLD_COST_ARMORY = 5;
    public int upgrade_armory(int intended_points, Empire empire){
-      int iron = Math.min(empire.get_iron(), intended_points*IRON_COST_ARMORY);
-      int gold = Math.min(empire.get_gold(), intended_points*GOLD_COST_ARMORY);
+      int iron = Math.min(empire.getIron(), intended_points*IRON_COST_ARMORY);
+      int gold = Math.min(empire.getGold(), intended_points*GOLD_COST_ARMORY);
       int iron_packs = iron/IRON_COST_ARMORY;
       int gold_packs = gold/GOLD_COST_ARMORY;
 
       int points_added = Math.min(iron_packs, gold_packs);
       armory_level += points_added;
       
-      empire.set_iron((empire.get_iron() - IRON_COST_ARMORY*points_added));
-      empire.set_gold(empire.get_gold() - (GOLD_COST_ARMORY*points_added));
+      empire.setIron((empire.getIron() - IRON_COST_ARMORY*points_added));
+      empire.setGold(empire.getGold() - (GOLD_COST_ARMORY*points_added));
 
       return points_added;
    }
@@ -69,18 +70,14 @@ public class Army extends Entidade{
       return hiring_cost - prev_hiring_cost;
    }
 
-   public boolean allocate_work(Empire empire, int amt){
-      if(amt > empire.get_population()){
-         return false;
-      }
+  // Retorna quantos trabalhadores entraram
+  public int send_workers(int amount) {
+    int _soldiers = soldiers_amt;
+    soldiers_amt += amount;
+    return soldiers_amt - _soldiers;
+  }
 
-      soldiers_amt += amt;
-      empire.set_population(empire.get_population() - amt);
-      empire.set_workers(empire.get_workers() + amt);
-      return true;
-   }
-
-   public int take_soldiers(int amount) {
+   public int take_workers(int amount) {
     int _soldiers = soldiers_amt;
     soldiers_amt = Math.max(0, soldiers_amt - amount);
     return _soldiers - soldiers_amt;
@@ -89,11 +86,11 @@ public class Army extends Entidade{
    public void time_update_army(Empire empire){
       
       // Manages army payment
-      if(empire.get_gold() < hiring_cost){
-         change_hiring_funds(empire.get_gold());
-         empire.set_gold(empire.get_gold() - hiring_cost);
+      if(empire.getGold() < hiring_cost){
+         change_hiring_funds(empire.getGold());
+         empire.setGold(empire.getGold() - hiring_cost);
       }else {
-         empire.set_gold(empire.get_gold() - hiring_cost);
+         empire.setGold(empire.getGold() - hiring_cost);
       }
 
       //Manages army food supply
@@ -103,10 +100,10 @@ public class Army extends Entidade{
          soldiers_amt = Math.max(soldiers_amt, 0);
       }
 
-      if(empire.get_food() < soldiers_amt){
-         empire.set_food(empire.get_food() - supply_food(empire.get_food()));
+      if(empire.getFood() < soldiers_amt){
+         empire.setFood(empire.getFood() - supply_food(empire.getFood()));
       }else{
-         empire.set_food(empire.get_food() - supply_food(soldiers_amt));
+         empire.setFood(empire.getFood() - supply_food(soldiers_amt));
       }
    }
 
@@ -124,15 +121,6 @@ public class Army extends Entidade{
       super.get_id(), armory_level, food_level, hiring_level, hiring_cost, soldiers_amt);
    }
    
-   public int take_workers(int amount){
-      if(in_battle){
-         return 0;
-      }
-
-      int prev_soldiers = soldiers_amt;
-      soldiers_amt = Math.max(0, soldiers_amt - amount);
-      return prev_soldiers - soldiers_amt;
-   }
    // --- INNER CLASSES
    
    /**

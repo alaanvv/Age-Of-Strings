@@ -2,18 +2,22 @@ package modelo;
 
 import persistencia.BancoDeDados;
 
-public class Mine extends Entidade{
+public class Mine extends Entidade {
   private int iron;
   private int gold;
   private int workers = 0;
   private int empire_id;
 
-  public Mine(int empire_id, BancoDeDados banco) {
-    super(banco.getMine().getSize());
+  // ---
+
+  public Mine(int empire_id, BancoDeDados db) {
+    super(db.getMine().getSize());
+    this.empire_id = empire_id;
     iron = (int) (Math.random() * 250);
     gold = (int) (Math.random() * 100);
-    this.empire_id = empire_id;
   }
+
+  public int getWorkers() { return workers; }
 
   // Retorna quantos trabalhadores entraram
   public int send_workers(int amount) {
@@ -31,7 +35,7 @@ public class Mine extends Entidade{
 
   // Extrai ferro equivalente a um turno
   public int extract_iron() {
-    double efficiency = Math.log(workers + 1); 
+    double efficiency = Math.log(workers + 1);
     int collected_iron = Math.min(iron, (int) (Math.random() * efficiency * 3));
     iron -= collected_iron;
     return collected_iron;
@@ -39,23 +43,20 @@ public class Mine extends Entidade{
 
   // Extrai ouro equivalente a um turno
   public int extract_gold() {
-    double efficiency = Math.log(workers + 1); 
+    double efficiency = Math.log(workers + 1);
     int collected_gold = Math.min(gold, (int) (Math.random() * efficiency * 2));
     gold -= collected_gold;
     return collected_gold;
   }
 
-  public int getEmpire_id() {
-        return empire_id;
-    }
-
-  public int getWorkers() {
-      return workers;
+  public int get_empire_id() {
+    return empire_id;
   }
 
   // ---
 
+  @Override
   public String toString() {
-    return "{" + super.toString() + " | " + String.format("Mina #%d| Trabalhadores: %d/20 | Ferro: %d | Ouro: %d}", super.get_id(), workers, iron, gold);
+    return String.format("Fazenda #%d | Trabalhadores: %d/10; Ferro: %d; Ouro: %d", super.get_id(), workers, iron, gold);
   }
 }

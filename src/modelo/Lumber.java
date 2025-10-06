@@ -2,20 +2,24 @@ package modelo;
 
 import persistencia.BancoDeDados;
 
-public class LumberCamp extends Entidade{
+public class Lumber extends Entidade {
   private int workers = 0;
   private int empire_id;
 
   // ---
 
-  public LumberCamp(int empire_id, BancoDeDados banco){
-    super(banco.getLumberCamp().getSize());
+  public Lumber(int empire_id, BancoDeDados db) {
+    super(db.getLumber().getSize());
     this.empire_id = empire_id;
   }
 
+  public int getWorkers() { return workers; }
+
+  // Retorna quantos trabalhadores entraram
   public int send_workers(int amount) {
-    workers += amount;
-    return amount;
+    int _workers = workers;
+    workers = workers + amount;
+    return workers - _workers;
   }
 
   // Retorna quantos trabalhadores foram retirados
@@ -27,21 +31,18 @@ public class LumberCamp extends Entidade{
 
   // Extrai madeira equivalente a um turno
   public int extract_wood() {
-    double efficiency = Math.log(workers + 1); 
+    double efficiency = Math.log(workers + 1);
     return (int) (Math.random() * efficiency * 10);
   }
 
-  public int getWorkers() {
-      return workers;
-  }
-
-  public int getEmpire_id() {
-      return empire_id;
+  public int get_empire_id() {
+    return empire_id;
   }
 
   // ---
 
+  @Override
   public String toString() {
-    return "{" + super.toString() + " | " + String.format("Campo de Lenhadores | Trabalhadores: %d}", workers);
+    return String.format("Campo de lenhadores #%d | Trabalhadores: %d", super.get_id(), workers);
   }
 }

@@ -19,7 +19,7 @@ public class BancoDeDados {
     this.war = new Persistente();
   }
 
-  public Persistente getLumberCamp() { return lumberCamp; }
+  public Persistente getLumber() { return lumberCamp; }
   public Persistente getBattle() { return battle; }
   public Persistente getEmpire() { return empire; }
   public Persistente getFarm() { return farm; }
