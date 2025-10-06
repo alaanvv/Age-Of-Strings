@@ -54,6 +54,10 @@ public class Empire extends Entidade {
     for (Army a : armies) a.destroy();
     for (Farm f : farms) f.destroy();
     for (Mine m : mines) m.destroy();
+
+    for (Entidade a : db.getArmies().getEntidades()) {if (((Army)a).getEmpireId() == super.getId()) ((Army)a).destroy();}
+    for (Entidade f : db.getFarms().getEntidades()) {if (((Farm)f).getEmpireId() == super.getId()) ((Farm)f).destroy();}
+    for (Entidade m : db.getMines().getEntidades()) {if (((Mine)m).getEmpireId() == super.getId()) ((Mine)m).destroy();}
     db.getEmpires().remove(super.getId());
   }
 
