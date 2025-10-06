@@ -147,9 +147,10 @@ public class Empire extends Entidade {
 
   // ---
 
-  public void run_turn() {
+  public String run_turn() {
+    StringBuilder output = new StringBuilder();
+
     // Extraindo recursos
- 
     wood += lumber.extract_wood();
 
     for (Farm farm : farms)
@@ -161,13 +162,12 @@ public class Empire extends Entidade {
     }
 
     // Consumindo pontos de comida
-
     int consumed = population + workers;
     food -= consumed;
     if (food < 0) {
       int dead = -food;
       float perc = (float) dead / (population + workers);
-      System.out.println(String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.get_id(), dead));
+      output.append(String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.get_id(), dead));
       food = 0;
 
       int removed = lumber.take_workers((int) Math.ceil(lumber.getWorkers() * perc));
@@ -202,24 +202,25 @@ public class Empire extends Entidade {
       if (workers < 0) workers = 0;
     }
 
-    for (int i = db.getBattle().getSize()-1; i >= 0; i--) {
-      Battle batalhas = ((Battle)db.getBattle().buscarId(i));
-
+    for (int i = db.getBattle().getSize() - 1; i >= 0; i--) {
+      Battle batalhas = (Battle) db.getBattle().buscarId(i);
       int result = batalhas.simulate_round();
 
       String attackerName = "Army #" + batalhas.getAttacker().get_id();
       String defenderName = "Army #" + batalhas.getDefender().get_id();
 
       if (result == 1) {
-        System.out.println(attackerName + " Venceu a batalha! Vitoria dos atacantes.");
+        output.append(attackerName).append(" Venceu a batalha! Vitoria dos atacantes.\n");
         db.getBattle().remover(batalhas.get_id());
       } else if (result == -1) {
-        System.out.println(defenderName + " Venceu a batalha! Vitoria dos defensores.");
+        output.append(defenderName).append(" Venceu a batalha! Vitoria dos defensores.\n");
         db.getBattle().remover(batalhas.get_id());
       } else {
-        System.out.println("A batalha continua... Nenhum vencedor nesta rodada.");
+        output.append("A batalha continua... Nenhum vencedor nesta rodada.\n");
       }
     }
+
+    return output.toString();
   }
 
   // ---
