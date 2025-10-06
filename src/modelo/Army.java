@@ -17,7 +17,7 @@ public class Army extends Entidade {
   private BancoDeDados db;
 
   public Army(int empireId, BancoDeDados db) {
-    super(db.getArmies().getSize());
+    super(db.nextArmy());
     this.db = db;
     this.empireId = empireId;
     this.general = new General();

@@ -369,6 +369,7 @@ public class Terminal {
     System.out.println("Batalhas");
     System.out.println("");
     print("new <empire> <atk_id> <dfn_id>", "Iniciar nova batalha usando a tropa *atk_id* pra atacar *dfn_id*");
+    print("insertsoldier <battle_id> <attacker/defender> <amt>", "Inserir soldados temporários no exército *attacker/defender* d");
     print("view <id>", "Ver batalha com *id*");
     print("viewall", "Ver todas batalhas");
     print("destroy <id>", "Destroi a batalha *id* (0-%d)", db.getBattles().getSize() - 1);
@@ -391,14 +392,15 @@ public class Terminal {
         if (battle == null) log("Batalha inexistente.");
         else log(battle.toString());
         break;
+      
       case "new":
         Empire empire = (Empire) db.getEmpires().findById(parseInt(cmd[1]));
         if (empire == null) {log("Imperio inexistente."); break;}
-        Army attackerArmy = (Army) db.getArmies().findById(parseInt(cmd[1]));
+        Army attackerArmy = (Army) db.getArmies().findById(parseInt(cmd[2]));
         if (attackerArmy == null || attackerArmy.getEmpireId() != empire.getId()) {
-          log("Tropa atacante invalida ou nao pertence ao seu imperio.");
+          log("Tropa atacante invalida ou nao pertence ao imperio selecionado.");
         } else {
-          Army defenderArmy = (Army) db.getArmies().findById(parseInt(cmd[2]));
+          Army defenderArmy = (Army) db.getArmies().findById(parseInt(cmd[3]));
           if (defenderArmy == null || defenderArmy.getEmpireId() == empire.getId()) {
             log("Tropa defensora invalida ou pertence ao seu imperio.");
           } else {

@@ -8,6 +8,13 @@ public class BancoDeDados {
   private Persistente farms;
   private Persistente mines;
 
+  private int cBattles = 0;
+  private int cEmpires = 0;
+  private int cLumbers = 0;
+  private int cArmies = 0;
+  private int cFarms = 0;
+  private int cMines = 0;
+
   public BancoDeDados() {
     this.battles = new Persistente();
     this.empires = new Persistente();
@@ -16,6 +23,13 @@ public class BancoDeDados {
     this.farms = new Persistente();
     this.mines = new Persistente();
   }
+  
+  public int nextBattle() { return cBattles++; }
+  public int nextEmpire() { return cEmpires++; }
+  public int nextLumber() { return cLumbers++; }
+  public int nextArmy() { return cArmies++; }
+  public int nextFarm() { return cFarms++; }
+  public int nextMine() { return cMines++; }
 
   public Persistente getLumbers() {
     return lumbers;

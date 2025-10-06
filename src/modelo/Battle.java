@@ -19,7 +19,7 @@ public class Battle extends Entidade {
   private persistencia.BancoDeDados db;
 
   public Battle(Army attacker, Army defender, persistencia.BancoDeDados db) {
-    super(db.getBattles().getSize());
+    super(db.nextBattle());
     this.db = db;
     this.attacker = attacker;
     this.defender = defender;
@@ -166,6 +166,14 @@ public class Battle extends Entidade {
     }
 
     return 0;
+  }
+
+  void insertSoldier(Boolean is_attacker, int amount){
+    ArrayList<Army.Soldier> receiverSoldiers = is_attacker? attackerSoldiers : defenderSoldiers;
+    Army receiverArmy = is_attacker? attacker : defender;
+    for(int i = 0; i < amount; i++){
+      receiverSoldiers.addLast(receiverArmy.new Soldier());
+    }
   }
 }
 
