@@ -7,11 +7,11 @@ public abstract class Entidade {
     this.id = id;
   }
 
-  public void set_id(int id) {
+  public void setId(int id) {
     this.id = id;
   }
 
-  public int get_id() {
+  public int getId() {
     return id;
   }
 

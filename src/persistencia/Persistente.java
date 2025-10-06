@@ -11,23 +11,23 @@ public class Persistente {
     this.entidades = new ArrayList<>();
   }
 
-  public void inserir(Entidade objeto) {
-    this.entidades.add(objeto);
+  public void insert(Entidade entity) {
+    this.entidades.add(entity);
   }
 
-  public Boolean alterar(int id, Entidade objeto) {
+  public Boolean update(int id, Entidade entity) {
     for (int i = 0; i < entidades.size(); i++) {
-      if (entidades.get(i).get_id() == id) {
-        entidades.set(i, objeto);
+      if (entidades.get(i).getId() == id) {
+        entidades.set(i, entity);
         return true;
       }
     }
     return false;
   }
 
-  public Boolean remover(int id) {
+  public Boolean remove(int id) {
     for (Entidade entidade : entidades) {
-      if (entidade.get_id() == id) {
+      if (entidade.getId() == id) {
         entidades.remove(entidade);
         return true;
       }
@@ -35,9 +35,9 @@ public class Persistente {
     return false;
   }
 
-  public Entidade buscarId(int id) {
+  public Entidade findById(int id) {
     for (Entidade entidade : entidades)
-      if (entidade.get_id() == id)
+      if (entidade.getId() == id)
         return entidade;
     return null;
   }
@@ -52,7 +52,7 @@ public class Persistente {
 
   public String toString() {
     StringBuilder s = new StringBuilder();
-    for (Entidade entidade : entidades) 
+    for (Entidade entidade : entidades)
       s.append(entidade.toString()).append("\n");
     return s.toString();
   }

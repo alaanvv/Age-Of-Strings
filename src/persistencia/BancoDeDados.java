@@ -19,19 +19,47 @@ public class BancoDeDados {
     this.war = new Persistente();
   }
 
-  public Persistente getLumber() { return lumberCamp; }
-  public Persistente getBattle() { return battle; }
-  public Persistente getEmpire() { return empire; }
-  public Persistente getFarm() { return farm; }
-  public Persistente getMine() { return mine; }
-  public Persistente getArmy() { return army; }
-  public Persistente getWar() { return war; }
+  public Persistente getLumberCamp() {
+    return lumberCamp;
+  }
+  public Persistente getBattle() {
+    return battle;
+  }
+  public Persistente getEmpire() {
+    return empire;
+  }
+  public Persistente getFarm() {
+    return farm;
+  }
+  public Persistente getMine() {
+    return mine;
+  }
+  public Persistente getArmy() {
+    return army;
+  }
+  public Persistente getWar() {
+    return war;
+  }
 
-  public void setLumberCamp(Persistente lumberCamp) { this.lumberCamp = lumberCamp; }
-  public void setBattle(Persistente battle) { this.battle = battle; }
-  public void setEmpire(Persistente empire) { this.empire = empire; }
-  public void setArmy(Persistente army) { this.army = army; }
-  public void setFarm(Persistente farm) { this.farm = farm; }
-  public void setMine(Persistente mine) { this.mine = mine; }
-  public void setWar(Persistente war) { this.war = war; }
+  public void setLumberCamp(Persistente lumberCamp) {
+    this.lumberCamp = lumberCamp;
+  }
+  public void setBattle(Persistente battle) {
+    this.battle = battle;
+  }
+  public void setEmpire(Persistente empire) {
+    this.empire = empire;
+  }
+  public void setArmy(Persistente army) {
+    this.army = army;
+  }
+  public void setFarm(Persistente farm) {
+    this.farm = farm;
+  }
+  public void setMine(Persistente mine) {
+    this.mine = mine;
+  }
+  public void setWar(Persistente war) {
+    this.war = war;
+  }
 }

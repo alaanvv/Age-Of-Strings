@@ -38,7 +38,7 @@ public class Terminal {
     return line.split(" ");
   }
 
-  private static int toint(String n) {
+  private static int parseInt(String n) {
     return Integer.parseInt(n);
   }
 
@@ -55,11 +55,11 @@ public class Terminal {
     switch (cmd[0]) {
       case "new":
         Empire empire = new Empire(db);
-        db.getEmpire().inserir(empire);
-        log(String.format("Imperio #%d criado", empire.get_id()));
+        db.getEmpire().insert(empire);
+        log(String.format("Imperio #%d criado", empire.getId()));
         break;
       case "view":
-        empire = (Empire) db.getEmpire().buscarId(toint(cmd[1]));
+        empire = (Empire) db.getEmpire().findById(parseInt(cmd[1]));
         if (empire == null) log("Imperio inexistente.");
         else log(empire.toString());
         break;
@@ -68,7 +68,7 @@ public class Terminal {
           log(e.toString());
         break;
       case "destroy":
-        empire = (Empire) db.getEmpire().buscarId(toint(cmd[1]));
+        empire = (Empire) db.getEmpire().findById(parseInt(cmd[1]));
         if (empire == null) log("Imperio inexistente.");
         else {
           empire.destroy();
@@ -76,13 +76,13 @@ public class Terminal {
         }
         break;
       case "control":
-        empire = (Empire) db.getEmpire().buscarId(toint(cmd[1]));
+        empire = (Empire) db.getEmpire().findById(parseInt(cmd[1]));
         if (empire == null) log("Imperio nao encontrado.");
         else empireMenu(empire, db);
         break;
       case "run":
         for (Entidade e : db.getEmpire().getEntidades())
-          log(((Empire) e).run_turn());
+          log(((Empire) e).runTurn());
         log("Turno rodado.");
         break;
       case "exit":
@@ -143,7 +143,7 @@ public class Terminal {
 
     switch (cmd[0]) {
       case "build":
-        log(empire.build_house() ? "Casa construida." : "Recursos insuficientes.");
+        log(empire.buildHouse() ? "Casa construida." : "Recursos insuficientes.");
         break;
       case "back":
         return;
@@ -174,7 +174,7 @@ public class Terminal {
           log(farm.toString());
         break;
       case "viewany":
-        Farm farm = (Farm) db.getFarm().buscarId(toint(cmd[1]));
+        Farm farm = (Farm) db.getFarm().findById(parseInt(cmd[1]));
         if (farm == null) log("Fazenda inexistente.");
         else log(farm.toString());
         break;
@@ -183,10 +183,10 @@ public class Terminal {
           log(f.toString());
         break;
       case "build":
-        log(empire.build_farm() ? "Fazenda construida." : "Recursos insuficientes.");
+        log(empire.buildFarm() ? "Fazenda construida." : "Recursos insuficientes.");
         break;
       case "destroy":
-        farm = (Farm) db.getFarm().buscarId(toint(cmd[1]));
+        farm = (Farm) db.getFarm().findById(parseInt(cmd[1]));
         if (farm == null) log("Fazenda inexistente.");
         else {
           farm.destroy();
@@ -194,22 +194,22 @@ public class Terminal {
         }
         break;
       case "send":
-        farm = (Farm) db.getFarm().buscarId(toint(cmd[2]));
+        farm = (Farm) db.getFarm().findById(parseInt(cmd[2]));
         if (farm == null)
           log("Fazenda inexistente.");
-        else if (farm.get_empire_id() != empire.get_id())
+        else if (farm.getEmpireId() != empire.getId())
           log("Essa fazenda nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores enviados.", empire.send_workers_to_farm(toint(cmd[1]), toint(cmd[2]))));
+          log(String.format("%d trabalhadores enviados.", empire.sendWorkersToFarm(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
       case "take":
-        farm = (Farm) db.getFarm().buscarId(toint(cmd[2]));
+        farm = (Farm) db.getFarm().findById(parseInt(cmd[2]));
         if (farm == null)
           log("Fazenda inexistente.");
-        else if (farm.get_empire_id() != empire.get_id())
+        else if (farm.getEmpireId() != empire.getId())
           log("Essa fazenda nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores retirados.", empire.take_workers_from_farm(toint(cmd[1]), toint(cmd[2]))));
+          log(String.format("%d trabalhadores retirados.", empire.takeWorkersFromFarm(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
       case "back":
         return;
@@ -241,7 +241,7 @@ public class Terminal {
           log(m.toString());
         break;
       case "viewany":
-        Mine mine = (Mine) db.getMine().buscarId(toint(cmd[1]));
+        Mine mine = (Mine) db.getMine().findById(parseInt(cmd[1]));
         if (mine == null) log("Mina inexistente.");
         else log(mine.toString());
         break;
@@ -250,10 +250,10 @@ public class Terminal {
           log(m.toString());
         break;
       case "build":
-        log(empire.build_mine() ? "Mina construida." : "Recursos insuficientes.");
+        log(empire.buildMine() ? "Mina construida." : "Recursos insuficientes.");
         break;
       case "destroy":
-        mine = (Mine) db.getMine().buscarId(toint(cmd[1]));
+        mine = (Mine) db.getMine().findById(parseInt(cmd[1]));
         if (mine == null) log("Mina inexistente.");
         else {
           mine.destroy();
@@ -261,22 +261,22 @@ public class Terminal {
         }
         break;
       case "send":
-        mine = (Mine) db.getMine().buscarId(toint(cmd[2]));
+        mine = (Mine) db.getMine().findById(parseInt(cmd[2]));
         if (mine == null)
           log("Mina inexistente.");
-        else if (mine.get_empire_id() != empire.get_id())
+        else if (mine.getEmpireId() != empire.getId())
           log("Essa mina nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores enviados.", empire.send_workers_to_mine(toint(cmd[1]), toint(cmd[2]))));
+          log(String.format("%d trabalhadores enviados.", empire.sendWorkersToMine(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
       case "take":
-        mine = (Mine) db.getMine().buscarId(toint(cmd[2]));
+        mine = (Mine) db.getMine().findById(parseInt(cmd[2]));
         if (mine == null)
           log("Mina inexistente.");
-        else if (mine.get_empire_id() != empire.get_id())
+        else if (mine.getEmpireId() != empire.getId())
           log("Essa mina nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores retirados.", empire.take_workers_from_mine(toint(cmd[1]), toint(cmd[2]))));
+          log(String.format("%d trabalhadores retirados.", empire.takeWorkersFromMine(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
       case "back":
         return;
@@ -291,9 +291,9 @@ public class Terminal {
     System.out.println("Campos de lenhador - Produzem madeira");
     System.out.println("");
     print("view", "Ver campos");
-    if (db.getLumber().getSize() > 0) print("viewany <id>", "Ver campo de lenhador de qualquer imperio com *id* (0-%d)", db.getLumber().getSize() - 1);
-    if (db.getLumber().getSize() > 0) print("viewall", "Ver todos campos de lenhador de todos imperios");
-    if (db.getLumber().getSize() > 0) print("destroy <id>", "Destroi o campo de lenhador *id* (0-%d)", db.getLumber().getSize() - 1);
+    if (db.getLumberCamp().getSize() > 0) print("viewany <id>", "Ver campo de lenhador de qualquer imperio com *id* (0-%d)", db.getLumberCamp().getSize() - 1);
+    if (db.getLumberCamp().getSize() > 0) print("viewall", "Ver todos campos de lenhador de todos imperios");
+    if (db.getLumberCamp().getSize() > 0) print("destroy <id>", "Destroi o campo de lenhador *id* (0-%d)", db.getLumberCamp().getSize() - 1);
     print("send <amount>", "Envia *amount* trabalhadores pro campo");
     print("take <amount>", "Tira *amount* trabalhadores do campo");
     print("back", "Voltar pro menu anterior");
@@ -304,16 +304,16 @@ public class Terminal {
         log(empire.getLumber().toString());
         break;
       case "viewany":
-        Lumber lumber = (Lumber) db.getLumber().buscarId(toint(cmd[1]));
+        Lumber lumber = (Lumber) db.getLumberCamp().findById(parseInt(cmd[1]));
         if (lumber == null) log("Campo de lenhador inexistente.");
         else log(lumber.toString());
         break;
       case "viewall":
-        for (Entidade l : db.getLumber().getEntidades())
+        for (Entidade l : db.getLumberCamp().getEntidades())
           log(l.toString());
         break;
       case "destroy":
-        lumber = (Lumber) db.getLumber().buscarId(toint(cmd[1]));
+        lumber = (Lumber) db.getLumberCamp().findById(parseInt(cmd[1]));
         if (lumber == null) log("Campo de lenhador inexistente.");
         else {
           lumber.destroy();
@@ -321,10 +321,10 @@ public class Terminal {
         }
         break;
       case "send":
-        log(String.format("%d trabalhadores enviados.", empire.send_workers_to_lumber(toint(cmd[1]))));
+        log(String.format("%d trabalhadores enviados.", empire.sendWorkersToLumber(parseInt(cmd[1]))));
         break;
       case "take":
-        log(String.format("%d trabalhadores retirados.", empire.take_workers_from_lumber(toint(cmd[1]))));
+        log(String.format("%d trabalhadores retirados.", empire.takeWorkersFromLumber(parseInt(cmd[1]))));
         break;
       case "back":
         return;
@@ -358,7 +358,7 @@ public class Terminal {
           log(a.toString());
         break;
       case "viewany":
-        Army army = (Army) db.getArmy().buscarId(toint(cmd[1]));
+        Army army = (Army) db.getArmy().findById(parseInt(cmd[1]));
         if (army == null) log("Exercito inexistente.");
         else log(army.toString());
         break;
@@ -367,10 +367,10 @@ public class Terminal {
           log(a.toString());
         break;
       case "new":
-        log(empire.create_army() ? "Exercito criado." : "Recursos insuficientes.");
+        log(empire.createArmy() ? "Exercito criado." : "Recursos insuficientes.");
         break;
       case "destroy":
-        army = (Army) db.getArmy().buscarId(toint(cmd[1]));
+        army = (Army) db.getArmy().findById(parseInt(cmd[1]));
         if (army == null) log("Exercito inexistente.");
         else {
           army.destroy();
@@ -378,33 +378,33 @@ public class Terminal {
         }
         break;
       case "send":
-        army = (Army) db.getArmy().buscarId(toint(cmd[2]));
+        army = (Army) db.getArmy().findById(parseInt(cmd[2]));
         if (army == null)
           log("Esse exercito nao existe.");
-        else if (army.getEmpire_id() != empire.get_id())
+        else if (army.getEmpireId() != empire.getId())
           log("Esse exercito nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores se tornaram soldados.", empire.send_workers_to_army(toint(cmd[1]), toint(cmd[2]))));
+          log(String.format("%d trabalhadores se tornaram soldados.", empire.sendWorkersToArmy(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
       case "take":
-        army = (Army) db.getArmy().buscarId(toint(cmd[2]));
+        army = (Army) db.getArmy().findById(parseInt(cmd[2]));
         if (army == null)
           log("Esse exercito nao existe.");
-        else if (army.getEmpire_id() != empire.get_id())
+        else if (army.getEmpireId() != empire.getId())
           log("Esse exercito nao pertence a esse imperio.");
         else
-          log(String.format("%d tropas retiradas.", empire.take_workers_from_army(toint(cmd[1]), toint(cmd[2]))));
+          log(String.format("%d tropas retiradas.", empire.takeWorkersFromArmy(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
       case "upgrade":
-        army = (Army) db.getArmy().buscarId(toint(cmd[2]));
+        army = (Army) db.getArmy().findById(parseInt(cmd[2]));
         if (army == null)
           log("Esse exercito nao existe.");
-        else if (army.getEmpire_id() != empire.get_id())
+        else if (army.getEmpireId() != empire.getId())
           log("Esse exercito nao pertence a esse imperio.");
         else {
-          int pontos = army.upgrade_armory(toint(cmd[1]), empire);
-          log(pontos > 0 ? String.format("Armadura melhorada em %d ponto(s).", pontos)
-              : "Recursos insuficientes para esta melhoria.");
+          int pontos = army.upgradeArmory(parseInt(cmd[1]), empire);
+          log(pontos > 0 ? String.format("Armadura melhorada em %d ponto(s).", pontos) :
+            "Recursos insuficientes para esta melhoria.");
         }
         break;
       case "back":
@@ -428,36 +428,36 @@ public class Terminal {
     switch (cmd[0]) {
       case "view":
         for (int i = db.getBattle().getSize() - 1; i >= 0; i--) {
-          Battle batalhas = (Battle) db.getBattle().buscarId(i);
-          String attackerName = "Army #" + batalhas.getAttacker().get_id();
-          String defenderName = "Army #" + batalhas.getDefender().get_id();
+          Battle batalhas = (Battle) db.getBattle().findById(i);
+          String attackerName = "Army #" + batalhas.getAttacker().getId();
+          String defenderName = "Army #" + batalhas.getDefender().getId();
           log("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
-          log("Soldados Atacantes vivos: " + batalhas.getAttacker_soldiers_alive());
-          log("Soldados Defensores vivos: " + batalhas.getDefender_soldiers_alive());
+          log("Soldados Atacantes vivos: " + batalhas.getAttackerSoldiersAlive());
+          log("Soldados Defensores vivos: " + batalhas.getDefenderSoldiersAlive());
         }
         break;
       case "viewany":
-        Battle battle = (Battle) db.getBattle().buscarId(toint(cmd[1]));
+        Battle battle = (Battle) db.getBattle().findById(parseInt(cmd[1]));
         if (battle == null) log("Batalha inexistente.");
         else log(battle.toString());
         break;
       case "new":
-        Army attackerArmy = (Army) db.getArmy().buscarId(toint(cmd[1]));
-        if (attackerArmy == null || attackerArmy.getEmpire_id() != empire.get_id()) {
+        Army attackerArmy = (Army) db.getArmy().findById(parseInt(cmd[1]));
+        if (attackerArmy == null || attackerArmy.getEmpireId() != empire.getId()) {
           log("Tropa atacante invalida ou nao pertence ao seu imperio.");
         } else {
-          Army defenderArmy = (Army) db.getArmy().buscarId(toint(cmd[2]));
-          if (defenderArmy == null || defenderArmy.getEmpire_id() == empire.get_id()) {
+          Army defenderArmy = (Army) db.getArmy().findById(parseInt(cmd[2]));
+          if (defenderArmy == null || defenderArmy.getEmpireId() == empire.getId()) {
             log("Tropa defensora invalida ou pertence ao seu imperio.");
           } else {
-            Battle new_battle = new Battle(attackerArmy, defenderArmy, db);
-            db.getBattle().inserir(new_battle);
+            Battle newBattle = new Battle(attackerArmy, defenderArmy, db);
+            db.getBattle().insert(newBattle);
             log("Batalha iniciada!");
           }
         }
         break;
       case "destroy":
-        battle = (Battle) db.getBattle().buscarId(toint(cmd[1]));
+        battle = (Battle) db.getBattle().findById(parseInt(cmd[1]));
         if (battle == null) log("Batalha inexistente.");
         else {
           battle.destroy();
@@ -471,4 +471,3 @@ public class Terminal {
     warMenu(empire, db);
   }
 }
-

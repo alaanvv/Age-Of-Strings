@@ -4,52 +4,54 @@ import persistencia.BancoDeDados;
 
 public class Farm extends Entidade {
   private int workers = 0;
-  private int empire_id;
+  private int empireId;
 
   private BancoDeDados db;
 
   // ---
 
-  public Farm(int empire_id, BancoDeDados db) {
+  public Farm(int empireId, BancoDeDados db) {
     super(db.getFarm().getSize());
-    this.empire_id = empire_id;
+    this.empireId = empireId;
     this.db = db;
   }
 
-  public int getWorkers() { return workers; }
+  public int getWorkers() {
+    return workers;
+  }
 
   public void destroy() {
-    db.getMine().remover(super.get_id());
+    db.getMine().remove(super.getId());
   }
 
   // Retorna quantos trabalhadores entraram
-  public int send_workers(int amount) {
-    int _workers = workers;
+  public int sendWorkers(int amount) {
+    int previousWorkers = workers;
     workers = Math.min(10, workers + amount);
-    return workers - _workers;
+    return workers - previousWorkers;
   }
 
   // Retorna quantos trabalhadores foram retirados
-  public int take_workers(int amount) {
-    int _workers = workers;
+  public int takeWorkers(int amount) {
+    int previousWorkers = workers;
     workers = Math.max(0, workers - amount);
-    return _workers - workers;
+    return previousWorkers - workers;
   }
 
   // Extrai comida equivalente a um turno
-  public int extract_food() {
+  public int extractFood() {
     double efficiency = Math.log(workers + 1);
-    return (int) (Math.random() * efficiency * 20);
+    return (int)(Math.random() * efficiency * 20);
   }
 
-  public int get_empire_id() {
-    return empire_id;
+  public int getEmpireId() {
+    return empireId;
   }
 
   // ---
 
   @Override
   public String toString() {
-    return String.format("Fazenda #%d | Trabalhadores: %d/10", super.get_id(), workers);
+    return String.format("Fazenda #%d | Trabalhadores: %d/10", super.getId(), workers);
   }
 }

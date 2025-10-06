@@ -6,64 +6,66 @@ public class Mine extends Entidade {
   private int iron;
   private int gold;
   private int workers = 0;
-  private int empire_id;
+  private int empireId;
 
   private BancoDeDados db;
 
   // ---
 
-  public Mine(int empire_id, BancoDeDados db) {
+  public Mine(int empireId, BancoDeDados db) {
     super(db.getMine().getSize());
-    this.empire_id = empire_id;
+    this.empireId = empireId;
     this.db = db;
-    iron = (int) (Math.random() * 250);
-    gold = (int) (Math.random() * 100);
+    iron = (int)(Math.random() * 250);
+    gold = (int)(Math.random() * 100);
   }
 
-  public int getWorkers() { return workers; }
+  public int getWorkers() {
+    return workers;
+  }
 
   public void destroy() {
-    db.getMine().remover(super.get_id());
+    db.getMine().remove(super.getId());
   }
 
   // Retorna quantos trabalhadores entraram
-  public int send_workers(int amount) {
-    int _workers = workers;
+  public int sendWorkers(int amount) {
+    int previousWorkers = workers;
     workers = Math.min(20, workers + amount);
-    return workers - _workers;
+    return workers - previousWorkers;
   }
 
   // Retorna quantos trabalhadores foram retirados
-  public int take_workers(int amount) {
-    int _workers = workers;
+  public int takeWorkers(int amount) {
+    int previousWorkers = workers;
     workers = Math.max(0, workers - amount);
-    return _workers - workers;
+    return previousWorkers - workers;
   }
 
   // Extrai ferro equivalente a um turno
-  public int extract_iron() {
+  public int extractIron() {
     double efficiency = Math.log(workers + 1);
-    int collected_iron = Math.min(iron, (int) (Math.random() * efficiency * 3));
-    iron -= collected_iron;
-    return collected_iron;
+    int collectedIron = Math.min(iron, (int)(Math.random() * efficiency * 3));
+    iron -= collectedIron;
+    return collectedIron;
   }
 
   // Extrai ouro equivalente a um turno
-  public int extract_gold() {
+  public int extractGold() {
     double efficiency = Math.log(workers + 1);
-    int collected_gold = Math.min(gold, (int) (Math.random() * efficiency * 2));
-    gold -= collected_gold;
-    return collected_gold;
+    int collectedGold = Math.min(gold, (int)(Math.random() * efficiency * 2));
+    gold -= collectedGold;
+    return collectedGold;
   }
 
-  public int get_empire_id() {
-    return empire_id;
+  public int getEmpireId() {
+    return empireId;
   }
 
   // ---
 
   @Override
   public String toString() {
-    return String.format("Mina #%d | Trabalhadores: %d/10; Ferro: %d; Ouro: %d", super.get_id(), workers, iron, gold);
+    return String.format("Mina #%d | Trabalhadores: %d/10; Ferro: %d; Ouro: %d", super.getId(), workers, iron, gold);
   }
 }

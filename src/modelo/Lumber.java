@@ -4,52 +4,54 @@ import persistencia.BancoDeDados;
 
 public class Lumber extends Entidade {
   private int workers = 0;
-  private int empire_id;
+  private int empireId;
 
   private BancoDeDados db;
 
   // ---
 
-  public Lumber(int empire_id, BancoDeDados db) {
-    super(db.getLumber().getSize());
-    this.empire_id = empire_id;
+  public Lumber(int empireId, BancoDeDados db) {
+    super(db.getLumberCamp().getSize());
+    this.empireId = empireId;
     this.db = db;
   }
 
-  public int getWorkers() { return workers; }
+  public int getWorkers() {
+    return workers;
+  }
 
   public void destroy() {
-    db.getLumber().remover(super.get_id());
+    db.getLumberCamp().remove(super.getId());
   }
 
   // Retorna quantos trabalhadores entraram
-  public int send_workers(int amount) {
-    int _workers = workers;
+  public int sendWorkers(int amount) {
+    int previousWorkers = workers;
     workers = workers + amount;
-    return workers - _workers;
+    return workers - previousWorkers;
   }
 
   // Retorna quantos trabalhadores foram retirados
-  public int take_workers(int amount) {
-    int _workers = workers;
+  public int takeWorkers(int amount) {
+    int previousWorkers = workers;
     workers = Math.max(0, workers - amount);
-    return _workers - workers;
+    return previousWorkers - workers;
   }
 
   // Extrai madeira equivalente a um turno
-  public int extract_wood() {
+  public int extractWood() {
     double efficiency = Math.log(workers + 1);
-    return (int) (Math.random() * efficiency * 10);
+    return (int)(Math.random() * efficiency * 10);
   }
 
-  public int get_empire_id() {
-    return empire_id;
+  public int getEmpireId() {
+    return empireId;
   }
 
   // ---
 
   @Override
   public String toString() {
-    return String.format("Campo de lenhadores #%d | Trabalhadores: %d", super.get_id(), workers);
+    return String.format("Campo de lenhadores #%d | Trabalhadores: %d", super.getId(), workers);
   }
 }
