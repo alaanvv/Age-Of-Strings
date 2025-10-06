@@ -61,7 +61,7 @@ public class Terminal {
     System.out.println("farm    # Ver menu de fazendas");
     System.out.println("mine    # Ver menu de minas");
     System.out.println("lumber  # Ver menu de campos de lenhador");
-    System.out.println("army    # Ver menu de exército");
+    System.out.println("army    # Ver menu de exercito");
     System.out.println("war     # Ver menu de guerra");
     System.out.println("back    # Voltar pro menu anterior");
     String[] cmd = read();
@@ -95,7 +95,7 @@ public class Terminal {
   public static void houseMenu(Empire empire, BancoDeDados db) {
     System.out.println("CASA");
     System.out.println("Aumenta a populacao");
-    System.out.println("Preço de construcao [Madeira: 5; Ouro: 5]");
+    System.out.println("Preco de construcao [Madeira: 5; Ouro: 5]");
     System.out.println("");
     System.out.println("build  # Construir");
     System.out.println("back   # Voltar pro menu anterior");
@@ -115,7 +115,7 @@ public class Terminal {
   public static void farmMenu(Empire empire, BancoDeDados db) {
     System.out.println("FAZENDAS");
     System.out.println("Produzem comida");
-    System.out.println("Preço de construcao [Madeira: 5; Ouro: 3]");
+    System.out.println("Preco de construcao [Madeira: 5; Ouro: 3]");
     System.out.println("");
     System.out.println("view                # Ver fazendas");
     System.out.println("build               # Construir nova fazenda");
@@ -156,7 +156,7 @@ public class Terminal {
   public static void mineMenu(Empire empire, BancoDeDados db) {
     System.out.println("MINAS");
     System.out.println("Produzem minerios");
-    System.out.println("Preço de construcao [Madeira: 15; Ouro: 5]");
+    System.out.println("Preco de construcao [Madeira: 15; Ouro: 5]");
     System.out.println("");
     System.out.println("view                # Ver minas");
     System.out.println("build               # Construir nova mina");
@@ -226,12 +226,11 @@ public class Terminal {
   public static void armyMenu(Empire empire, BancoDeDados db) {
     System.out.println("EXERCITOS");
     System.out.println("Usados pra atacar e se defender de outros imperios");
-    System.out.println("Preço de construcao [Ferro: 50; Ouro: 20; Comida: 1]");
+    System.out.println("Preco de construcao [Ferro: 50; Ouro: 20; Comida: 1]");
     System.out.println("");
     System.out.println("view                # Ver exercitos");
     System.out.println("new                 # Criar novo exercito");
     System.out.println("send <amount> <id>  # Envia *amount* tropas pro exercito *id*");
-    System.out.println("take <amount> <id>  # Tira *amount* trabalhadores do exercito *id*");
     System.out.println("take <amount> <id>  # Tira *amount* trabalhadores do exercito *id*");
     System.out.println("upgrade <id>        # Melhora a armadura do exercito *id*");
     System.out.println("feed <amount> <id>  # Envia *amount* comida pro exercito *id*");
@@ -264,24 +263,30 @@ public class Terminal {
         else System.out.println(String.format("%d tropas retiradas.", empire.take_workers_from_army(toint(cmd[1]), toint(cmd[2]))));
         break;
       case "upgrade":
-        army = (Army) db.getArmy().buscarId(toint(cmd[2]));
+        army = (Army) db.getArmy().buscarId(toint(cmd[1]));
+
         if (army == null) System.out.println("Esse exercito nao existe.");
         else if (army.getEmpire_id() != empire.get_id()) System.out.println("Esse exercito nao pertence a esse imperio.");
+
         int costIron = ((modelo.Army) army).IRON_COST_ARMORY;
         int costGold = ((modelo.Army) army).GOLD_COST_ARMORY;
+
         System.out.println(String.format("Custo por nivel: %d Ferro e %d Ouro.", costIron, costGold));
         System.out.println("Quantos niveis voce deseja melhorar?");
+
         int pontos = sc.nextInt();
         pontos = ((modelo.Army) army).upgrade_armory(pontos, empire);
+
         if (pontos > 0) System.out.println(String.format("Armadura melhorada em %d ponto(s).", pontos));
         else System.out.println("Recursos (Ferro/Ouro) insuficientes para esta melhoria.");
         break;
+
       case "feed":
         army = (Army) db.getArmy().buscarId(toint(cmd[2]));
         if (army == null) System.out.println("Esse exercito nao existe.");
         else if (army.getEmpire_id() != empire.get_id()) System.out.println("Esse exercito nao pertence a esse imperio.");
-        System.out.println("Quanta comida voce quer transferir para o exercito?");
-        int food_supply = sc.nextInt();
+        
+        int food_supply = toint(cmd[1]);
         if (food_supply > empire.getFood() || food_supply < 0) {
           System.out.println("Quantidade invalida.");
           break;
@@ -361,4 +366,6 @@ public class Terminal {
 
     warMenu(empire, db);
   }
+
+  
 }

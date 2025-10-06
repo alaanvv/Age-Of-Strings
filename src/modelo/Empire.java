@@ -9,6 +9,7 @@ public class Empire extends Entidade{
   private int gold = 100;
   private int population = 3;
   private int workers = 0;
+  private boolean turno = true;
   private BancoDeDados banco;
 
   private LumberCamp lumber_camp;
