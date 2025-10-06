@@ -231,7 +231,7 @@ public class Terminal {
         else log(empire.buildMine() ? "Mina construida." : "Recursos insuficientes.");
         break;
       case "view":
-        Mine mine = (Mine) db.getFarms().findById(parseInt(cmd[1]));
+        Mine mine = (Mine) db.getMines().findById(parseInt(cmd[1]));
         if (mine == null) log("Mina inexistente.");
         else log(mine.toString());
         break;
@@ -240,12 +240,12 @@ public class Terminal {
         for (Entidade m : db.getMines().getEntidades()) log(m.toString());
         break;
       case "send":
-        mine = (Mine) db.getFarms().findById(parseInt(cmd[1]));
+        mine = (Mine) db.getMines().findById(parseInt(cmd[2]));
         if (mine == null) log("Mina inexistente.");
         else log(String.format("%d trabalhadores enviados.", ((Empire) db.getEmpires().findById(mine.getEmpireId())).sendWorkersToMine(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
       case "take":
-        mine = (Mine) db.getFarms().findById(parseInt(cmd[1]));
+        mine = (Mine) db.getMines().findById(parseInt(cmd[2]));
         if (mine == null) log("Mina inexistente.");
         else log(String.format("%d trabalhadores retirados.", ((Empire) db.getEmpires().findById(mine.getEmpireId())).takeWorkersFromMine(parseInt(cmd[1]), parseInt(cmd[2]))));
         break;
@@ -285,12 +285,12 @@ public class Terminal {
         for (Entidade l : db.getLumbers().getEntidades()) log(l.toString());
         break;
       case "send":
-        lumber = (Lumber) db.getLumbers().findById(parseInt(cmd[1]));
+        lumber = (Lumber) db.getLumbers().findById(parseInt(cmd[2]));
         if (lumber == null) log("Campo inexistente.");
         else log(String.format("%d trabalhadores enviados.", ((Empire) db.getEmpires().findById(lumber.getEmpireId())).sendWorkersToLumber(parseInt(cmd[1]))));
         break;
       case "take":
-        lumber = (Lumber) db.getLumbers().findById(parseInt(cmd[1]));
+        lumber = (Lumber) db.getLumbers().findById(parseInt(cmd[2]));
         if (lumber == null) log("Campo inexistente.");
         else log(String.format("%d trabalhadores retirados.", ((Empire) db.getEmpires().findById(lumber.getEmpireId())).takeWorkersFromLumber(parseInt(cmd[1]))));
         break;
