@@ -17,7 +17,7 @@ public class Army extends Entidade {
   private BancoDeDados db;
 
   public Army(int empireId, BancoDeDados db) {
-    super(db.getArmy().getSize());
+    super(db.getArmies().getSize());
     this.db = db;
     this.empireId = empireId;
     this.general = new General();
@@ -25,7 +25,8 @@ public class Army extends Entidade {
 
 
   public void destroy() {
-    db.getArmy().remove(super.getId());
+    db.getArmies().remove(super.getId());
+    ((Empire) db.getEmpires().findById(getEmpireId())).addPopulation(soldiersAmount);
   }
 
   public boolean isBattling() {

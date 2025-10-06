@@ -11,7 +11,7 @@ public class Lumber extends Entidade {
   // ---
 
   public Lumber(int empireId, BancoDeDados db) {
-    super(db.getLumberCamp().getSize());
+    super(db.getLumbers().getSize());
     this.empireId = empireId;
     this.db = db;
   }
@@ -21,7 +21,8 @@ public class Lumber extends Entidade {
   }
 
   public void destroy() {
-    db.getLumberCamp().remove(super.getId());
+    db.getLumbers().remove(super.getId());
+    ((Empire) db.getEmpires().findById(getEmpireId())).addPopulation(workers);
   }
 
   // Retorna quantos trabalhadores entraram

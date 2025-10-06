@@ -10,6 +10,7 @@ public class Empire extends Entidade {
   private int iron = 100;
   private int gold = 100;
   private int wood = 50;
+  private String name;
 
   private ArrayList<Army> armies = new ArrayList<>();
   private ArrayList<Farm> farms = new ArrayList<>();
@@ -18,17 +19,19 @@ public class Empire extends Entidade {
 
   private BancoDeDados db;
 
-  public Empire(BancoDeDados db) {
-    super(db.getEmpire().getSize());
+  public Empire(BancoDeDados db, String name) {
+    super(db.getEmpires().getSize());
+    this.name = name;
     this.db = db;
     lumber = new Lumber(super.getId(), db);
-    db.getLumberCamp().insert(lumber);
+    db.getLumbers().insert(lumber);
   }
 
   public ArrayList<Army> getArmies() { return armies; }
   public ArrayList<Farm> getFarms() { return farms; }
   public ArrayList<Mine> getMines() { return mines; }
   public Lumber getLumber() { return lumber; }
+  public String getName() { return name; }
   public int getPopulation() { return population; }
   public int getWorkers() { return workers; }
   public int getFood() { return food; }
@@ -37,14 +40,17 @@ public class Empire extends Entidade {
 
   public void setPopulation(int population) { this.population = population; }
   public void setWorkers(int workers) { this.workers = workers; }
+  public void setName(String name) { this.name = name; }
   public void setFood(int food) { this.food = food; }
   public void setIron(int iron) { this.iron = iron; }
   public void setGold(int gold) { this.gold = gold; }
 
+  public void addPopulation(int amount) { population += amount; }
+
   // ---
 
   public void destroy() {
-    db.getEmpire().remove(super.getId());
+    db.getEmpires().remove(super.getId());
   }
 
   public boolean buildHouse() {
@@ -62,7 +68,7 @@ public class Empire extends Entidade {
     gold -= 2;
 
     Farm farm = new Farm(super.getId(), db);
-    db.getFarm().insert(farm);
+    db.getFarms().insert(farm);
     farms.add(farm);
     return true;
   }
@@ -73,7 +79,7 @@ public class Empire extends Entidade {
     gold -= 5;
 
     Mine mine = new Mine(super.getId(), db);
-    db.getMine().insert(mine);
+    db.getMines().insert(mine);
     mines.add(mine);
     return true;
   }
@@ -84,7 +90,7 @@ public class Empire extends Entidade {
     gold -= 20;
 
     Army army = new Army(super.getId(), db);
-    db.getArmy().insert(army);
+    db.getArmies().insert(army);
     armies.add(army);
     return true;
   }
@@ -99,21 +105,21 @@ public class Empire extends Entidade {
   }
 
   public int sendWorkersToFarm(int amount, int id) {
-    amount = ((Farm) (db.getFarm().findById(id))).sendWorkers(Math.min(amount, population));
+    amount = ((Farm) (db.getFarms().findById(id))).sendWorkers(Math.min(amount, population));
     population -= amount;
     workers += amount;
     return amount;
   }
 
   public int sendWorkersToMine(int amount, int id) {
-    amount = ((Mine) (db.getMine().findById(id))).sendWorkers(Math.min(amount, population));
+    amount = ((Mine) (db.getMines().findById(id))).sendWorkers(Math.min(amount, population));
     population -= amount;
     workers += amount;
     return amount;
   }
 
   public int sendWorkersToArmy(int amount, int id) {
-    amount = ((Army) (db.getArmy().findById(id))).sendWorkers(Math.min(amount, population));
+    amount = ((Army) (db.getArmies().findById(id))).sendWorkers(Math.min(amount, population));
     population -= amount;
     workers += amount;
     return amount;
@@ -122,28 +128,28 @@ public class Empire extends Entidade {
   // ---
 
   public int takeWorkersFromLumber(int amount) {
-    int taken = ((Lumber) (db.getLumberCamp().findById(super.getId()))).takeWorkers(amount);
+    int taken = ((Lumber) (db.getLumbers().findById(super.getId()))).takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;
   }
 
   public int takeWorkersFromFarm(int amount, int id) {
-    int taken = ((Farm) (db.getFarm().findById(id))).takeWorkers(amount);
+    int taken = ((Farm) (db.getFarms().findById(id))).takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;
   }
 
   public int takeWorkersFromMine(int amount, int id) {
-    int taken = ((Mine) (db.getMine().findById(id))).takeWorkers(amount);
+    int taken = ((Mine) (db.getMines().findById(id))).takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;
   }
 
   public int takeWorkersFromArmy(int amount, int id) {
-    int taken = ((Army) (db.getArmy().findById(id))).takeWorkers(amount);
+    int taken = ((Army) (db.getArmies().findById(id))).takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;
@@ -206,8 +212,8 @@ public class Empire extends Entidade {
       if (workers < 0) workers = 0;
     }
 
-    for (int i = db.getBattle().getSize() - 1; i >= 0; i--) {
-      Battle batalhas = (Battle) db.getBattle().findById(i);
+    for (int i = db.getBattles().getSize() - 1; i >= 0; i--) {
+      Battle batalhas = (Battle) db.getBattles().findById(i);
       int result = batalhas.simulateRound();
 
       String attackerName = "Army #" + batalhas.getAttacker().getId();
@@ -215,10 +221,10 @@ public class Empire extends Entidade {
 
       if (result == 1) {
         output.append(attackerName).append(" Venceu a batalha! Vitoria dos atacantes.\n");
-        db.getBattle().remove(batalhas.getId());
+        db.getBattles().remove(batalhas.getId());
       } else if (result == -1) {
         output.append(defenderName).append(" Venceu a batalha! Vitoria dos defensores.\n");
-        db.getBattle().remove(batalhas.getId());
+        db.getBattles().remove(batalhas.getId());
       } else {
         output.append("A batalha continua... Nenhum vencedor nesta rodada.\n");
       }
@@ -231,6 +237,6 @@ public class Empire extends Entidade {
 
   @Override
   public String toString() {
-    return String.format("Imperio #%d | Populacao: %d; Trabalhadores: %d; Comida: %d; Madeira: %d; Ferro: %d; Ouro: %d", super.getId(), population, workers, food, wood, iron, gold);
+    return String.format("Imperio %s #%d | Populacao: %d; Trabalhadores: %d; Comida: %d; Madeira: %d; Ferro: %d; Ouro: %d", name, super.getId(), population, workers, food, wood, iron, gold);
   }
 }
