@@ -47,6 +47,7 @@ public class Terminal {
     if (db.getEmpire().getSize() > 0) print("control <id>", "Controlar imperio *id* (0-%d)", db.getEmpire().getSize() - 1);
     if (db.getEmpire().getSize() > 0) print("view <id>", "Ver imperio *id* (0-%d)", db.getEmpire().getSize() - 1);
     if (db.getEmpire().getSize() > 0) print("viewall", "Ver todos imperios");
+    if (db.getEmpire().getSize() > 0) print("destroy <id>", "Destroi o imperio *id* (0-%d)", db.getEmpire().getSize() - 1);
     if (db.getEmpire().getSize() > 0) print("run", "Roda o turno");
     print("exit", "Sair do jogo");
     String[] cmd = read();
@@ -65,6 +66,14 @@ public class Terminal {
       case "viewall":
         for (Entidade e : db.getEmpire().getEntidades())
           log(e.toString());
+        break;
+      case "destroy":
+        empire = (Empire) db.getEmpire().buscarId(toint(cmd[1]));
+        if (empire == null) log("Imperio inexistente.");
+        else {
+          empire.destroy();
+          log(empire.toString());
+        }
         break;
       case "control":
         empire = (Empire) db.getEmpire().buscarId(toint(cmd[1]));
@@ -153,6 +162,7 @@ public class Terminal {
     if (db.getFarm().getSize() > 0) print("viewany <id>", "Ver fazenda de qualquer imperio com *id* (0-%d)", db.getFarm().getSize() - 1);
     if (db.getFarm().getSize() > 0) print("viewall", "Ver todas fazendas de todos imperios");
     print("build", "Construir nova fazenda");
+    if (db.getFarm().getSize() > 0) print("destroy <id>", "Destroi a fazenda *id* (0-%d)", db.getFarm().getSize() - 1);
     if (empire.getFarms().size() > 0) print("send <amount> <id>", "Envia *amount* trabalhadores pra fazenda *id*");
     if (empire.getFarms().size() > 0) print("take <amount> <id>", "Tira *amount* trabalhadores da fazenda *id*");
     print("back", "Voltar pro menu anterior");
@@ -174,6 +184,14 @@ public class Terminal {
         break;
       case "build":
         log(empire.build_farm() ? "Fazenda construida." : "Recursos insuficientes.");
+        break;
+      case "destroy":
+        farm = (Farm) db.getFarm().buscarId(toint(cmd[1]));
+        if (farm == null) log("Fazenda inexistente.");
+        else {
+          farm.destroy();
+          log(farm.toString());
+        }
         break;
       case "send":
         farm = (Farm) db.getFarm().buscarId(toint(cmd[2]));
@@ -210,6 +228,7 @@ public class Terminal {
     if (db.getMine().getSize() > 0) print("viewany <id>", "Ver mina de qualquer imperio com *id* (0-%d)", db.getMine().getSize() - 1);
     if (db.getMine().getSize() > 0) print("viewall", "Ver todas minas de todos imperios");
     print("build", "Construir nova mina");
+    if (db.getMine().getSize() > 0) print("destroy <id>", "Destroi a mina *id* (0-%d)", db.getMine().getSize() - 1);
     if (empire.getMines().size() > 0) print("send <amount> <id>", "Envia *amount* trabalhadores pra mina *id*");
     if (empire.getMines().size() > 0) print("take <amount> <id>", "Tira *amount* trabalhadores da mina *id*");
     print("back", "Voltar pro menu anterior");
@@ -232,6 +251,14 @@ public class Terminal {
         break;
       case "build":
         log(empire.build_mine() ? "Mina construida." : "Recursos insuficientes.");
+        break;
+      case "destroy":
+        mine = (Mine) db.getMine().buscarId(toint(cmd[1]));
+        if (mine == null) log("Mina inexistente.");
+        else {
+          mine.destroy();
+          log(mine.toString());
+        }
         break;
       case "send":
         mine = (Mine) db.getMine().buscarId(toint(cmd[2]));
@@ -266,6 +293,7 @@ public class Terminal {
     print("view", "Ver campos");
     if (db.getLumber().getSize() > 0) print("viewany <id>", "Ver campo de lenhador de qualquer imperio com *id* (0-%d)", db.getLumber().getSize() - 1);
     if (db.getLumber().getSize() > 0) print("viewall", "Ver todos campos de lenhador de todos imperios");
+    if (db.getLumber().getSize() > 0) print("destroy <id>", "Destroi o campo de lenhador *id* (0-%d)", db.getLumber().getSize() - 1);
     print("send <amount>", "Envia *amount* trabalhadores pro campo");
     print("take <amount>", "Tira *amount* trabalhadores do campo");
     print("back", "Voltar pro menu anterior");
@@ -283,6 +311,14 @@ public class Terminal {
       case "viewall":
         for (Entidade l : db.getLumber().getEntidades())
           log(l.toString());
+        break;
+      case "destroy":
+        lumber = (Lumber) db.getLumber().buscarId(toint(cmd[1]));
+        if (lumber == null) log("Campo de lenhador inexistente.");
+        else {
+          lumber.destroy();
+          log(lumber.toString());
+        }
         break;
       case "send":
         log(String.format("%d trabalhadores enviados.", empire.send_workers_to_lumber(toint(cmd[1]))));
@@ -308,6 +344,7 @@ public class Terminal {
     if (db.getArmy().getSize() > 0) print("viewany <id>", "Ver exercito de qualquer imperio com *id* (0-%d)", db.getArmy().getSize() - 1);
     if (db.getArmy().getSize() > 0) print("viewall", "Ver todos exercitos de todos imperios");
     print("new", "Criar novo exercito");
+    if (db.getArmy().getSize() > 0) print("destroy <id>", "Destroi o exercito *id* (0-%d)", db.getArmy().getSize() - 1);
     if (empire.getArmies().size() > 0) print("send <amount> <id>", "Envia *amount* tropas pro exercito *id*");
     if (empire.getArmies().size() > 0) print("take <amount> <id>", "Tira *amount* trabalhadores do exercito *id*");
     if (empire.getArmies().size() > 0) print("upgrade <amount> <id>", "Melhora a armadura do exercito *id* em *amount* niveis");
@@ -331,6 +368,14 @@ public class Terminal {
         break;
       case "new":
         log(empire.create_army() ? "Exercito criado." : "Recursos insuficientes.");
+        break;
+      case "destroy":
+        army = (Army) db.getArmy().buscarId(toint(cmd[1]));
+        if (army == null) log("Exercito inexistente.");
+        else {
+          army.destroy();
+          log(army.toString());
+        }
         break;
       case "send":
         army = (Army) db.getArmy().buscarId(toint(cmd[2]));
@@ -376,6 +421,7 @@ public class Terminal {
     if (db.getBattle().getSize() > 0) print("view", "Ver batalhas em andamento");
     if (db.getBattle().getSize() > 0) print("viewany <id>", "Ver batalha com *id* (0-%d)", db.getBattle().getSize() - 1);
     print("new <atk_id> <dfn_id>", "Iniciar nova batalha usando a tropa *atk_id* pra atacar *dfn_id*");
+    if (db.getBattle().getSize() > 0) print("destroy <id>", "Destroi a batalha *id* (0-%d)", db.getBattle().getSize() - 1);
     print("back", "Voltar pro menu anterior");
     String[] cmd = read();
 
@@ -408,6 +454,14 @@ public class Terminal {
             db.getBattle().inserir(new_battle);
             log("Batalha iniciada!");
           }
+        }
+        break;
+      case "destroy":
+        battle = (Battle) db.getBattle().buscarId(toint(cmd[1]));
+        if (battle == null) log("Batalha inexistente.");
+        else {
+          battle.destroy();
+          log(battle.toString());
         }
         break;
       case "back":
