@@ -11,7 +11,7 @@ public class Farm extends Entidade {
   // ---
 
   public Farm(int empireId, BancoDeDados db) {
-    super(db.getFarm().getSize());
+    super(db.getFarms().getSize());
     this.empireId = empireId;
     this.db = db;
   }
@@ -21,7 +21,8 @@ public class Farm extends Entidade {
   }
 
   public void destroy() {
-    db.getMine().remove(super.getId());
+    db.getMines().remove(super.getId());
+    ((Empire) db.getEmpires().findById(getEmpireId())).addPopulation(workers);
   }
 
   // Retorna quantos trabalhadores entraram

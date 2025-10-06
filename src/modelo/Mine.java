@@ -13,7 +13,7 @@ public class Mine extends Entidade {
   // ---
 
   public Mine(int empireId, BancoDeDados db) {
-    super(db.getMine().getSize());
+    super(db.getMines().getSize());
     this.empireId = empireId;
     this.db = db;
     iron = (int)(Math.random() * 250);
@@ -25,7 +25,8 @@ public class Mine extends Entidade {
   }
 
   public void destroy() {
-    db.getMine().remove(super.getId());
+    db.getMines().remove(super.getId());
+    ((Empire) db.getEmpires().findById(getEmpireId())).addPopulation(workers);
   }
 
   // Retorna quantos trabalhadores entraram
