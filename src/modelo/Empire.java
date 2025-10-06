@@ -167,7 +167,7 @@ public class Empire extends Entidade {
 
     int dead = -food;
     float perc = (float) dead / (population + workers);
-    System.out.println(String.format("! Imperio #%d: %d pessoas morreram de fome.", super.get_id(), -dead));
+    System.out.println(String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.get_id(), dead));
     food = 0;
 
     int removed = lumber.take_workers((int) Math.ceil(lumber.getWorkers() * perc));
