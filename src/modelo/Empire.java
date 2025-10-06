@@ -163,36 +163,42 @@ public class Empire extends Entidade {
 
     int consumed = population + workers;
     food -= consumed;
-    if (food >= 0) return;
+    if (food < 0) {
+      int dead = -food;
+      float perc = (float) dead / (population + workers);
+      System.out.println(String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.get_id(), dead));
+      food = 0;
 
-    int dead = -food;
-    float perc = (float) dead / (population + workers);
-    System.out.println(String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.get_id(), dead));
-    food = 0;
-
-    int removed = lumber.take_workers((int) Math.ceil(lumber.getWorkers() * perc));
-    workers -= removed;
-    dead -= removed;
-
-    for (Army army : armies) {
-      if (dead <= 0) break;
-      removed = army.take_workers((int) Math.ceil(army.getWorkers() * perc));
+      int removed = lumber.take_workers((int) Math.ceil(lumber.getWorkers() * perc));
       workers -= removed;
       dead -= removed;
-    }
 
-    for (Mine mine : mines) {
-      if (dead <= 0) break;
-      removed = mine.take_workers((int) Math.ceil(mine.getWorkers() * perc));
-      workers -= removed;
-      dead -= removed;
-    }
+      for (Army army : armies) {
+        if (dead <= 0) break;
+        removed = army.take_workers((int) Math.ceil(army.getWorkers() * perc));
+        workers -= removed;
+        dead -= removed;
+      }
 
-    for (Farm farm : farms) {
-      if (dead <= 0) break;
-      removed = farm.take_workers((int) Math.ceil(farm.getWorkers() * perc));
-      workers -= removed;
-      dead -= removed;
+      for (Mine mine : mines) {
+        if (dead <= 0) break;
+        removed = mine.take_workers((int) Math.ceil(mine.getWorkers() * perc));
+        workers -= removed;
+        dead -= removed;
+      }
+
+      for (Farm farm : farms) {
+        if (dead <= 0) break;
+        removed = farm.take_workers((int) Math.ceil(farm.getWorkers() * perc));
+        workers -= removed;
+        dead -= removed;
+      }
+
+      if (dead > 0)
+        population -= Math.min(population, dead);
+
+      if (population < 0) population = 0;
+      if (workers < 0) workers = 0;
     }
 
     for (int i = db.getBattle().getSize()-1; i >= 0; i--) {
@@ -213,12 +219,6 @@ public class Empire extends Entidade {
         System.out.println("A batalha continua... Nenhum vencedor nesta rodada.");
       }
     }
-
-    if (dead > 0)
-      population -= Math.min(population, dead);
-
-    if (population < 0) population = 0;
-    if (workers < 0) workers = 0;
   }
 
   // ---
