@@ -54,7 +54,7 @@ public class _Terminal {
 
     switch (cmd[0]) {
       case "new":
-        Empire empire = new Empire(db);
+        Empire empire = new Empire(db, cmd[1]);
         db.getEmpires().insert(empire);
         log(String.format("Imperio #%d criado", empire.getId()));
         break;
