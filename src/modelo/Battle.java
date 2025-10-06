@@ -19,7 +19,7 @@ public class Battle extends Entidade {
   private persistencia.BancoDeDados db;
 
   public Battle(Army attacker, Army defender, persistencia.BancoDeDados db) {
-    super(db.getBattles().getSize());
+    super(db.nextBattle());
     this.db = db;
     this.attacker = attacker;
     this.defender = defender;

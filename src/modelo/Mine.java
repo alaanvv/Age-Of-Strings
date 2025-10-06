@@ -13,7 +13,7 @@ public class Mine extends Entidade {
   // ---
 
   public Mine(int empireId, BancoDeDados db) {
-    super(db.getMines().getSize());
+    super(db.nextMine());
     this.empireId = empireId;
     this.db = db;
     iron = (int)(Math.random() * 250);

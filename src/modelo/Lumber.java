@@ -11,7 +11,7 @@ public class Lumber extends Entidade {
   // ---
 
   public Lumber(int empireId, BancoDeDados db) {
-    super(db.getLumbers().getSize());
+    super(db.nextLumber());
     this.empireId = empireId;
     this.db = db;
   }
