@@ -1,14 +1,14 @@
 package visao;
 
 import java.util.Scanner;
-import persistencia.BancoDeDados;
-import modelo.Lumber;
-import modelo.Entidade;
+import modelo.Army;
 import modelo.Battle;
 import modelo.Empire;
+import modelo.Entidade;
 import modelo.Farm;
-import modelo.Army;
+import modelo.Lumber;
 import modelo.Mine;
+import persistencia.BancoDeDados;
 
 public class Terminal {
   public static Scanner sc = new Scanner(System.in);
@@ -303,28 +303,16 @@ public class Terminal {
     switch (cmd[0]) {
       case "view":
         if (db.getBattle().getSize() == 0) System.out.println("Sem batalhas");
+        
         for (int i = db.getBattle().getSize()-1; i >= 0; i--) {
           Battle batalhas = ((Battle)db.getBattle().buscarId(i));
-          int result = batalhas.simulate_round();
+
           String attackerName = "Army #" + batalhas.getAttacker().get_id();
           String defenderName = "Army #" + batalhas.getDefender().get_id();
           System.out.println("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
           System.out.println("Soldados Atacantes vivos: " + batalhas.getAttacker_soldiers_alive());
           System.out.println("Soldados Defensores vivos: " + batalhas.getDefender_soldiers_alive());
-          if (result == 1) {
-            System.out.println(attackerName + " Venceu a batalha! Vitoria dos atacantes.");
-            db.getBattle().remover(batalhas.get_id());
-          } else if (result == -1) {
-            System.out.println(defenderName + " Venceu a batalha! Vitoria dos defensores.");
-            db.getBattle().remover(batalhas.get_id());
-          } else {
-            System.out.println("A batalha continua... Nenhum vencedor nesta rodada.");
-          }
         }
-
-        for (Entidade armies : db.getArmy().getEntidades())
-          if (((Army) armies).getEmpire_id() == empire.get_id())
-            System.out.println(armies);
         break;
       case "new":
 

@@ -1,15 +1,15 @@
 package modelo;
 
-import persistencia.BancoDeDados;
 import java.util.ArrayList;
+import persistencia.BancoDeDados;
 
 public class Empire extends Entidade {
-  private int population = 3;
-  private int food = 10;
+  private int population = 30;
+  private int food = 100;
   private int workers = 0;
-  private int iron = 10;
-  private int gold = 10;
-  private int wood = 5;
+  private int iron = 100;
+  private int gold = 100;
+  private int wood = 50;
 
   private ArrayList<Army> armies = new ArrayList<>();
   private ArrayList<Farm> farms = new ArrayList<>();
@@ -108,7 +108,7 @@ public class Empire extends Entidade {
   }
 
   public int send_workers_to_army(int amount, int id) {
-    amount = ((Mine) (db.getArmy().buscarId(id))).send_workers(Math.min(amount, population));
+    amount = ((Army) (db.getArmy().buscarId(id))).send_workers(Math.min(amount, population));
     population -= amount;
     workers += amount;
     return amount;
@@ -193,6 +193,25 @@ public class Empire extends Entidade {
       removed = farm.take_workers((int) Math.ceil(farm.getWorkers() * perc));
       workers -= removed;
       dead -= removed;
+    }
+
+    for (int i = db.getBattle().getSize()-1; i >= 0; i--) {
+      Battle batalhas = ((Battle)db.getBattle().buscarId(i));
+
+      int result = batalhas.simulate_round();
+
+      String attackerName = "Army #" + batalhas.getAttacker().get_id();
+      String defenderName = "Army #" + batalhas.getDefender().get_id();
+
+      if (result == 1) {
+        System.out.println(attackerName + " Venceu a batalha! Vitoria dos atacantes.");
+        db.getBattle().remover(batalhas.get_id());
+      } else if (result == -1) {
+        System.out.println(defenderName + " Venceu a batalha! Vitoria dos defensores.");
+        db.getBattle().remover(batalhas.get_id());
+      } else {
+        System.out.println("A batalha continua... Nenhum vencedor nesta rodada.");
+      }
     }
 
     if (dead > 0)
