@@ -168,7 +168,7 @@ public class Battle extends Entidade {
     return 0;
   }
 
-  void insertSoldier(Boolean is_attacker, int amount){
+  public void insertSoldier(Boolean is_attacker, int amount){
     ArrayList<Army.Soldier> receiverSoldiers = is_attacker? attackerSoldiers : defenderSoldiers;
     Army receiverArmy = is_attacker? attacker : defender;
     for(int i = 0; i < amount; i++){

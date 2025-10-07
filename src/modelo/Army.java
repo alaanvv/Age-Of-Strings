@@ -103,8 +103,8 @@ public class Army extends Entidade {
 
   @Override
   public String toString() {
-    return "{" + super.toString() + " | " + String.format("Army #%d | Armory level: %d | Hiring level: %d | Hiring cost: %d | Soldiers amount: %d}",
-      super.getId(), armoryLevel, hiringLevel, hiringCost, soldiersAmount);
+    return "{" + super.toString() + " | " + String.format("Army #%d | Empire %d %s | Armory level: %d | Hiring level: %d | Hiring cost: %d | Soldiers amount: %d}",
+      super.getId(), empireId, ((Empire)db.getEmpires().findById(empireId)).getName(), armoryLevel, hiringLevel, hiringCost, soldiersAmount);
   }
 
   // --- INNER CLASSES
