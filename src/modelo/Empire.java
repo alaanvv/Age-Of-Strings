@@ -209,6 +209,10 @@ public class Empire extends Entidade {
         dead -= removed;
       }
 
+      for(Army army : armies){
+        
+      }
+
       if (dead > 0)
         population -= Math.min(population, dead);
 

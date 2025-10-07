@@ -51,6 +51,7 @@ public class Army extends Entidade {
 
     int pointsAdded = Math.min(ironPacks, goldPacks);
     armoryLevel += pointsAdded;
+    hiringLevel = armoryLevel;
 
     empire.setIron((empire.getIron() - IRON_COST_ARMORY * pointsAdded));
     empire.setGold(empire.getGold() - (GOLD_COST_ARMORY * pointsAdded));
@@ -103,7 +104,7 @@ public class Army extends Entidade {
 
   @Override
   public String toString() {
-    return "{" + super.toString() + " | " + String.format("Army #%d | Empire %d %s | Armory level: %d | Hiring level: %d | Hiring cost: %d | Soldiers amount: %d}",
+    return "{" + super.toString() + " | " + String.format("Army #%d | Empire %d %s | Armory level: %d| Soldiers amount: %d}",
       super.getId(), empireId, ((Empire)db.getEmpires().findById(empireId)).getName(), armoryLevel, hiringLevel, hiringCost, soldiersAmount);
   }
 
