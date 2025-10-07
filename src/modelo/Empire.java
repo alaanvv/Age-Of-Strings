@@ -216,24 +216,6 @@ public class Empire extends Entidade {
       if (workers < 0) workers = 0;
     }
 
-    for (int i = db.getBattles().getSize() - 1; i >= 0; i--) {
-      Battle batalhas = (Battle) db.getBattles().findById(i);
-      int result = batalhas.simulateRound();
-
-      String attackerName = "Army #" + batalhas.getAttacker().getId();
-      String defenderName = "Army #" + batalhas.getDefender().getId();
-
-      if (result == 1) {
-        output.append(attackerName).append(" Venceu a batalha! Vitoria dos atacantes.\n");
-        db.getBattles().remove(batalhas.getId());
-      } else if (result == -1) {
-        output.append(defenderName).append(" Venceu a batalha! Vitoria dos defensores.\n");
-        db.getBattles().remove(batalhas.getId());
-      } else {
-        output.append("A batalha continua... Nenhum vencedor nesta rodada.\n");
-      }
-    }
-
     return output.toString();
   }
 

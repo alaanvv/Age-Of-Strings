@@ -79,16 +79,38 @@ public class Terminal {
         battleMenu(db);
         break;
       case "run":
-        for (Entidade e : db.getEmpires().getEntidades()) log(((Empire) e).runTurn());
-        log("Turno rodado.");
-        break;
-      case "exit":
+        StringBuilder output;
+        output = new StringBuilder();
+        for (Entidade e : db.getEmpires().getEntidades()) output.append(((Empire) e).runTurn());
+        
+        for(Entidade b: db.getBattles().getEntidades()){
+          Battle battle = (Battle) b;
+          int result = battle.simulateRound();
+
+          String attackerName = "Army #" + battle.getAttacker().getId();
+          String defenderName = "Army #" + battle.getDefender().getId();
+
+          if (result == 1) {
+            output.append(attackerName).append(" Venceu a batalha! Vitoria dos atacantes.\n");
+            db.getBattles().remove(battle.getId());
+          } else if (result == -1) {
+            output.append(defenderName).append(" Venceu a batalha! Vitoria dos defensores.\n");
+            db.getBattles().remove(battle.getId());
+          } else {
+            output.append("A batalha continua... Nenhum vencedor nesta rodada.\n");
+          }
+        }
+          log(output.toString());
+          log("Turno rodado.");
+          break;
+        case "exit":
         sc.close();
         return;
-    }
-
-    mainMenu(db);
+      }
+      
+      mainMenu(db);
   }
+  
 
   public static void empireMenu(BancoDeDados db) {
     print("new <name>", "Criar imperio");

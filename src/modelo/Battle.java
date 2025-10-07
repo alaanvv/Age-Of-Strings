@@ -173,8 +173,7 @@ public class Battle extends Entidade {
 
     ArrayList<Army.Soldier> receiverSoldiers = is_attacker? attackerSoldiers : defenderSoldiers;
     Army receiverArmy = is_attacker? attacker : defender;
-    System.out.printf("Entrei aqui %d\n", amount);
-    System.out.flush();
+    
     for(int i = 0; i < amount; i++){
       receiverSoldiers.add(receiverArmy.new Soldier(receiverArmy.general));
     }
