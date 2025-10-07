@@ -67,6 +67,6 @@ public class Mine extends Entidade {
 
   @Override
   public String toString() {
-    return String.format("Mina #%d | Trabalhadores: %d/10; Ferro: %d; Ouro: %d", super.getId(), workers, iron, gold);
+    return String.format("Mina #%d | Trabalhadores: %d/20; Ferro: %d; Ouro: %d", super.getId(), workers, iron, gold);
   }
 }
