@@ -200,6 +200,12 @@ public class Battle extends Entidade {
     }
     return true;
   }
+
+  @Override
+  public String toString(){
+    return String.format("Batalha %d | Exército atacante %d | Exército defensor %d | Soldados atacantes vivos %d | Soldados defensores vivos %d\n",
+    super.getId(), attacker.getId(), defender.getId(), attackerSoldiersAlive, defenderSoldiersAlive);
+  }
 }
 
 
