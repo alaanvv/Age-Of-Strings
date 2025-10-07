@@ -21,7 +21,7 @@ public class Farm extends Entidade {
   }
 
   public void destroy() {
-    db.getMines().remove(super.getId());
+    db.getFarms().remove(super.getId());
     ((Empire) db.getEmpires().findById(getEmpireId())).addPopulation(workers);
   }
 
