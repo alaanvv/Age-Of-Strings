@@ -83,6 +83,7 @@ public class Terminal {
         output = new StringBuilder();
         for (Entidade e : db.getEmpires().getEntidades()) output.append(((Empire) e).runTurn());
         
+        java.util.List<Battle> battlesToRemove = new java.util.ArrayList<>();
         for(Entidade b: db.getBattles().getEntidades()){
           Battle battle = (Battle) b;
           int result = battle.simulateRound();
@@ -92,18 +93,21 @@ public class Terminal {
 
           if (result == 1) {
             output.append(attackerName).append(" Venceu a batalha! Vitoria dos atacantes.\n");
-            db.getBattles().remove(battle.getId());
+            battlesToRemove.add(battle);
           } else if (result == -1) {
             output.append(defenderName).append(" Venceu a batalha! Vitoria dos defensores.\n");
-            db.getBattles().remove(battle.getId());
+            battlesToRemove.add(battle);
           } else {
             output.append("A batalha continua... Nenhum vencedor nesta rodada.\n");
           }
         }
-          log(output.toString());
-          log("Turno rodado.");
-          break;
-        case "exit":
+        for(Battle b: battlesToRemove) db.getBattles().remove(b.getId());
+        
+        log(output.toString());
+        log("Turno rodado.");
+        break;
+
+      case "exit":
         sc.close();
         return;
       }
