@@ -58,11 +58,11 @@ public class Battle extends Entidade {
   }
 
   public int getAttackerSoldiersAlive() {
-    return attackerSoldiersAlive;
+    return attackerSoldiersAlive + 100;
   }
 
   public int getDefenderSoldiersAlive() {
-    return defenderSoldiersAlive;
+    return defenderSoldiersAlive + 100;
   }
 
   /**
@@ -117,14 +117,14 @@ public class Battle extends Entidade {
     attackerSoldiersAlive = 0;
     defenderSoldiersAlive = 0;
 
-    for (int i = 0; i < attacker.getSoldiersAmount(); i++) {
+    for (int i = 0; i < attackerSoldiers.size(); i++) {
       if (attackerSoldiers.get(i).getHp() <= 0) continue;
       attackerSoldiers.get(i).setIdx(i);
       next.add(new TurnOrder(i, (int)(Math.random() * attackerSoldiers.get(i).getDexterity()), true));
       attackerSoldiersAlive++;
     }
 
-    for (int i = 0; i < defender.getSoldiersAmount(); i++) {
+    for (int i = 0; i < defenderSoldiers.size(); i++) {
       if (defenderSoldiers.get(i).getHp() <= 0) continue;
       defenderSoldiers.get(i).setIdx(i);
       next.add(new TurnOrder(i, (int) Math.random() * defenderSoldiers.get(i).getDexterity(), false));
@@ -169,11 +169,37 @@ public class Battle extends Entidade {
   }
 
   public void insertSoldier(Boolean is_attacker, int amount){
+    if(amount <= 0) return;
+
     ArrayList<Army.Soldier> receiverSoldiers = is_attacker? attackerSoldiers : defenderSoldiers;
     Army receiverArmy = is_attacker? attacker : defender;
+    System.out.printf("Entrei aqui %d\n", amount);
+    System.out.flush();
     for(int i = 0; i < amount; i++){
-      receiverSoldiers.addLast(receiverArmy.new Soldier(receiverArmy.general));
+      receiverSoldiers.add(receiverArmy.new Soldier(receiverArmy.general));
     }
+
+    if(is_attacker) attackerSoldiersAlive += amount;
+    else defenderSoldiersAlive += amount;
+  }
+
+  int getSoldiersSize(Boolean is_attacker){
+    if(is_attacker) return attackerSoldiers.size();
+    else return defenderSoldiers.size();
+  }
+
+  public Boolean deleteSoldier(Boolean is_attacker, int pos){
+    if(is_attacker){
+      if(pos >= attackerSoldiers.size()) return false;
+      if(attackerSoldiers.get(pos).hp > 0) attackerSoldiersAlive--;
+      attackerSoldiers.remove(pos);
+      
+    }else{
+      if(pos >= defenderSoldiers.size()) return false;
+      if(defenderSoldiers.get(pos).hp > 0) defenderSoldiersAlive--;
+      defenderSoldiers.remove(pos);
+    }
+    return true;
   }
 }
 

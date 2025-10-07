@@ -369,7 +369,8 @@ public class Terminal {
     System.out.println("Batalhas");
     System.out.println("");
     print("new <empire> <atk_id> <dfn_id>", "Iniciar nova batalha usando a tropa *atk_id* pra atacar *dfn_id*");
-    print("insertsoldier <battle_id> <attacker/defender> <amt>", "Inserir soldados temporários no exército *attacker/defender* d");
+    print("insertsoldier <battle_id> <attacker/defender> <amt>", "Inserir soldados temporários no exército *attacker/defender*");
+    print("deletesoldier <battle_id> <attacker/defender> <pos>", "Deletar soldados no exército *attacker/defender*");
     print("view <id>", "Ver batalha com *id*");
     print("viewall", "Ver todas batalhas");
     print("destroy <id>", "Destroi a batalha *id* (0-%d)", db.getBattles().getSize() - 1);
@@ -416,11 +417,29 @@ public class Terminal {
           if (battle_ == null) {log("Batalha inexistente."); break;}
           if(cmd[2].equals("attacker") || cmd[2].equals("defender")){
             battle_.insertSoldier(cmd[2].equals("attacker"), parseInt(cmd[3]));
+            log("Soldados inseridos com sucesso!.");
           } else{
             log("Não foi possível ler o exército em que será adicionado os soldados.");
           }
           break;
+          
+        case "deletesoldier":
+          battle_ = (Battle) db.getBattles().findById(parseInt(cmd[1]));
 
+          if (battle_ == null) {log("Batalha inexistente."); break;}
+
+          if(cmd[2].equals("attacker") || cmd[2].equals("defender")){
+            if(battle_.deleteSoldier(cmd[2].equals("attacker"), parseInt(cmd[3]))){
+              log("Soldados removidos com sucesso!.");
+            } else {
+              log("Posição inválida.");
+            }
+            
+          } else{
+            log("Não foi possível ler o exército em que será adicionado os soldados.");
+          }
+          break;
+        
       case "destroy":
         battle = (Battle) db.getBattles().findById(parseInt(cmd[1]));
         if (battle == null) log("Batalha inexistente.");
