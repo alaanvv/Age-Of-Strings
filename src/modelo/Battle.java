@@ -172,7 +172,7 @@ public class Battle extends Entidade {
     ArrayList<Army.Soldier> receiverSoldiers = is_attacker? attackerSoldiers : defenderSoldiers;
     Army receiverArmy = is_attacker? attacker : defender;
     for(int i = 0; i < amount; i++){
-      receiverSoldiers.addLast(receiverArmy.new Soldier());
+      receiverSoldiers.addLast(receiverArmy.new Soldier(receiverArmy.general));
     }
   }
 }
