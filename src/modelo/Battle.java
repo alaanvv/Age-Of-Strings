@@ -58,11 +58,11 @@ public class Battle extends Entidade {
   }
 
   public int getAttackerSoldiersAlive() {
-    return attackerSoldiersAlive + 100;
+    return attackerSoldiersAlive;
   }
 
   public int getDefenderSoldiersAlive() {
-    return defenderSoldiersAlive + 100;
+    return defenderSoldiersAlive;
   }
 
   /**
@@ -183,7 +183,7 @@ public class Battle extends Entidade {
     else defenderSoldiersAlive += amount;
   }
 
-  int getSoldiersSize(Boolean is_attacker){
+  public int getSoldiersSize(Boolean is_attacker){
     if(is_attacker) return attackerSoldiers.size();
     else return defenderSoldiers.size();
   }

@@ -432,7 +432,7 @@ public class Terminal {
             if(battle_.deleteSoldier(cmd[2].equals("attacker"), parseInt(cmd[3]))){
               log("Soldados removidos com sucesso!.");
             } else {
-              log("Posição inválida.");
+              log("Posição deve estar entre 0 e " + (battle_.getSoldiersSize(cmd[2].equals("attacker"))-1) + ".");
             }
             
           } else{
