@@ -392,8 +392,8 @@ public class Terminal {
         if (battle == null) log("Batalha inexistente.");
         else log(battle.toString());
         break;
-      
-      case "new":
+        
+        case "new":
         Empire empire = (Empire) db.getEmpires().findById(parseInt(cmd[1]));
         if (empire == null) {log("Imperio inexistente."); break;}
         Army attackerArmy = (Army) db.getArmies().findById(parseInt(cmd[2]));
@@ -410,6 +410,17 @@ public class Terminal {
           }
         }
         break;
+      
+        case "insertsoldier":
+          Battle battle_ = (Battle) db.getBattles().findById(parseInt(cmd[1]));
+          if (battle_ == null) {log("Batalha inexistente."); break;}
+          if(cmd[2].equals("attacker") || cmd[2].equals("defender")){
+            battle_.insertSoldier(cmd[2].equals("attacker"), parseInt(cmd[3]));
+          } else{
+            log("Não foi possível ler o exército em que será adicionado os soldados.");
+          }
+          break;
+
       case "destroy":
         battle = (Battle) db.getBattles().findById(parseInt(cmd[1]));
         if (battle == null) log("Batalha inexistente.");
