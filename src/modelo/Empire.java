@@ -47,6 +47,10 @@ public class Empire extends Entidade {
 
   public void addPopulation(int amount) { population += amount; }
 
+  public boolean hasFarm() { return !farms.isEmpty(); }
+  public boolean hasMine() { return !mines.isEmpty(); }
+  public boolean hasArmy() { return !armies.isEmpty(); }
+
   // ---
 
   public void destroy() {
