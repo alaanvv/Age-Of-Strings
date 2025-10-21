@@ -55,9 +55,6 @@ public class Persistente {
    * {@code false} otherwise.
    */
   public Boolean remove(int id) {
-    // Note: Removing from a list while iterating using a for-each loop can
-    // sometimes lead to a ConcurrentModificationException. This implementation is safe
-    // because it returns immediately after the removal, thus exiting the loop.
     for (Entidade entidade : entidades) {
       if (entidade.getId() == id) {
         entidades.remove(entidade);

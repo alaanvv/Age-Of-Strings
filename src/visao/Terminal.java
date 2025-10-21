@@ -110,7 +110,7 @@ public class Terminal {
 
     switch (cmd[0]) {
       case "new":
-        Empire empire = new Empire(db, cmd[1]);
+        Empire empire = new Empire(cmd[1], db.nextEmpire());
         db.getEmpires().insert(empire);
         break;
       case "control":
@@ -121,7 +121,7 @@ public class Terminal {
       case "destroy":
         empire = (Empire) db.getEmpires().findById(parseInt(cmd[1]));
         if (empire == null) log("Imperio inexistente.");
-        else empire.destroy();
+        else db.destroyEmpire(empire);
         break;
       case "run":
         for (Entidade e : db.getEmpires().getEntidades())
@@ -236,7 +236,7 @@ public class Terminal {
 
     switch (cmd[0]) {
       case "build":
-        log(empire.buildFarm() ? "Fazenda construida." : "Recursos insuficientes.");
+        log(db.createFarm(empire.getId()) != 0 ? "Fazenda construida." : "Recursos insuficientes.");
         break;
       case "send":
         Farm farm = (Farm) db.getFarms().findById(parseInt(cmd[2]));
@@ -289,7 +289,7 @@ public class Terminal {
 
     switch (cmd[0]) {
       case "build":
-        log(empire.buildMine() ? "Mina construida." : "Recursos insuficientes.");
+        log(db.createMine(empire.getId()) != 0 ? "Mina construida." : "Recursos insuficientes.");
         break;
       case "send":
         Mine mine = (Mine) db.getMines().findById(parseInt(cmd[2]));
@@ -390,13 +390,13 @@ public class Terminal {
           log(a.toString());
         break;
       case "new":
-        log(empire.createArmy() ? "Exercito criado." : "Recursos insuficientes.");
+        log(db.createArmy(empire.getId()) != 0 ? "Exercito criado." : "Recursos insuficientes.");
         break;
       case "destroy":
         army = (Army) db.getArmies().findById(parseInt(cmd[1]));
         if (army == null) log("Exercito inexistente.");
         else {
-          army.destroy();
+          db.destroyEntity(army);
           log(army.toString());
         }
         break;
@@ -479,7 +479,7 @@ public class Terminal {
           if (defenderArmy == null || defenderArmy.getEmpireId() == empire.getId()) {
             log("Tropa defensora invalida ou pertence ao seu imperio.");
           } else {
-            Battle newBattle = new Battle(attackerArmy, defenderArmy, db);
+            Battle newBattle = new Battle(attackerArmy, defenderArmy, db.nextBattle());
             db.getBattles().insert(newBattle);
             log("Batalha iniciada!");
           }
@@ -489,7 +489,7 @@ public class Terminal {
         battle = (Battle) db.getBattles().findById(parseInt(cmd[1]));
         if (battle == null) log("Batalha inexistente.");
         else {
-          battle.destroy();
+          db.destroyEntity(battle);
           log(battle.toString());
         }
         break;

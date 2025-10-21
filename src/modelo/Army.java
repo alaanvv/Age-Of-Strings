@@ -1,12 +1,9 @@
 package modelo;
 
+public class Army extends Entidade implements Workpost{
 
-import persistencia.BancoDeDados;
-
-public class Army extends Entidade {
-
-  int empireId = -1;
-  Boolean inBattle = false;
+  private Empire empire;
+  private Boolean inBattle = false;
   protected int armoryLevel = 1;
   protected int hiringLevel = 1;
   protected int hiringCost = 1;
@@ -14,19 +11,10 @@ public class Army extends Entidade {
 
   Battle currentBattle;
 
-  private BancoDeDados db;
 
-  public Army(int empireId, BancoDeDados db) {
-    super(db.nextArmy());
-    this.db = db;
-    this.empireId = empireId;
-    this.general = new General();
-  }
-
-
-  public void destroy() {
-    db.getArmies().remove(super.getId());
-    ((Empire) db.getEmpires().findById(getEmpireId())).addPopulation(soldiersAmount);
+  public Army(Empire empire, int id) {
+    super(id);
+    this.empire = empire;
   }
 
   public boolean isBattling() {
@@ -95,7 +83,7 @@ public class Army extends Entidade {
   }
 
   public int getEmpireId() {
-    return empireId;
+    return empire.getId();
   }
 
   public int getSoldiersAmount() {
@@ -105,7 +93,7 @@ public class Army extends Entidade {
   @Override
   public String toString() {
     return "{" + super.toString() + " | " + String.format("Army #%d | Empire %d %s | Armory level: %d| Soldiers amount: %d}",
-      super.getId(), empireId, ((Empire)db.getEmpires().findById(empireId)).getName(), armoryLevel, hiringLevel, hiringCost, soldiersAmount);
+      super.getId(), getEmpireId(), empire.getName(), armoryLevel, hiringLevel, hiringCost, soldiersAmount);
   }
 
   // --- INNER CLASSES

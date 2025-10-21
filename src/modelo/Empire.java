@@ -1,6 +1,9 @@
 package modelo;
 
 import java.util.ArrayList;
+
+import javax.lang.model.type.NullType;
+
 import persistencia.BancoDeDados;
 
 public class Empire extends Entidade {
@@ -17,14 +20,11 @@ public class Empire extends Entidade {
   private ArrayList<Mine> mines = new ArrayList<>();
   private Lumber lumber;
 
-  private BancoDeDados db;
 
-  public Empire(BancoDeDados db, String name) {
-    super(db.nextEmpire());
+  public Empire(String name, int id) {
+    super(id);
     this.name = name;
-    this.db = db;
-    lumber = new Lumber(super.getId(), db);
-    db.getLumbers().insert(lumber);
+    lumber = new Lumber(id, this);
   }
 
   public ArrayList<Army> getArmies() { return armies; }
@@ -53,14 +53,6 @@ public class Empire extends Entidade {
 
   // ---
 
-  public void destroy() {
-    lumber.destroy();
-    for (Army a : armies) a.destroy();
-    for (Farm f : farms) f.destroy();
-    for (Mine m : mines) m.destroy();
-    db.getEmpires().remove(super.getId());
-  }
-
   public boolean buildHouse() {
     if (wood < 5 || gold < 5) return false;
     wood -= 5;
@@ -70,94 +62,86 @@ public class Empire extends Entidade {
     return true;
   }
 
-  public boolean buildFarm() {
-    if (wood < 5 || gold < 2) return false;
+  public Farm buildFarm(int farmId) {
+    if (wood < 5 || gold < 2) return null;
     wood -= 5;
     gold -= 2;
 
-    Farm farm = new Farm(super.getId(), db);
-    db.getFarms().insert(farm);
-    farms.add(farm);
-    return true;
+    Farm f = new Farm(farmId, this);
+    farms.add(f);
+
+    return f;
   }
 
-  public boolean buildMine() {
-    if (wood < 15 || gold < 5) return false;
+  public Mine buildMine(int id) {
+    if (wood < 15 || gold < 5) return null;
     wood -= 15;
     gold -= 5;
 
-    Mine mine = new Mine(super.getId(), db);
-    db.getMines().insert(mine);
-    mines.add(mine);
-    return true;
+    Mine mine = new Mine(id, this);
+    return mine;
   }
 
-  public boolean createArmy() {
-    if (gold < 20 || iron < 50) return false;
+  public Army createArmy(int id) {
+    if (gold < 20 || iron < 50) return null;
     iron -= 50;
     gold -= 20;
 
-    Army army = new Army(super.getId(), db);
-    db.getArmies().insert(army);
+    Army army = new Army(this, id);
     armies.add(army);
-    return true;
+    return army;
   }
 
   // ---
+
+  private int sendWorkers(int amount, Workpost workpost){
+    amount = workpost.sendWorkers(Math.min(amount, population));
+    population -= amount;
+    workers += amount;
+    return amount;
+  }
 
   public int sendWorkersToLumber(int amount) {
-    amount = lumber.sendWorkers(Math.min(amount, population));
-    population -= amount;
-    workers += amount;
-    return amount;
+    return sendWorkers(amount, lumber);
   }
 
-  public int sendWorkersToFarm(int amount, int id) {
-    amount = ((Farm) (db.getFarms().findById(id))).sendWorkers(Math.min(amount, population));
-    population -= amount;
-    workers += amount;
-    return amount;
+  public int sendWorkersToFarm(int amount, int idx) {
+    return sendWorkers(amount, farms.get(idx));
   }
 
-  public int sendWorkersToMine(int amount, int id) {
-    amount = ((Mine) (db.getMines().findById(id))).sendWorkers(Math.min(amount, population));
-    population -= amount;
-    workers += amount;
-    return amount;
+  public int sendWorkersToMine(int amount, int idx) {
+    return sendWorkers(amount, mines.get(idx));
   }
 
-  public int sendWorkersToArmy(int amount, int id) {
-    amount = ((Army) (db.getArmies().findById(id))).sendWorkers(Math.min(amount, population));
-    population -= amount;
-    workers += amount;
-    return amount;
+  public int sendWorkersToArmy(int amount, int idx) {
+    return sendWorkers(amount, armies.get(idx));
   }
 
   // ---
-
+  
   public int takeWorkersFromLumber(int amount) {
-    int taken = ((Lumber) (db.getLumbers().findById(super.getId()))).takeWorkers(amount);
+    int taken = lumber.takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;
   }
 
-  public int takeWorkersFromFarm(int amount, int id) {
-    int taken = ((Farm) (db.getFarms().findById(id))).takeWorkers(amount);
+  public int takeWorkersFromFarm(int amount, int idx) {
+    int taken = farms.get(idx).takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;
   }
 
-  public int takeWorkersFromMine(int amount, int id) {
-    int taken = ((Mine) (db.getMines().findById(id))).takeWorkers(amount);
+  public int takeWorkersFromMine(int amount, int idx) {
+    int taken = mines.get(idx).takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;
   }
 
-  public int takeWorkersFromArmy(int amount, int id) {
-    int taken = ((Army) (db.getArmies().findById(id))).takeWorkers(amount);
+  public int takeWorkersFromArmy(int amount, int idx) {
+    int taken = armies.get(idx).takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;

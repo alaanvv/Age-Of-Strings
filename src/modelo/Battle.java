@@ -16,11 +16,8 @@ public class Battle extends Entidade {
   private ArrayList < Army.Soldier > defenderSoldiers = new ArrayList < > ();
   private int defenderSoldiersAlive;
 
-  private persistencia.BancoDeDados db;
-
-  public Battle(Army attacker, Army defender, persistencia.BancoDeDados db) {
-    super(db.nextBattle());
-    this.db = db;
+  public Battle(Army attacker, Army defender, int id) {
+    super(id);
     this.attacker = attacker;
     this.defender = defender;
 
@@ -43,10 +40,6 @@ public class Battle extends Entidade {
       defenderSoldiers.add(defender.new Soldier(defenderGeneral));
     }
     defenderSoldiersAlive = defenderSoldiers.size();
-  }
-
-  public void destroy() {
-    db.getBattles().remove(super.getId());
   }
 
   public Army getAttacker() {

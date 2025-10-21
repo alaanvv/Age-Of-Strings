@@ -1,5 +1,17 @@
 package persistencia;
 
+import java.util.ArrayList;
+
+import javax.lang.model.UnknownEntityException;
+
+import modelo.Entidade;
+import modelo.Farm;
+import modelo.Lumber;
+import modelo.Mine;
+import modelo.Army;
+import modelo.Battle;
+import modelo.Empire;
+
 /**
  * Acts as an in-memory database to manage and persist all major game entities.
  * <p>
@@ -19,27 +31,27 @@ public class BancoDeDados {
    * Counter to generate a unique ID for the next Battle entity.
    * It's incremented each time a new battle is created.
    */
-  private int cBattles = 0;
+  private int cBattles = 1;
   /**
    * Counter to generate a unique ID for the next Empire entity.
    */
-  private int cEmpires = 0;
+  private int cEmpires = 1;
   /**
    * Counter to generate a unique ID for the next Lumber entity.
    */
-  private int cLumbers = 0;
+  private int cLumbers = 1;
   /**
    * Counter to generate a unique ID for the next Army entity.
    */
-  private int cArmies = 0;
+  private int cArmies = 1;
   /**
    * Counter to generate a unique ID for the next Farm entity.
    */
-  private int cFarms = 0;
+  private int cFarms = 1;
   /**
    * Counter to generate a unique ID for the next Mine entity.
    */
-  private int cMines = 0;
+  private int cMines = 1;
 
   public BancoDeDados() {
     this.battles = new Persistente();
@@ -50,6 +62,100 @@ public class BancoDeDados {
     this.mines = new Persistente();
   }
   
+  /** Create an empire and insert into the database
+   * @return new empire id
+  */
+  public int createEmpire(String name){
+    Empire e = new Empire(name, this.nextEmpire());
+    empires.insert(e);
+    e.getLumber().setId(this.nextLumber());
+    lumbers.insert(e.getLumber());
+    
+    return e.getId();
+  }
+
+  /** Create a battle and insert into the database
+   * @return the battle id
+  */
+  public int createBattle(int attackerId, int defenderId){
+    Army attackerArmy = (Army)armies.findById(attackerId);
+    Army defenderArmy = (Army)armies.findById(defenderId);
+    Battle b = new Battle(attackerArmy, defenderArmy, this.nextBattle());
+    battles.insert(b);
+    return b.getId();
+  }
+
+  /**
+   * Create a army of a given empire
+   * @param empireId The empire that will own the army.
+   * @return the army id if it was sucessfully created, or -1 if creation failed (due to lack of resources).
+    */
+  public int createArmy(int empireId){
+    Empire empire = (Empire)empires.findById(empireId);
+    Army army = empire.createArmy(this.nextArmy());
+    
+    if(army == null) return 0;
+    
+    armies.insert(army);
+    return army.getId();
+  }
+
+  public int createFarm(int empireId){
+    Empire empire = (Empire)empires.findById(empireId);
+    Farm farm = empire.buildFarm(empireId);
+
+    if(farm == null) return 0;
+
+    farms.insert(farm);
+    return farm.getId();
+  }
+
+  public int createMine(int empireId){
+    Empire empire = (Empire)empires.findById(empireId);
+    Mine mine = empire.buildMine(this.nextMine());
+
+    if(mine == null) return 0;
+
+    mines.insert(mine);
+    return mine.getId();
+  }
+
+  /** Destroy any type of Entity, removing of its respective persistency.*/
+  public void destroyEntity(Entidade entity){
+    switch(entity){
+        case Battle b -> battles.remove(b.getId());
+        case Empire e -> throw new RuntimeException("Objeto tipo Empire deve ser destruído em sua função apropriada (destroyEmpire).");
+        case Lumber l -> lumbers.remove(l.getId());
+        case Army a -> armies.remove(a.getId());
+        case Farm f -> farms.remove(f.getId());
+        case Mine m -> mines.remove(m.getId());
+        default -> {throw new RuntimeException("Um tipo de entidade inesperada foi encontrada em destroyEntity: " + entity.getClass().getName());}
+      }
+  }
+
+  /** Destroy a list of Entidade, removing of its respective persistency */
+  public void destroyEntities(ArrayList<Entidade> entitieList){
+    for(int i = entitieList.size()-1; i >= 0; i--){
+      destroyEntity(entitieList.get(i));
+    }
+  }
+
+  /** Correctly remove an Empire, removing all its dependent entities and finally destroying the empire*/
+  public void destroyEmpire(Empire empire){
+
+    //Adds all empire dependent entities to an ArrayList and burn'em all in destroyEntities
+    ArrayList<Entidade> entities = new ArrayList<>();
+    
+    entities.addAll(empire.getArmies());
+    entities.addAll(empire.getFarms());
+    entities.addAll(empire.getMines());
+    entities.add(empire.getLumber());
+
+    destroyEntities(entities);
+    empires.remove(empire.getId());
+  }
+
+
   /**
    * Generates and returns the next available unique ID for a Battle.
    * This method uses a post-increment operation, ensuring each call returns
@@ -87,9 +193,6 @@ public class BancoDeDados {
    * @return The next unique integer ID for a mine.
    */
   public int nextMine() { return cMines++; }
-
-  // The rest of the methods are standard getters, setters, and utility checks
-  // (has/size), which are generally self-explanatory.
 
   public Persistente getLumbers() {
     return lumbers;

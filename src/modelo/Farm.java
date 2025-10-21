@@ -1,28 +1,19 @@
 package modelo;
 
-import persistencia.BancoDeDados;
-
-public class Farm extends Entidade {
+public class Farm extends Entidade implements Workpost {
   private int workers = 0;
-  private int empireId;
+  private Empire empire;
 
-  private BancoDeDados db;
 
   // ---
 
-  public Farm(int empireId, BancoDeDados db) {
-    super(db.nextFarm());
-    this.empireId = empireId;
-    this.db = db;
+  public Farm(int id, Empire empire) {
+    super(id);
+    this.empire = empire;
   }
 
   public int getWorkers() {
     return workers;
-  }
-
-  public void destroy() {
-    db.getFarms().remove(super.getId());
-    ((Empire) db.getEmpires().findById(getEmpireId())).addPopulation(workers);
   }
 
   // Retorna quantos trabalhadores entraram
@@ -45,8 +36,8 @@ public class Farm extends Entidade {
     return (int)(Math.random() * efficiency * 20);
   }
 
-  public int getEmpireId() {
-    return empireId;
+  public int getEmpireId(){
+    return empire.getId();
   }
 
   // ---

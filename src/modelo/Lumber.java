@@ -1,19 +1,15 @@
 package modelo;
 
-import persistencia.BancoDeDados;
-
-public class Lumber extends Entidade {
+public class Lumber extends Entidade implements Workpost{
   private int workers = 0;
-  private int empireId;
+  Empire empire;
 
-  private BancoDeDados db;
 
   // ---
 
-  public Lumber(int empireId, BancoDeDados db) {
-    super(db.nextLumber());
-    this.empireId = empireId;
-    this.db = db;
+  public Lumber(int id, Empire empire) {
+    super(id);
+    this.empire = empire;
   }
 
   public int getWorkers() {
@@ -21,8 +17,7 @@ public class Lumber extends Entidade {
   }
 
   public void destroy() {
-    db.getLumbers().remove(super.getId());
-    ((Empire) db.getEmpires().findById(getEmpireId())).addPopulation(workers);
+    empire.addPopulation(workers);
   }
 
   // Retorna quantos trabalhadores entraram
@@ -46,7 +41,7 @@ public class Lumber extends Entidade {
   }
 
   public int getEmpireId() {
-    return empireId;
+    return empire.getId();
   }
 
   // ---
