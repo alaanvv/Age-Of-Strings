@@ -9,42 +9,20 @@ import modelo.Farm;
 import modelo.Mine;
 import persistencia.BancoDeDados;
 
-/**
- * Provides a command-line interface (CLI) for interacting with the game.
- * This class is responsible for all user input and output, presenting menus,
- * and calling the appropriate model and persistence layer methods based on user commands.
- */
 public class Terminal {
-  /** A buffer to store log messages to be displayed to the user in the next input cycle. */
   private static StringBuilder logs = new StringBuilder();
-  /** A static Scanner instance to read input from the console. */
   public static Scanner sc = new Scanner(System.in);
 
-  /**
-   * Appends a message to the log buffer. The message is ignored if it's empty.
-   * @param text The string message to log.
-   */
   private static void log(String text) {
-    if (text == null || text.isEmpty()) return;
+    if (text.equals("")) return;
     logs.append(text).append("\n");
   }
 
-  /**
-   * Prints a formatted command description to the console.
-   * @param cmd The command string (e.g., "new <name>").
-   * @param desc A description of the command, which can be a format string.
-   * @param args Optional arguments for the description's format string.
-   */
   private static void print(String cmd, String desc, Object... args) {
     System.out.printf("%-20s # ", cmd);
     System.out.printf(desc + "\n", args);
   }
 
-  /**
-   * Displays any pending log messages, prompts the user for input, reads the command,
-   * clears the console, and returns the parsed command.
-   * @return A string array containing the command and its arguments.
-   */
   private static String[] read() {
     if (logs.length() > 0) {
       System.out.println();
@@ -55,27 +33,15 @@ public class Terminal {
     System.out.print("\n:");
     String line = sc.nextLine();
 
-    // ANSI escape codes to clear the screen
     System.out.print("\033[H\033[2J");
     System.out.flush();
     return line.split(" ");
   }
 
-  /**
-   * A simple utility method to parse a string into an integer.
-   * @param n The string to parse.
-   * @return The integer value of the string.
-   */
   private static int parseInt(String n) {
     return Integer.parseInt(n);
   }
 
-  /**
-   * Displays the main menu of the game.
-   * This is the entry point of the UI loop, allowing the user to manage empires,
-   * run turns, or exit the game.
-   * @param db The main database instance containing all game data.
-   */
   public static void mainMenu(BancoDeDados db) {
     if (db.hasEmpire()) {
       for (Entidade e : db.getEmpires().getEntidades())
@@ -118,12 +84,6 @@ public class Terminal {
     mainMenu(db);
   }
 
-  /**
-   * Displays the menu for controlling a specific empire.
-   * From here, the user can navigate to sub-menus for managing buildings and armies.
-   * @param empire The empire being controlled.
-   * @param db The main database instance.
-   */
   public static void empireMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -162,11 +122,6 @@ public class Terminal {
     empireMenu(empire, db);
   }
 
-  /**
-   * Displays the menu for building houses.
-   * @param empire The current empire.
-   * @param db The main database instance.
-   */
   public static void houseMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -188,11 +143,6 @@ public class Terminal {
     houseMenu(empire, db);
   }
 
-  /**
-   * Displays the menu for managing farms (building and assigning workers).
-   * @param empire The current empire.
-   * @param db The main database instance.
-   */
   public static void farmMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -237,11 +187,6 @@ public class Terminal {
     farmMenu(empire, db);
   }
 
-  /**
-   * Displays the menu for managing mines (building and assigning workers).
-   * @param empire The current empire.
-   * @param db The main database instance.
-   */
   public static void mineMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -287,11 +232,6 @@ public class Terminal {
     mineMenu(empire, db);
   }
 
-  /**
-   * Displays the menu for managing the lumber mill (assigning workers).
-   * @param empire The current empire.
-   * @param db The main database instance.
-   */
   public static void lumberMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -318,11 +258,6 @@ public class Terminal {
     lumberMenu(empire, db);
   }
 
-  /**
-   * Displays the menu for managing armies (creating, viewing, reinforcing, and upgrading).
-   * @param empire The current empire.
-   * @param db The main database instance.
-   */
   public static void armyMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -364,7 +299,7 @@ public class Terminal {
         if (army == null) log("Exercito inexistente.");
         else {
           army.destroy();
-          log("Exercito #" + army.getId() + " destruido.");
+          log(army.toString());
         }
         break;
       case "send":
@@ -404,12 +339,6 @@ public class Terminal {
     armyMenu(empire, db);
   }
 
-  /**
-   * Displays the menu for managing wars and battles.
-   * Allows the user to initiate new battles or view existing ones.
-   * @param empire The current empire.
-   * @param db The main database instance.
-   */
   public static void warMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("GUERRAS");
@@ -424,12 +353,12 @@ public class Terminal {
     switch (cmd[0]) {
       case "view":
         for (int i = db.getBattles().getSize() - 1; i >= 0; i--) {
-          Battle battle = (Battle) db.getBattles().getEntidades().get(i);
-          String attackerName = "Army #" + battle.getAttacker().getId();
-          String defenderName = "Army #" + battle.getDefender().getId();
-          log("\nBattle #" + battle.getId() + ": " + attackerName + " (Attacker) vs " + defenderName + " (Defender)");
-          log("Attacker Soldiers Alive: " + battle.getAttackerSoldiersAlive());
-          log("Defender Soldiers Alive: " + battle.getDefenderSoldiersAlive());
+          Battle batalhas = (Battle) db.getBattles().findById(i);
+          String attackerName = "Army #" + batalhas.getAttacker().getId();
+          String defenderName = "Army #" + batalhas.getDefender().getId();
+          log("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
+          log("Soldados Atacantes vivos: " + batalhas.getAttackerSoldiersAlive());
+          log("Soldados Defensores vivos: " + batalhas.getDefenderSoldiersAlive());
         }
         break;
       case "viewany":
@@ -448,7 +377,7 @@ public class Terminal {
           } else {
             Battle newBattle = new Battle(attackerArmy, defenderArmy, db);
             db.getBattles().insert(newBattle);
-            log("Batalha #" + newBattle.getId() + " iniciada!");
+            log("Batalha iniciada!");
           }
         }
         break;
@@ -457,7 +386,7 @@ public class Terminal {
         if (battle == null) log("Batalha inexistente.");
         else {
           battle.destroy();
-          log("Batalha #" + battle.getId() + " destruida.");
+          log(battle.toString());
         }
         break;
       case "back":
