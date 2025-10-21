@@ -4,7 +4,6 @@ import java.util.Scanner;
 import modelo.Army;
 import modelo.Battle;
 import modelo.Empire;
-import modelo.Lumber;
 import modelo.Entidade;
 import modelo.Farm;
 import modelo.Mine;
