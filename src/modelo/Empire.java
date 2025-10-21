@@ -2,10 +2,6 @@ package modelo;
 
 import java.util.ArrayList;
 
-import javax.lang.model.type.NullType;
-
-import persistencia.BancoDeDados;
-
 public class Empire extends Entidade {
   private int population = 30;
   private int food = 100;
@@ -94,7 +90,7 @@ public class Empire extends Entidade {
 
   // ---
 
-  private int sendWorkers(int amount, Workpost workpost){
+  public int sendWorkers(int amount, Workpost workpost){
     amount = workpost.sendWorkers(Math.min(amount, population));
     population -= amount;
     workers += amount;
@@ -118,33 +114,28 @@ public class Empire extends Entidade {
   }
 
   // ---
-  
-  public int takeWorkersFromLumber(int amount) {
-    int taken = lumber.takeWorkers(amount);
+
+  public int takeWorkers(int amount, Workpost workpost){
+    int taken = workpost.takeWorkers(amount);
     population += taken;
     workers -= taken;
     return taken;
+  }
+
+  public int takeWorkersFromLumber(int amount) {
+    return takeWorkers(amount, lumber);
   }
 
   public int takeWorkersFromFarm(int amount, int idx) {
-    int taken = farms.get(idx).takeWorkers(amount);
-    population += taken;
-    workers -= taken;
-    return taken;
+    return takeWorkers(amount, farms.get(idx));
   }
 
   public int takeWorkersFromMine(int amount, int idx) {
-    int taken = mines.get(idx).takeWorkers(amount);
-    population += taken;
-    workers -= taken;
-    return taken;
+    return takeWorkers(amount, mines.get(idx));
   }
 
   public int takeWorkersFromArmy(int amount, int idx) {
-    int taken = armies.get(idx).takeWorkers(amount);
-    population += taken;
-    workers -= taken;
-    return taken;
+    return takeWorkers(amount, armies.get(idx));
   }
 
   // ---

@@ -2,8 +2,6 @@ package persistencia;
 
 import java.util.ArrayList;
 
-import javax.lang.model.UnknownEntityException;
-
 import modelo.Entidade;
 import modelo.Farm;
 import modelo.Lumber;
