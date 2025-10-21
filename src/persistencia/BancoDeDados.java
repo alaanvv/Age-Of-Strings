@@ -1,5 +1,12 @@
 package persistencia;
 
+/**
+ * Acts as an in-memory database to manage and persist all major game entities.
+ * <p>
+ * This class centralizes access to collections of battles, empires, and various
+ * resource-producing structures like lumbers, farms, and mines. It also handles
+ * the generation of unique IDs for new entities.
+ */
 public class BancoDeDados {
   private Persistente battles;
   private Persistente empires;
@@ -8,11 +15,30 @@ public class BancoDeDados {
   private Persistente farms;
   private Persistente mines;
 
+  /**
+   * Counter to generate a unique ID for the next Battle entity.
+   * It's incremented each time a new battle is created.
+   */
   private int cBattles = 0;
+  /**
+   * Counter to generate a unique ID for the next Empire entity.
+   */
   private int cEmpires = 0;
+  /**
+   * Counter to generate a unique ID for the next Lumber entity.
+   */
   private int cLumbers = 0;
+  /**
+   * Counter to generate a unique ID for the next Army entity.
+   */
   private int cArmies = 0;
+  /**
+   * Counter to generate a unique ID for the next Farm entity.
+   */
   private int cFarms = 0;
+  /**
+   * Counter to generate a unique ID for the next Mine entity.
+   */
   private int cMines = 0;
 
   public BancoDeDados() {
@@ -24,12 +50,46 @@ public class BancoDeDados {
     this.mines = new Persistente();
   }
   
+  /**
+   * Generates and returns the next available unique ID for a Battle.
+   * This method uses a post-increment operation, ensuring each call returns
+   * a sequential and unique identifier (0, 1, 2, ...).
+   * @return The next unique integer ID for a battle.
+   */
   public int nextBattle() { return cBattles++; }
+
+  /**
+   * Generates and returns the next available unique ID for an Empire.
+   * @return The next unique integer ID for an empire.
+   */
   public int nextEmpire() { return cEmpires++; }
+
+  /**
+   * Generates and returns the next available unique ID for a Lumber mill.
+   * @return The next unique integer ID for a lumber mill.
+   */
   public int nextLumber() { return cLumbers++; }
+
+  /**
+   * Generates and returns the next available unique ID for an Army.
+   * @return The next unique integer ID for an army.
+   */
   public int nextArmy() { return cArmies++; }
+
+  /**
+   * Generates and returns the next available unique ID for a Farm.
+   * @return The next unique integer ID for a farm.
+   */
   public int nextFarm() { return cFarms++; }
+
+  /**
+   * Generates and returns the next available unique ID for a Mine.
+   * @return The next unique integer ID for a mine.
+   */
   public int nextMine() { return cMines++; }
+
+  // The rest of the methods are standard getters, setters, and utility checks
+  // (has/size), which are generally self-explanatory.
 
   public Persistente getLumbers() {
     return lumbers;

@@ -9,39 +9,91 @@ import modelo.Farm;
 import modelo.Mine;
 import persistencia.BancoDeDados;
 
+/**
+ * Handles all command-line interface (CLI) interactions for the game.
+ * <p>
+ * This class is responsible for displaying menus, reading user input,
+ * and calling the appropriate model methods based on the commands entered.
+ * It operates as a series of recursive menu loops that manage the application's state.
+ */
 public class Terminal {
+  /**
+   * A string buffer to accumulate feedback messages for the user.
+   * Messages are logged here and then printed to the console all at once
+   * during the next input cycle in the {@link #read()} method.
+   */
   private static StringBuilder logs = new StringBuilder();
   public static Scanner sc = new Scanner(System.in);
 
+  /**
+   * Appends a message to the log buffer to be displayed later.
+   * An empty string will be ignored.
+   *
+   * @param text The message to add to the log.
+   */
   private static void log(String text) {
     if (text.equals("")) return;
     logs.append(text).append("\n");
   }
 
+  /**
+   * Prints a formatted command entry for a menu.
+   * Ensures consistent alignment for better readability.
+   *
+   * @param cmd The command string (e.g., "new <name>").
+   * @param desc A description of the command, which can include format specifiers.
+   * @param args Optional arguments to be formatted into the description string.
+   */
   private static void print(String cmd, String desc, Object... args) {
     System.out.printf("%-20s # ", cmd);
     System.out.printf(desc + "\n", args);
   }
 
+  /**
+   * The core input and screen refresh method for the terminal UI.
+   * <p>
+   * This method performs three main tasks:
+   * 1. Prints all accumulated messages from the {@code logs} buffer.
+   * 2. Prompts the user for input and reads the next line.
+   * 3. Clears the console screen using ANSI escape codes for a clean refresh.
+   *
+   * @return An array of strings, split from the user's input line.
+   */
   private static String[] read() {
     if (logs.length() > 0) {
       System.out.println();
       System.out.print(logs);
-      logs.setLength(0);
+      logs.setLength(0); // Clear the buffer after printing
     }
 
     System.out.print("\n:");
     String line = sc.nextLine();
 
+    // ANSI escape codes to clear the screen.
+    // \033[H moves the cursor to the top-left corner.
+    // \033[2J clears the entire screen.
     System.out.print("\033[H\033[2J");
     System.out.flush();
     return line.split(" ");
   }
 
+  /**
+   * A simple utility wrapper for Integer.parseInt to keep the main code cleaner.
+   *
+   * @param n The string to be parsed into an integer.
+   * @return The integer value of the string.
+   */
   private static int parseInt(String n) {
     return Integer.parseInt(n);
   }
 
+  /**
+   * Displays the main menu and handles top-level commands like creating,
+   * controlling, or destroying empires. This method acts as the entry point
+   * for the game's UI loop and calls itself recursively to keep the menu active.
+   *
+   * @param db The main database object containing all game data.
+   */
   public static void mainMenu(BancoDeDados db) {
     if (db.hasEmpire()) {
       for (Entidade e : db.getEmpires().getEntidades())
@@ -78,12 +130,20 @@ public class Terminal {
         break;
       case "exit":
         sc.close();
-        return;
+        return; // Exits the recursive loop
     }
 
-    mainMenu(db);
+    mainMenu(db); // Recursive call to show the menu again
   }
 
+  /**
+   * Displays the management menu for a specific empire. This menu is a hub that
+   * navigates to sub-menus for managing buildings, armies, and warfare.
+   * It operates on a recursive loop until the user chooses to go back.
+   *
+   * @param empire The empire being controlled.
+   * @param db The main database object.
+   */
   public static void empireMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -122,6 +182,14 @@ public class Terminal {
     empireMenu(empire, db);
   }
 
+  /**
+   * Displays the menu for building houses. This menu is a simple interface
+   * for a single action: constructing a new house. It recursively calls itself
+   * to remain on the screen until the user goes back.
+   *
+   * @param empire The empire performing the action.
+   * @param db The main database object.
+   */
   public static void houseMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -143,6 +211,14 @@ public class Terminal {
     houseMenu(empire, db);
   }
 
+  /**
+   * Displays the menu for managing farms. Allows building new farms and
+   * assigning/removing workers from existing ones. Calls itself recursively
+   * to stay on this menu.
+   *
+   * @param empire The empire managing the farms.
+   * @param db The main database object.
+   */
   public static void farmMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -187,6 +263,14 @@ public class Terminal {
     farmMenu(empire, db);
   }
 
+  /**
+   * Displays the menu for managing mines. Allows building new mines and
+   * assigning/removing workers from existing ones. Calls itself recursively
+   * to stay on this menu.
+   *
+   * @param empire The empire managing the mines.
+   * @param db The main database object.
+   */
   public static void mineMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -232,6 +316,13 @@ public class Terminal {
     mineMenu(empire, db);
   }
 
+  /**
+   * Displays the menu for managing the empire's single lumber camp. Allows
+   * assigning and removing workers. Calls itself recursively.
+   *
+   * @param empire The empire managing the lumber camp.
+   * @param db The main database object.
+   */
   public static void lumberMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -258,6 +349,13 @@ public class Terminal {
     lumberMenu(empire, db);
   }
 
+  /**
+   * Displays the comprehensive menu for managing armies. This includes creating,
+   * viewing, destroying, reinforcing, and upgrading armies. Calls itself recursively.
+   *
+   * @param empire The empire managing its armies.
+   * @param db The main database object, used for viewing/interacting with any army.
+   */
   public static void armyMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
@@ -339,6 +437,12 @@ public class Terminal {
     armyMenu(empire, db);
   }
 
+  /**
+   * Displays the menu for initiating and viewing battles. Calls itself recursively.
+   *
+   * @param empire The empire initiating or viewing wars.
+   * @param db The main database object.
+   */
   public static void warMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("GUERRAS");
