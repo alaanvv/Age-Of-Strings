@@ -56,7 +56,7 @@ public class Army extends Entidade implements Workpost{
 
     hiringLevel = (int) auxiliar.LogCalculator.logBase(cyclicalGold, 1.055D);
     hiringCost = (int) Math.pow(1.055D, hiringLevel);
-    hiringCost = Math.max(hiringCost, 1);
+    hiringLevel = Math.max(hiringLevel, 1);
     return previousHiringCost - hiringCost;
   }
 
