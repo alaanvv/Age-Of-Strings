@@ -1,8 +1,8 @@
 package persistencia;
 
-import java.util.ArrayList;
 import modelo.Entidade;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * A generic, in-memory repository to manage a collection of {@link Entidade} objects.
@@ -15,14 +15,14 @@ public class Persistente {
   /**
    * The internal list that stores all managed entities.
    */
-  private List<Entidade> entidades;
+  private Map<Integer, Entidade> entidades;
 
   public Persistente() {
-    this.entidades = new ArrayList<>();
+    this.entidades = new HashMap<Integer, Entidade>();
   }
 
   public void insert(Entidade entity) {
-    this.entidades.add(entity);
+    this.entidades.put(entity.getId(), entity);
   }
 
   /**
@@ -34,13 +34,17 @@ public class Persistente {
    * {@code false} otherwise.
    */
   public Boolean update(int id, Entidade entity) {
-    for (int i = 0; i < entidades.size(); i++) {
+    if(!entidades.containsKey(id)) return false;
+    entidades.put(id, entity);
+    return true;
+    
+    /* for (int i = 0; i < entidades.size(); i++) {
       if (entidades.get(i).getId() == id) {
         entidades.set(i, entity);
         return true;
       }
     }
-    return false;
+    return false; */
   }
 
   /**
@@ -55,20 +59,13 @@ public class Persistente {
    * {@code false} otherwise.
    */
   public Boolean remove(int id) {
-    for (Entidade entidade : entidades) {
-      if (entidade.getId() == id) {
-        entidades.remove(entidade);
-        return true;
-      }
-    }
-    return false;
+    if(!entidades.containsKey(id)) return false;
+    entidades.remove(id);
+    return true;
   }
 
   public Entidade findById(int id) {
-    for (Entidade entidade : entidades)
-      if (entidade.getId() == id)
-        return entidade;
-    return null;
+    return entidades.get(id);
   }
 
   public int getSize() {
@@ -85,14 +82,14 @@ public class Persistente {
    *
    * @return The internal list of {@code Entidade} objects.
    */
-  public List<Entidade> getEntidades() {
+  public Map<Integer, Entidade> getEntidades() {
     return entidades;
   }
 
   @Override
   public String toString() {
     StringBuilder s = new StringBuilder();
-    for (Entidade entidade : entidades)
+    for (Entidade entidade : entidades.values())
       s.append(entidade.toString()).append("\n");
     return s.toString();
   }

@@ -96,7 +96,7 @@ public class Terminal {
    */
   public static void mainMenu(BancoDeDados db) {
     if (db.hasEmpire()) {
-      for (Entidade e : db.getEmpires().getEntidades())
+      for (Entidade e : db.getEmpires().getEntidades().values())
         System.out.println(String.format("Imperio %s #%d", ((Empire) e).getName(), e.getId()));
       System.out.println("");
     }
@@ -124,7 +124,7 @@ public class Terminal {
         else db.destroyEmpire(empire);
         break;
       case "run":
-        for (Entidade e : db.getEmpires().getEntidades())
+        for (Entidade e : db.getEmpires().getEntidades().values())
           log(((Empire) e).runTurn());
         log("Turno rodado.");
         break;
@@ -386,7 +386,7 @@ public class Terminal {
         else log(army.toString());
         break;
       case "viewall":
-        for (Entidade a : db.getArmies().getEntidades())
+        for (Entidade a : db.getArmies().getEntidades().values())
           log(a.toString());
         break;
       case "new":
