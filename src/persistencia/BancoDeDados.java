@@ -100,7 +100,7 @@ public class BancoDeDados {
 
   public int createFarm(int empireId){
     Empire empire = (Empire)empires.findById(empireId);
-    Farm farm = empire.buildFarm(empireId);
+    Farm farm = empire.buildFarm(this.nextFarm());
 
     if(farm == null) return 0;
 
