@@ -142,6 +142,24 @@ public class Empire extends Entidade {
 
   // ---
 
+  /** This functions serves to determine how much gold is being invested into an army
+   * @param armyId The army that will have its funds changed.
+   * @param amount The new hiring cost of the army.
+   * @return If the change was possible.
+   */
+  boolean changeArmyHiringFunds(int armyId, int amount){
+    Army army = armies.get(armyId);
+    int previousHiringCost = army.getHiringCost();
+    int previousHiringLevel = army.getHiringLevel();
+    int difference = army.changeHiringFunds(amount);
+    if(this.gold + difference < 0){
+      army.changeHiringFunds(previousHiringCost);
+      return false;
+    }
+    this.gold += difference;
+    return army.getHiringLevel() != previousHiringLevel;
+  }
+
   public String runTurn() {
     StringBuilder output = new StringBuilder();
 
@@ -155,6 +173,8 @@ public class Empire extends Entidade {
       iron += mine.extractIron();
       gold += mine.extractGold();
     }
+
+    armies.forEach((key, army) -> army.timeUpdateArmy(this));
 
     // Consumindo pontos de comida
     int consumed = population + workers;
@@ -204,6 +224,7 @@ public class Empire extends Entidade {
 
   @Override
   public String toString() {
-    return String.format("Imperio %s #%d | Populacao: %d; Trabalhadores: %d; Comida: %d; Madeira: %d; Ferro: %d; Ouro: %d", name, super.getId(), population, workers, food, wood, iron, gold);
+    return String.format("Imperio %s #%d | Populacao: %d; Trabalhadores: %d; Comida: %d; Madeira: %d; Ferro: %d; Ouro: %d", 
+           name, super.getId(), population, workers, food, wood, iron, gold);
   }
 }

@@ -6,7 +6,7 @@ public class Army extends Entidade implements Workpost{
   private Boolean inBattle = false;
   protected int armoryLevel = 1;
   protected int hiringLevel = 1;
-  protected int hiringCost = 1;
+  protected int hiringCost = 0;
   protected int soldiersAmount = 1;
 
   Battle currentBattle;
@@ -51,21 +51,25 @@ public class Army extends Entidade implements Workpost{
    * the diference must be added to the empire's gold.
    */
   public int changeHiringFunds(int cyclicalGold) {
+    if(isBattling()) return 0;
     int previousHiringCost = hiringCost;
 
     hiringLevel = (int) auxiliar.LogCalculator.logBase(cyclicalGold, 1.055D);
     hiringCost = (int) Math.pow(1.055D, hiringLevel);
-    return hiringCost - previousHiringCost;
+    hiringCost = Math.max(hiringCost, 1);
+    return previousHiringCost - hiringCost;
   }
 
   // Retorna quantos trabalhadores entraram
   public int sendWorkers(int amount) {
+    if(isBattling()) return 0;
     int previousSoldiers = soldiersAmount;
     soldiersAmount += amount;
     return soldiersAmount - previousSoldiers;
   }
-
+  
   public int takeWorkers(int amount) {
+    if(isBattling()) return 0;
     int previousSoldiers = soldiersAmount;
     soldiersAmount = Math.max(0, soldiersAmount - amount);
     return previousSoldiers - soldiersAmount;
@@ -90,10 +94,13 @@ public class Army extends Entidade implements Workpost{
     return soldiersAmount;
   }
 
+  public int getHiringLevel(){ return hiringLevel; }
+  public int getHiringCost(){ return hiringCost; }
+
   @Override
   public String toString() {
-    return "{" + super.toString() + " | " + String.format("Army #%d | Empire %d %s | Armory level: %d| Soldiers amount: %d}",
-      super.getId(), getEmpireId(), empire.getName(), armoryLevel, hiringLevel, hiringCost, soldiersAmount);
+    return "{" + super.toString() + " | " + String.format("Army #%d | Empire %d %s | Armory level: %d| Soldiers amount: %d | Hiring cost: %d | Hiring level: %d}",
+      super.getId(), getEmpireId(), empire.getName(), armoryLevel, hiringLevel, hiringCost, soldiersAmount, hiringCost, hiringLevel);
   }
 
   // --- INNER CLASSES

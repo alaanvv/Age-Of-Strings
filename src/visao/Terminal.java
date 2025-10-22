@@ -368,9 +368,11 @@ public class Terminal {
     if (db.getArmies().getSize() > 0) print("viewall", "Ver todos exercitos de todos imperios");
     print("new", "Criar novo exercito");
     if (db.getArmies().getSize() > 0) print("destroy <id>", "Destroi o exercito *id* (0-%d)", db.getArmies().getSize() - 1);
-    if (empire.getArmies().size() > 0) print("send <amount> <id>", "Envia *amount* tropas pro exercito *id*");
-    if (empire.getArmies().size() > 0) print("take <amount> <id>", "Tira *amount* trabalhadores do exercito *id*");
-    if (empire.getArmies().size() > 0) print("upgrade <amount> <id>", "Melhora a armadura do exercito *id* em *amount* niveis");
+    if (empire.getArmies().size() > 0){
+                                      print("send <amount> <id>", "Envia *amount* tropas pro exercito *id*");
+                                      print("take <amount> <id>", "Tira *amount* trabalhadores do exercito *id*");
+                                      print("upgrade <amount> <id>", "Melhora a armadura do exercito *id* em *amount* niveis");
+    }
     print("back", "Voltar pro menu anterior");
 
     String[] cmd = read();
