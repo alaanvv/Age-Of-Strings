@@ -144,9 +144,9 @@ public class BancoDeDados {
     //Adds all empire dependent entities to an ArrayList and burn'em all in destroyEntities
     ArrayList<Entidade> entities = new ArrayList<>();
     
-    entities.addAll(empire.getArmies());
-    entities.addAll(empire.getFarms());
-    entities.addAll(empire.getMines());
+    entities.addAll(empire.getArmies().values());
+    entities.addAll(empire.getFarms().values());
+    entities.addAll(empire.getMines().values());
     entities.add(empire.getLumber());
 
     destroyEntities(entities);

@@ -1,6 +1,7 @@
 package modelo;
 
-import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Empire extends Entidade {
   private int population = 30;
@@ -11,9 +12,9 @@ public class Empire extends Entidade {
   private int wood = 50;
   private String name;
 
-  private ArrayList<Army> armies = new ArrayList<>();
-  private ArrayList<Farm> farms = new ArrayList<>();
-  private ArrayList<Mine> mines = new ArrayList<>();
+  private Map<Integer, Army> armies = new TreeMap<>();
+  private Map<Integer, Farm> farms = new TreeMap<>();
+  private Map<Integer, Mine> mines = new TreeMap<>();
   private Lumber lumber;
 
 
@@ -23,9 +24,9 @@ public class Empire extends Entidade {
     lumber = new Lumber(id, this);
   }
 
-  public ArrayList<Army> getArmies() { return armies; }
-  public ArrayList<Farm> getFarms() { return farms; }
-  public ArrayList<Mine> getMines() { return mines; }
+  public Map<Integer, Army> getArmies() { return armies; }
+  public Map<Integer, Farm> getFarms() { return farms; }
+  public Map<Integer, Mine> getMines() { return mines; }
   public Lumber getLumber() { return lumber; }
   public String getName() { return name; }
   public int getPopulation() { return population; }
@@ -64,7 +65,7 @@ public class Empire extends Entidade {
     gold -= 2;
 
     Farm f = new Farm(farmId, this);
-    farms.add(f);
+    farms.put(farmId, f);
 
     return f;
   }
@@ -75,6 +76,7 @@ public class Empire extends Entidade {
     gold -= 5;
 
     Mine mine = new Mine(id, this);
+    mines.put(id, mine);
     return mine;
   }
 
@@ -84,7 +86,7 @@ public class Empire extends Entidade {
     gold -= 20;
 
     Army army = new Army(this, id);
-    armies.add(army);
+    armies.put(id, army);
     return army;
   }
 
@@ -101,16 +103,16 @@ public class Empire extends Entidade {
     return sendWorkers(amount, lumber);
   }
 
-  public int sendWorkersToFarm(int amount, int idx) {
-    return sendWorkers(amount, farms.get(idx));
+  public int sendWorkersToFarm(int amount, int id) {
+    return sendWorkers(amount, farms.get(id));
   }
 
-  public int sendWorkersToMine(int amount, int idx) {
-    return sendWorkers(amount, mines.get(idx));
+  public int sendWorkersToMine(int amount, int id) {
+    return sendWorkers(amount, mines.get(id));
   }
 
-  public int sendWorkersToArmy(int amount, int idx) {
-    return sendWorkers(amount, armies.get(idx));
+  public int sendWorkersToArmy(int amount, int id) {
+    return sendWorkers(amount, armies.get(id));
   }
 
   // ---
@@ -126,16 +128,16 @@ public class Empire extends Entidade {
     return takeWorkers(amount, lumber);
   }
 
-  public int takeWorkersFromFarm(int amount, int idx) {
-    return takeWorkers(amount, farms.get(idx));
+  public int takeWorkersFromFarm(int amount, int id) {
+    return takeWorkers(amount, farms.get(id));
   }
 
-  public int takeWorkersFromMine(int amount, int idx) {
-    return takeWorkers(amount, mines.get(idx));
+  public int takeWorkersFromMine(int amount, int id) {
+    return takeWorkers(amount, mines.get(id));
   }
 
-  public int takeWorkersFromArmy(int amount, int idx) {
-    return takeWorkers(amount, armies.get(idx));
+  public int takeWorkersFromArmy(int amount, int id) {
+    return takeWorkers(amount, armies.get(id));
   }
 
   // ---
@@ -146,10 +148,10 @@ public class Empire extends Entidade {
     // Extraindo recursos
     wood += lumber.extractWood();
 
-    for (Farm farm : farms)
+    for (Farm farm : farms.values())
       food += farm.extractFood();
 
-    for (Mine mine : mines) {
+    for (Mine mine : mines.values()) {
       iron += mine.extractIron();
       gold += mine.extractGold();
     }
@@ -167,21 +169,21 @@ public class Empire extends Entidade {
       workers -= removed;
       dead -= removed;
 
-      for (Army army : armies) {
+      for (Army army : armies.values()) {
         if (dead <= 0) break;
         removed = army.takeWorkers((int) Math.ceil(army.getWorkers() * perc));
         workers -= removed;
         dead -= removed;
       }
 
-      for (Mine mine : mines) {
+      for (Mine mine : mines.values()) {
         if (dead <= 0) break;
         removed = mine.takeWorkers((int) Math.ceil(mine.getWorkers() * perc));
         workers -= removed;
         dead -= removed;
       }
 
-      for (Farm farm : farms) {
+      for (Farm farm : farms.values()) {
         if (dead <= 0) break;
         removed = farm.takeWorkers((int) Math.ceil(farm.getWorkers() * perc));
         workers -= removed;

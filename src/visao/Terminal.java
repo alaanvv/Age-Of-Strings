@@ -222,7 +222,7 @@ public class Terminal {
   public static void farmMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
-    for (Farm farm : empire.getFarms())
+    for (Farm farm : empire.getFarms().values())
       System.out.println(farm.toString());
     if (empire.hasFarm()) System.out.println("");
     System.out.println("Fazenda - Produz comida");
@@ -245,7 +245,7 @@ public class Terminal {
         else if (farm.getEmpireId() != empire.getId())
           log("Essa fazenda nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores enviados.", empire.sendWorkersToFarm(parseInt(cmd[1]), parseInt(cmd[2]))));
+          log(String.format("%d trabalhadores enviados.", empire.sendWorkers(parseInt(cmd[1]), farm)));
         break;
       case "take":
         farm = (Farm) db.getFarms().findById(parseInt(cmd[2]));
@@ -254,7 +254,7 @@ public class Terminal {
         else if (farm.getEmpireId() != empire.getId())
           log("Essa fazenda nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores retirados.", empire.takeWorkersFromFarm(parseInt(cmd[1]), parseInt(cmd[2]))));
+          log(String.format("%d trabalhadores retirados.", empire.takeWorkers(parseInt(cmd[1]), farm)));
         break;
       case "back":
         return;
@@ -274,7 +274,7 @@ public class Terminal {
   public static void mineMenu(Empire empire, BancoDeDados db) {
     System.out.println(empire);
     System.out.println("");
-    for (Mine mine : empire.getMines())
+    for (Mine mine : empire.getMines().values())
       System.out.println(mine.toString());
     if (empire.hasMine()) System.out.println("");
     System.out.println("Minas - Produzem ferro e ouro");
@@ -298,7 +298,7 @@ public class Terminal {
         else if (mine.getEmpireId() != empire.getId())
           log("Essa mina nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores enviados.", empire.sendWorkersToMine(parseInt(cmd[1]), parseInt(cmd[2]))));
+          log(String.format("%d trabalhadores enviados.", empire.sendWorkers(parseInt(cmd[1]), mine)));
         break;
       case "take":
         mine = (Mine) db.getMines().findById(parseInt(cmd[2]));
@@ -307,7 +307,7 @@ public class Terminal {
         else if (mine.getEmpireId() != empire.getId())
           log("Essa mina nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores retirados.", empire.takeWorkersFromMine(parseInt(cmd[1]), parseInt(cmd[2]))));
+          log(String.format("%d trabalhadores retirados.", empire.takeWorkers(parseInt(cmd[1]), mine)));
         break;
       case "back":
         return;
@@ -337,10 +337,10 @@ public class Terminal {
 
     switch (cmd[0]) {
       case "send":
-        log(String.format("%d trabalhadores enviados.", empire.sendWorkersToLumber(parseInt(cmd[1]))));
+        log(String.format("%d trabalhadores enviados.", empire.sendWorkers(parseInt(cmd[1]), empire.getLumber())));
         break;
       case "take":
-        log(String.format("%d trabalhadores retirados.", empire.takeWorkersFromLumber(parseInt(cmd[1]))));
+        log(String.format("%d trabalhadores retirados.", empire.takeWorkers(parseInt(cmd[1]), empire.getLumber())));
         break;
       case "back":
         return;
@@ -377,7 +377,7 @@ public class Terminal {
 
     switch (cmd[0]) {
       case "view":
-        for (Army a : empire.getArmies())
+        for (Army a : empire.getArmies().values())
           log(a.toString());
         break;
       case "viewany":
@@ -407,7 +407,7 @@ public class Terminal {
         else if (army.getEmpireId() != empire.getId())
           log("Esse exercito nao pertence a esse imperio.");
         else
-          log(String.format("%d trabalhadores se tornaram soldados.", empire.sendWorkersToArmy(parseInt(cmd[1]), parseInt(cmd[2]))));
+          log(String.format("%d trabalhadores se tornaram soldados.", empire.sendWorkers(parseInt(cmd[1]), army)));
         break;
       case "take":
         army = (Army) db.getArmies().findById(parseInt(cmd[2]));
@@ -416,7 +416,7 @@ public class Terminal {
         else if (army.getEmpireId() != empire.getId())
           log("Esse exercito nao pertence a esse imperio.");
         else
-          log(String.format("%d tropas retiradas.", empire.takeWorkersFromArmy(parseInt(cmd[1]), parseInt(cmd[2]))));
+          log(String.format("%d tropas retiradas.", empire.takeWorkers(parseInt(cmd[1]), army)));
         break;
       case "upgrade":
         army = (Army) db.getArmies().findById(parseInt(cmd[2]));

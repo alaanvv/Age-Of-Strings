@@ -1,7 +1,7 @@
 package modelo;
 
-public abstract class Entidade {
-  private int id;
+public abstract class Entidade implements Comparable<Entidade>{
+  private Integer id;
 
   public Entidade(){}
 
@@ -13,8 +13,13 @@ public abstract class Entidade {
     this.id = id;
   }
 
-  public int getId() {
+  public Integer getId() {
     return id;
+  }
+
+  @Override
+  public int compareTo(Entidade other){
+    return Integer.compare(this.getId(), other.getId());
   }
 
   @Override
