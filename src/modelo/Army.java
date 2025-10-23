@@ -1,6 +1,6 @@
 package modelo;
 
-public class Army extends Entidade implements Workpost{
+public class Army extends Entidade implements WorkpostInterface{
 
   private Empire empire;
   private Boolean inBattle = false;

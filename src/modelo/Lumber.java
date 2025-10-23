@@ -1,6 +1,6 @@
 package modelo;
 
-public class Lumber extends Entidade implements Workpost{
+public class Lumber extends Entidade implements WorkpostInterface{
   private int workers = 0;
   Empire empire;
 

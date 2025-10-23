@@ -92,7 +92,7 @@ public class Empire extends Entidade {
 
   // ---
 
-  public int sendWorkers(int amount, Workpost workpost){
+  public int sendWorkers(int amount, WorkpostInterface workpost){
     amount = workpost.sendWorkers(Math.min(amount, population));
     population -= amount;
     workers += amount;
@@ -117,7 +117,7 @@ public class Empire extends Entidade {
 
   // ---
 
-  public int takeWorkers(int amount, Workpost workpost){
+  public int takeWorkers(int amount, WorkpostInterface workpost){
     int taken = workpost.takeWorkers(amount);
     population += taken;
     workers -= taken;

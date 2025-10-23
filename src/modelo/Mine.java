@@ -1,6 +1,6 @@
 package modelo;
 
-public class Mine extends Entidade implements Workpost{
+public class Mine extends Entidade implements WorkpostInterface{
   private int iron;
   private int gold;
   private int workers = 0;

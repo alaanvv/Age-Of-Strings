@@ -1,6 +1,6 @@
 package modelo;
 
-public class Farm extends Entidade implements Workpost {
+public class Farm extends Entidade implements WorkpostInterface {
   private int workers = 0;
   private Empire empire;
 
