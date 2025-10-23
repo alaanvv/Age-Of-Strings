@@ -119,7 +119,7 @@ public class BancoDeDados {
   }
 
   /** Destroy any type of Entity, removing of its respective persistency.*/
-  public void destroyEntity(Entidade entity){
+  public void destroyEntity(Entidade entity) throws RuntimeException{
     switch(entity){
         case Battle b -> battles.remove(b.getId());
         case Empire e -> throw new RuntimeException("Objeto tipo Empire deve ser destruído em sua função apropriada (destroyEmpire).");
@@ -127,7 +127,7 @@ public class BancoDeDados {
         case Army a -> armies.remove(a.getId());
         case Farm f -> farms.remove(f.getId());
         case Mine m -> mines.remove(m.getId());
-        default -> {throw new RuntimeException("Um tipo de entidade inesperada foi encontrada em destroyEntity: " + entity.getClass().getName());}
+        default -> {throw new RuntimeException("Um tipo de entidade inesperada foi recebida em destroyEntity: " + entity.getClass().getName());}
       }
   }
 
