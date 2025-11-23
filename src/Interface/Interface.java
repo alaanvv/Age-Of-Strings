@@ -1,34 +1,27 @@
 package Interface;
 
-
-import javax.swing.JFrame;
-
+import javax.swing.*;
 import persistencia.BancoDeDados;
-
 
 public class Interface extends JFrame {
 
-    private Menus menu = new Menus();
+    private MenuManager menuManager;
     private BancoDeDados db;
 
-
-    //tamanho da janela
-    public static final int WIDTH = 1920, HEIGHT = 1080;
-
-    // -----------------------------------------------------------------------------------
-    // -------------------------------- Construtor----------------------------------------
-    // -----------------------------------------------------------------------------------
     public Interface(BancoDeDados db) {
-        super("Age Of Strings");
+        super("Age of Strings");
         this.db = db;
 
-        setSize(WIDTH, HEIGHT);
+        setSize(1920, 1080);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        setVisible(true);
+        menuManager = new MenuManager(this);
 
-        menu.MainMenu(db, this);
+        // Abre o menu inicial
+        menuManager.switchMenu(new MenuMain(db, menuManager));
+
+        setVisible(true);
     }
 }

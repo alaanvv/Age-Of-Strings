@@ -222,6 +222,23 @@ public class Empire extends Entidade {
 
   // ---
 
+  public String statusReport() {
+    return "=== Empire Status ===\n"
+        + "Name: " + name + "\n"
+        + "ID: " + super.getId() + "\n"
+        + "Population: " + population + "\n"
+        + "Workers: " + workers + "\n"
+        + "Food: " + food + "\n"
+        + "Wood: " + wood + "\n"
+        + "Iron: " + iron + "\n"
+        + "Gold: " + gold + "\n"
+        + "Farms: " + farms.size() + "\n"
+        + "Mines: " + mines.size() + "\n"
+        + "Armies: " + armies.size() + "\n";
+  }
+
+  // ---
+
   @Override
   public String toString() {
     return String.format("Imperio %s #%d | Populacao: %d; Trabalhadores: %d; Comida: %d; Madeira: %d; Ferro: %d; Ouro: %d", 
