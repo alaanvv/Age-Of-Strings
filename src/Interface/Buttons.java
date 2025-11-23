@@ -1,8 +1,5 @@
 package Interface;
 
-import java.awt.Color;
-
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import persistencia.BancoDeDados;
