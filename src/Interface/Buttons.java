@@ -2,17 +2,20 @@ package Interface;
 
 import javax.swing.JOptionPane;
 
+import modelo.Empire;
+import modelo.Entidade;
 import persistencia.BancoDeDados;
 
 public class Buttons {
     
+    //destroy mode
     private boolean isDestroyMode = false;
+    public boolean getIsDestroyMode() { return isDestroyMode; }
+    public void switchDestroyMode() { isDestroyMode = !isDestroyMode; }
 
-    public boolean getIsDestroyMode() {
-        return isDestroyMode;
-    }
-
-    // ----- Logica do botão New Empire -----
+    // -----------------------------------------------------------------------------------
+    // --------------------------- logica btn newEmpire ----------------------------------
+    // -----------------------------------------------------------------------------------
     public void createNewEmpireButton(BancoDeDados db) {
         try {
 
@@ -36,8 +39,21 @@ public class Buttons {
         }
     }
 
-    public void switchDestroyMode() {
-        isDestroyMode = !isDestroyMode;
+    // -----------------------------------------------------------------------------------
+    // --------------------------- logica btn runTurn ----------------------------------
+    // -----------------------------------------------------------------------------------
+    public void btnRunTurn(BancoDeDados db){
+
+
+        for (Entidade e : db.getEmpires().getEntidades().values()) {
+            if (e instanceof Empire) {
+                String res = ((Empire) e).runTurn();
+                System.out.println(res);
+            }
+        }
+        System.out.println(" ------- Turn completed. ------- \n");
+        JOptionPane.showMessageDialog(null, "Turn completed.");
     }
+
     
 }

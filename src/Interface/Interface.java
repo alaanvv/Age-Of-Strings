@@ -15,7 +15,9 @@ public class Interface extends JFrame {
     //tamanho da janela
     public static final int WIDTH = 1920, HEIGHT = 1080;
 
-    // ----- Construtor -----
+    // -----------------------------------------------------------------------------------
+    // -------------------------------- Construtor----------------------------------------
+    // -----------------------------------------------------------------------------------
     public Interface(BancoDeDados db) {
         super("Age Of Strings");
         this.db = db;

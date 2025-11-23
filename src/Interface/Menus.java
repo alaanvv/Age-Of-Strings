@@ -80,7 +80,7 @@ public class Menus {
     private void updateMainMenu(BancoDeDados db) {
         topPanel.removeAll();
 
-        // Botão New Empire
+        // --- Botão New Empire --- 
         JButton btnNew = new JButton("New Empire");
         btnNew.setBackground(btnColor);
         btnNew.setForeground(Color.WHITE);
@@ -92,7 +92,7 @@ public class Menus {
         topPanel.add(btnNew);
 
         if (db.sizeEmpires() >= 1) {
-            // Botão Destroy Empire
+            // --- Botão Destroy Empire --- 
             JButton btnDestroy = new JButton("Destroy Empire");
             if (buttons.getIsDestroyMode()) {
                 btnColor = new Color(150, 50, 50);
@@ -108,6 +108,17 @@ public class Menus {
             });
             topPanel.add(btnDestroy);
             btnColor = new Color(50, 50, 50);
+
+            // --- Botao RunTurn ---
+            JButton btnRun = new JButton("Run Turn");
+            btnRun.setBackground(btnColor);
+            btnRun.setForeground(Color.WHITE);
+            btnRun.addActionListener(e -> {
+                buttons.btnRunTurn(db);
+                updateMainMenu(db);
+            });
+            topPanel.add(btnRun);
+
         }
 
         topPanel.revalidate();
