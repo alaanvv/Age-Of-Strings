@@ -1,6 +1,7 @@
 package Interface;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import modelo.Empire;
 import modelo.Entidade;
 import persistencia.BancoDeDados;
@@ -29,8 +30,6 @@ public class Buttons {
 
             //cria imperio
             db.createEmpire(s1);
-
-            System.out.println("Empire created: " + s1 + " #" + db.sizeEmpires());
           
 
         } catch (Exception ex) {
@@ -73,5 +72,47 @@ public class Buttons {
         }
  
     }
+
+
+    // -----------------------------------------------------------------------------------
+    // ----------------------------- logica btn Lumber -----------------------------------
+    // -----------------------------------------------------------------------------------
+    public void btnLumber(Empire empire) {
+    JTextField field = new JTextField();
+
+    Object[] message = {
+        "Amount of workers:", field
+    };
+
+    int option = JOptionPane.showOptionDialog(
+            null,
+            message,
+            "Assign workers to Lumber",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            new String[]{"Send", "Take", "Cancel"},
+            "Send"
+    );
+
+    if (option == 0) { // Send
+        try {
+            int amount = Integer.parseInt(field.getText());
+            int sent = empire.sendWorkersToLumber(amount);
+            JOptionPane.showMessageDialog(null, sent + " workers sent to Lumber.");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid number!");
+        }
+    } else if (option == 1) { // Take
+        try {
+            int amount = Integer.parseInt(field.getText());
+            int taken = empire.takeWorkersFromLumber(amount);
+            JOptionPane.showMessageDialog(null, taken + " workers taken from Lumber.");
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Invalid number!");
+        }
+    }
+}
+
     
 }

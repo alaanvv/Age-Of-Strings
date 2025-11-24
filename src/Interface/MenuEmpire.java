@@ -109,10 +109,10 @@ public class MenuEmpire extends MenuBase {
         // ################
         // Botao Lenhadores
         // ################
-        JButton btnLumber = new JButton("Lumber");
+        JButton btnLumber = new JButton("Set lumbers");
         btnLumber.setBackground(btnColor);
         btnLumber.setForeground(Color.WHITE);
-        btnLumber.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        btnLumber.addActionListener(e -> buttons.btnLumber(empire));
 
         centerPanel.add(btnLumber);
 
