@@ -28,7 +28,7 @@ public class MenuManager {
 
     public void switchMenu(MenuBase newMenu) {
         this.currentMenu = newMenu;
-
+        
         newMenu.setButtons(buttons);
 
         newMenu.render();

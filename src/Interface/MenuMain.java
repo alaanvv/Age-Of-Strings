@@ -77,6 +77,24 @@ public class MenuMain extends MenuBase {
             });
             topPanel.add(btnRun);
         }
+        // ###########
+        // BOTÃO EXIT
+        // ###########
+        JButton btnExit = new JButton("Exit");
+        btnExit.setBackground(btnColor);
+        btnExit.setForeground(Color.WHITE);
+        btnExit.addActionListener(e -> {
+            int op = JOptionPane.showConfirmDialog(
+                null,
+                "Do you really want to exit?",
+                "Exit Confirmation",
+                JOptionPane.YES_NO_OPTION
+            );
+            if (op == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
+        });
+        topPanel.add(btnExit);
 
         // ##########################
         // LISTA DE IMPÉRIOS COM AÇAO

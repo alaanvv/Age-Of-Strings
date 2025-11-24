@@ -21,6 +21,7 @@ public class MenuEmpire extends MenuBase {
         this.db = db;
         this.manager = manager;
         this.empire = empire;
+        this.buttons = manager.getButtons();
     }
 
 
@@ -72,10 +73,13 @@ public class MenuEmpire extends MenuBase {
         // ###########
         // Botao Casas
         // ###########
-        JButton btnHouse = new JButton("Houses");
+        JButton btnHouse = new JButton("Build Houses");
         btnHouse.setBackground(btnColor);
         btnHouse.setForeground(Color.WHITE);
-        btnHouse.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        btnHouse.addActionListener(e -> {
+            buttons.btnBuildHouse(empire); // constrói
+            manager.switchMenu(new MenuEmpire(db, manager, empire));
+        });
 
         centerPanel.add(btnHouse);
 

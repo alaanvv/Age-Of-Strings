@@ -39,14 +39,14 @@ public class Buttons {
     }
 
     // -----------------------------------------------------------------------------------
-    // --------------------------- logica btn runTurn ----------------------------------
+    // ---------------------------- logica btn runTurn -----------------------------------
     // -----------------------------------------------------------------------------------
     public void btnRunTurn(BancoDeDados db){
 
 
         for (Entidade e : db.getEmpires().getEntidades().values()) {
-            if (e instanceof Empire) {
-                String res = ((Empire) e).runTurn();
+            if (e instanceof Empire empire) {
+                String res = empire.runTurn();
                 System.out.println(res);
             }
         }
@@ -54,5 +54,24 @@ public class Buttons {
         JOptionPane.showMessageDialog(null, "Turn completed.");
     }
 
+    // -----------------------------------------------------------------------------------
+    // --------------------------- logica btn buildHouse----------------------------------
+    // -----------------------------------------------------------------------------------
+    public void btnBuildHouse(Empire empire) {
+        int op = JOptionPane.showConfirmDialog(
+                    null,
+                    "It costs: 5 woods and 5 golds \n (increases population by 3)",
+                    "Build Houses ?",
+                    JOptionPane.YES_NO_OPTION
+                );
+
+        if (op == JOptionPane.YES_OPTION) {
+            boolean built = empire.buildHouse();
+            if (!built) {
+                JOptionPane.showMessageDialog(null, "Insufficient resources (Wood: 5, Gold: 5).");
+            }
+        }
+ 
+    }
     
 }

@@ -2,6 +2,7 @@ package modelo;
 
 import java.util.Map;
 import java.util.TreeMap;
+import javax.swing.JOptionPane;
 
 public class Empire extends Entidade {
   private int population = 30;
@@ -16,7 +17,6 @@ public class Empire extends Entidade {
   private Map<Integer, Farm> farms = new TreeMap<>();
   private Map<Integer, Mine> mines = new TreeMap<>();
   private Lumber lumber;
-
 
   public Empire(String name, int id) {
     super(id);
@@ -183,6 +183,7 @@ public class Empire extends Entidade {
       int dead = -food;
       float perc = (float) dead / (population + workers);
       output.append(String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.getId(), dead));
+      JOptionPane.showMessageDialog(null, String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.getId(), dead));
       food = 0;
 
       int removed = lumber.takeWorkers((int) Math.ceil(lumber.getWorkers() * perc));
