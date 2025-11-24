@@ -13,10 +13,18 @@ public class MenuManager {
     public final Buttons buttons = new Buttons();
     // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+
+    // -----------------------------------------------------------------------------------
+    // -------------------------- Construtor menu manager --------------------------------
+    // -----------------------------------------------------------------------------------
     public MenuManager(JFrame frame) {
         this.frame = frame;
         frame.setLayout(new BorderLayout());
     }
+
+    // -----------------------------------------------------------------------------------
+    // ------------------------ Controla a trocas de menus -------------------------------
+    // -----------------------------------------------------------------------------------
 
     public void switchMenu(MenuBase newMenu) {
         this.currentMenu = newMenu;
@@ -36,8 +44,7 @@ public class MenuManager {
         frame.revalidate();
         frame.repaint();
     }
-
-    public Buttons getButtons() {
-        return buttons;
-    }
+    
+    // ----- getter buttons -----
+    public Buttons getButtons() { return buttons; }
 }

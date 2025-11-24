@@ -1,14 +1,13 @@
 package Interface;
 
 import javax.swing.JOptionPane;
-
 import modelo.Empire;
 import modelo.Entidade;
 import persistencia.BancoDeDados;
 
 public class Buttons {
     
-    //destroy mode
+    // ----- destroy mode -----
     private boolean isDestroyMode = false;
     public boolean getIsDestroyMode() { return isDestroyMode; }
     public void switchDestroyMode() { isDestroyMode = !isDestroyMode; }

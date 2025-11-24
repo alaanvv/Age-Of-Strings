@@ -13,6 +13,9 @@ public abstract class MenuBase {
 
     protected Buttons buttons;
 
+    // -----------------------------------------------------------------------------------
+    // ----------------------- Classe Mae de todos os menus ------------------------------
+    // -----------------------------------------------------------------------------------
     public MenuBase() {
         topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setBackground(bgColor);
@@ -26,14 +29,14 @@ public abstract class MenuBase {
         leftPanel.setPreferredSize(new Dimension(200, 0)); 
     }
 
-    public void setButtons(Buttons buttons) {
-        this.buttons = buttons;
-    }
+    // ----- setter buttons -----
+    public void setButtons(Buttons buttons) { this.buttons = buttons; }
 
+    // ----- getters dos paineis -----
     public JPanel getTopPanel()  { return topPanel; }
     public JPanel getCenterPanel() { return centerPanel; }
     public JPanel getLeftPanel() { return leftPanel; }
 
-    // Cada menu vai implementar isto
+    // ----- Cada menu vai implementar isto -----
     public abstract void render();
 }

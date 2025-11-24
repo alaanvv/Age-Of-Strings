@@ -12,6 +12,9 @@ public class Interface extends JFrame {
     //tamanho da janela (padrão: 1920x1080)
     private int WIDTH = 1200, HEIGHT = 900;
 
+    // ----------------------------------------------------------------------------
+    // ----------------------------- construtor -----------------------------------
+    // ----------------------------------------------------------------------------
     public Interface(BancoDeDados db) {
         super("Age of Strings");
         this.db = db;

@@ -1,11 +1,10 @@
 package Interface;
 
+import java.awt.Color;
+import javax.swing.*;
 import modelo.Empire;
 import modelo.Entidade;
 import persistencia.BancoDeDados;
-
-import java.awt.Color;
-import javax.swing.*;
 
 public class MenuMain extends MenuBase {
 
@@ -14,21 +13,28 @@ public class MenuMain extends MenuBase {
     private Buttons buttons;
 
 
+    // -----------------------------------------------------------------------------------
+    // ----------------------- Construtor do menu principal ------------------------------
+    // -----------------------------------------------------------------------------------
     public MenuMain(BancoDeDados db, MenuManager manager) {
         this.db = db;
         this.manager = manager;
         this.buttons = manager.getButtons();
     }
 
+
+    // -----------------------------------------------------------------------------------
+    // --------------------------- Metodo Render da mae ----------------------------------
+    // -----------------------------------------------------------------------------------
     @Override
     public void render() {
 
         topPanel.removeAll();
         centerPanel.removeAll();
 
-        // ############################################################
-        //                     BOTÃO NEW EMPIRE
-        // ############################################################
+        // ################
+        // BOTÃO NEW EMPIRE
+        // ################
         JButton btnNew = new JButton("New Empire");
         btnNew.setBackground(btnColor);
         btnNew.setForeground(Color.WHITE);
@@ -38,12 +44,11 @@ public class MenuMain extends MenuBase {
         });
         topPanel.add(btnNew);
 
-        // Só mostra Destroy/RunTurn se houver impérios
         if (db.sizeEmpires() >= 1) {
 
-            // ############################################################
-            //                  BOTÃO DESTROY EMPIRE
-            // ############################################################
+            // ####################
+            // BOTAO DESTROY EMPIRE
+            // ####################
             JButton btnDestroy = new JButton("Destroy Empire");
 
             Color destroyColor = buttons.getIsDestroyMode()
@@ -60,9 +65,9 @@ public class MenuMain extends MenuBase {
 
             topPanel.add(btnDestroy);
 
-            // ############################################################
-            //                     BOTÃO RUN TURN
-            // ############################################################
+            // ##############
+            // BOTAO RUN TURN
+            // ##############
             JButton btnRun = new JButton("Run Turn");
             btnRun.setBackground(btnColor);
             btnRun.setForeground(Color.WHITE);
@@ -73,9 +78,9 @@ public class MenuMain extends MenuBase {
             topPanel.add(btnRun);
         }
 
-        // ############################################################
-        //               LISTA DE IMPÉRIOS COM AÇÃO
-        // ############################################################
+        // ##########################
+        // LISTA DE IMPÉRIOS COM AÇAO
+        // ##########################
         for (Entidade e : db.getEmpires().getEntidades().values()) {
             if (e instanceof Empire empire) {
 
