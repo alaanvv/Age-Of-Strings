@@ -8,7 +8,6 @@ import persistencia.BancoDeDados;
 
 public class MenuMain extends MenuBase {
 
-    private final BancoDeDados db;
     private final MenuManager manager;
     private Buttons buttons;
 
@@ -17,7 +16,7 @@ public class MenuMain extends MenuBase {
     // ----------------------- Construtor do menu principal ------------------------------
     // -----------------------------------------------------------------------------------
     public MenuMain(BancoDeDados db, MenuManager manager) {
-        this.db = db;
+        super(db);
         this.manager = manager;
         this.buttons = manager.getButtons();
     }

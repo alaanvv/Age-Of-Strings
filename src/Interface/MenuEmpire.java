@@ -7,7 +7,6 @@ import persistencia.BancoDeDados;
 
 public class MenuEmpire extends MenuBase {
 
-    private BancoDeDados db;
     private MenuManager manager;
     private Empire empire;
 
@@ -18,7 +17,7 @@ public class MenuEmpire extends MenuBase {
     // --------------------------- Construtor MenuEpire ----------------------------------
     // -----------------------------------------------------------------------------------
     public MenuEmpire(BancoDeDados db, MenuManager manager, Empire empire) {
-        this.db = db;
+        super(db);
         this.manager = manager;
         this.empire = empire;
         this.buttons = manager.getButtons();
@@ -112,7 +111,11 @@ public class MenuEmpire extends MenuBase {
         JButton btnLumber = new JButton("Set lumbers");
         btnLumber.setBackground(btnColor);
         btnLumber.setForeground(Color.WHITE);
-        btnLumber.addActionListener(e -> buttons.btnLumber(empire));
+        btnLumber.addActionListener(e -> {
+                                    buttons.btnLumber(empire); 
+                                    manager.switchMenu(new MenuEmpire(db, manager, empire));  
+                        });
+
 
         centerPanel.add(btnLumber);
 

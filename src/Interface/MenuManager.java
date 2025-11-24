@@ -8,10 +8,8 @@ public class MenuManager {
     private final JFrame frame;
     private MenuBase currentMenu;
 
-    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-    // UM ÚNICO Buttons para TUDO
     public final Buttons buttons = new Buttons();
-    // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ 
 
 
     // -----------------------------------------------------------------------------------

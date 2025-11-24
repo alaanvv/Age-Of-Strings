@@ -2,6 +2,7 @@ package Interface;
 
 import java.awt.*;
 import javax.swing.*;
+import persistencia.BancoDeDados;
 
 public abstract class MenuBase {
 
@@ -11,12 +12,16 @@ public abstract class MenuBase {
     protected Color bgColor = new Color(25,30,35);
     protected Color btnColor = new Color(50,50,50);
 
+    protected BancoDeDados db;
+
     protected Buttons buttons;
 
     // -----------------------------------------------------------------------------------
     // ----------------------- Classe Mae de todos os menus ------------------------------
     // -----------------------------------------------------------------------------------
-    public MenuBase() {
+    public MenuBase(BancoDeDados db) {
+        this.db = db;
+        
         topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setBackground(bgColor);
 
