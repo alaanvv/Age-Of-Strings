@@ -1,10 +1,9 @@
 package Interface;
 
+import java.awt.Color;
+import javax.swing.*;
 import modelo.Empire;
 import persistencia.BancoDeDados;
-import java.awt.Color;
-
-import javax.swing.*;
 
 public class MenuEmpire extends MenuBase {
 
@@ -36,18 +35,20 @@ public class MenuEmpire extends MenuBase {
         topPanel.add(btnBack);
 
         // Título
-        JLabel title = new JLabel("Empire: " + empire.getName());
+        JLabel title = new JLabel("     Empire: " + empire.getName());
+        JLabel lb = new JLabel("\n");
         title.setForeground(Color.WHITE);
-        centerPanel.add(title);
+        leftPanel.add(lb);
+        leftPanel.add(title);
+        leftPanel.add(lb);
 
-        // Exemplo: botão de stats
-        JButton btnStats = new JButton("View Stats");
-        btnStats.setBackground(btnColor);
-        btnStats.setForeground(Color.WHITE);
-        btnStats.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, empire.statusReport());
-        });
+        String[] linhas = empire.statusReport().split("\n");
 
-        centerPanel.add(btnStats);
+        for (String linha : linhas) {
+            JLabel lbl = new JLabel(linha);
+            lbl.setForeground(Color.WHITE);
+            leftPanel.add(lbl);
+        }
+
     }
 }

@@ -21,14 +21,17 @@ public class MenuManager {
     public void switchMenu(MenuBase newMenu) {
         this.currentMenu = newMenu;
 
-        // garante que cada menu usa sempre o mesmo buttons
         newMenu.setButtons(buttons);
 
         newMenu.render();
 
         frame.getContentPane().removeAll();
+
+
         frame.add(newMenu.getTopPanel(), BorderLayout.NORTH);
         frame.add(new JScrollPane(newMenu.getCenterPanel()), BorderLayout.CENTER);
+        frame.add(new JScrollPane(newMenu.getLeftPanel()), BorderLayout.WEST);
+        
 
         frame.revalidate();
         frame.repaint();

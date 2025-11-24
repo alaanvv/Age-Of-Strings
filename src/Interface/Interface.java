@@ -8,11 +8,15 @@ public class Interface extends JFrame {
     private MenuManager menuManager;
     private BancoDeDados db;
 
+
+    //tamanho da janela (padrão: 1920x1080)
+    private int WIDTH = 1200, HEIGHT = 900;
+
     public Interface(BancoDeDados db) {
         super("Age of Strings");
         this.db = db;
 
-        setSize(1920, 1080);
+        setSize(WIDTH, HEIGHT);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
