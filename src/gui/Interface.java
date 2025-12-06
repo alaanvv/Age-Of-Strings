@@ -1,4 +1,4 @@
-package Interface;
+package gui;
 
 import javax.swing.*;
 import persistencia.BancoDeDados;

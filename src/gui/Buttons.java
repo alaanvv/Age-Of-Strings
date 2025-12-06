@@ -1,4 +1,4 @@
-package Interface;
+package gui;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;

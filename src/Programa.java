@@ -1,4 +1,4 @@
-import Interface.Interface;
+import gui.Interface;
 import persistencia.BancoDeDados;
 import visao.Terminal;
 
