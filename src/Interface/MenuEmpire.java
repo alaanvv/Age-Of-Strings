@@ -7,10 +7,9 @@ import persistencia.BancoDeDados;
 
 public class MenuEmpire extends MenuBase {
 
-    private MenuManager manager;
-    private Empire empire;
-
-    private Buttons buttons;
+    private final MenuManager manager;
+    private final Empire empire;
+    private final Buttons buttons;
 
 
     // -----------------------------------------------------------------------------------
@@ -37,12 +36,12 @@ public class MenuEmpire extends MenuBase {
         // ############
         // BOTAO VOLTAR
         // ############
-        JButton btnBack = new JButton("Return");
-        btnBack.setBackground(btnColor);
-        btnBack.setForeground(Color.WHITE);
-        btnBack.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        JButton backButton = new JButton("Return");
+        backButton.setBackground(btnColor);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
 
-        topPanel.add(btnBack);
+        topPanel.add(backButton);
 
         
         // ###################
@@ -72,74 +71,73 @@ public class MenuEmpire extends MenuBase {
         // ###########
         // Botao Casas
         // ###########
-        JButton btnHouse = new JButton("Build Houses");
-        btnHouse.setBackground(btnColor);
-        btnHouse.setForeground(Color.WHITE);
-        btnHouse.addActionListener(e -> {
-            buttons.btnBuildHouse(empire); // constrói
+        JButton buildHouseButton = new JButton("Build Houses");
+        buildHouseButton.setBackground(btnColor);
+        buildHouseButton.setForeground(Color.WHITE);
+        buildHouseButton.addActionListener(e -> {
+            buttons.buildHouse(empire);
             manager.switchMenu(new MenuEmpire(db, manager, empire));
         });
 
-        centerPanel.add(btnHouse);
+        centerPanel.add(buildHouseButton);
 
 
         // ##############
         // Botao Fazendas
         // ##############
-        JButton BtnFarm = new JButton("Farms");
-        BtnFarm.setBackground(btnColor);
-        BtnFarm.setForeground(Color.WHITE);
-        BtnFarm.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        JButton farmButton = new JButton("Farms");
+        farmButton.setBackground(btnColor);
+        farmButton.setForeground(Color.WHITE);
+        farmButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
 
-        centerPanel.add(BtnFarm);
+        centerPanel.add(farmButton);
 
 
         // ###########
         // Botao Minas
         // ###########
-        JButton btnMine = new JButton("Mines");
-        btnMine.setBackground(btnColor);
-        btnMine.setForeground(Color.WHITE);
-        btnMine.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        JButton mineButton = new JButton("Mines");
+        mineButton.setBackground(btnColor);
+        mineButton.setForeground(Color.WHITE);
+        mineButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
 
-        centerPanel.add(btnMine);
+        centerPanel.add(mineButton);
 
 
         // ################
         // Botao Lenhadores
         // ################
-        JButton btnLumber = new JButton("Set lumbers");
-        btnLumber.setBackground(btnColor);
-        btnLumber.setForeground(Color.WHITE);
-        btnLumber.addActionListener(e -> {
-                                    buttons.btnLumber(empire); 
-                                    manager.switchMenu(new MenuEmpire(db, manager, empire));  
-                        });
+        JButton lumberButton = new JButton("Set lumbers");
+        lumberButton.setBackground(btnColor);
+        lumberButton.setForeground(Color.WHITE);
+        lumberButton.addActionListener(e -> {
+            buttons.adjustLumberWorkers(empire);
+            manager.switchMenu(new MenuEmpire(db, manager, empire));
+        });
 
-
-        centerPanel.add(btnLumber);
+        centerPanel.add(lumberButton);
 
 
         // ##############
         // Botao Exercito
         // ##############
-        JButton btnArmy = new JButton("Army");
-        btnArmy.setBackground(btnColor);
-        btnArmy.setForeground(Color.WHITE);
-        btnArmy.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        JButton armyButton = new JButton("Army");
+        armyButton.setBackground(btnColor);
+        armyButton.setForeground(Color.WHITE);
+        armyButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
 
-        centerPanel.add(btnArmy);
+        centerPanel.add(armyButton);
 
 
         // #############
         // Botao Guerras
         // #############
-        JButton btnWar = new JButton("Wars");
-        btnWar.setBackground(btnColor);
-        btnWar.setForeground(Color.WHITE);
-        btnWar.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        JButton warButton = new JButton("Wars");
+        warButton.setBackground(btnColor);
+        warButton.setForeground(Color.WHITE);
+        warButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
 
-        centerPanel.add(btnWar);
+        centerPanel.add(warButton);
 
     }
 }

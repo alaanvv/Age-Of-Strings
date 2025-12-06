@@ -8,7 +8,7 @@ public class MenuManager {
     private final JFrame frame;
     private MenuBase currentMenu;
 
-    public final Buttons buttons = new Buttons();
+    private final Buttons buttons = new Buttons();
  
 
 

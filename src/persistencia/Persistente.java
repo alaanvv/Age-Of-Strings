@@ -15,10 +15,10 @@ public class Persistente {
   /**
    * The internal list that stores all managed entities.
    */
-  private Map<Integer, Entidade> entidades;
+  private final Map<Integer, Entidade> entidades;
 
   public Persistente() {
-    this.entidades = new HashMap<Integer, Entidade>();
+    this.entidades = new HashMap<>();
   }
 
   public void insert(Entidade entity) {

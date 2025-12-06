@@ -2,8 +2,11 @@ package modelo;
 
 public class Army extends Entidade implements WorkpostInterface{
 
-  private Empire empire;
-  private Boolean inBattle = false;
+  private static final int ARMORY_IRON_COST = 25;
+  private static final int ARMORY_GOLD_COST = 5;
+
+  private final Empire empire;
+  private boolean inBattle = false;
   protected int armoryLevel = 1;
   protected int hiringLevel = 1;
   protected int hiringCost = 0;
@@ -30,19 +33,18 @@ public class Army extends Entidade implements WorkpostInterface{
    * @param intendedPoints Amount of points that is trying to upgrade.
    * @return Amount of points effectively added.
    */
-  public final int IRON_COST_ARMORY = 25, GOLD_COST_ARMORY = 5;
   public int upgradeArmory(int intendedPoints, Empire empire) {
-    int iron = Math.min(empire.getIron(), intendedPoints * IRON_COST_ARMORY);
-    int gold = Math.min(empire.getGold(), intendedPoints * GOLD_COST_ARMORY);
-    int ironPacks = iron / IRON_COST_ARMORY;
-    int goldPacks = gold / GOLD_COST_ARMORY;
+    int iron = Math.min(empire.getIron(), intendedPoints * ARMORY_IRON_COST);
+    int gold = Math.min(empire.getGold(), intendedPoints * ARMORY_GOLD_COST);
+    int ironPacks = iron / ARMORY_IRON_COST;
+    int goldPacks = gold / ARMORY_GOLD_COST;
 
     int pointsAdded = Math.min(ironPacks, goldPacks);
     armoryLevel += pointsAdded;
     hiringLevel = armoryLevel;
 
-    empire.setIron((empire.getIron() - IRON_COST_ARMORY * pointsAdded));
-    empire.setGold(empire.getGold() - (GOLD_COST_ARMORY * pointsAdded));
+    empire.setIron((empire.getIron() - ARMORY_IRON_COST * pointsAdded));
+    empire.setGold(empire.getGold() - (ARMORY_GOLD_COST * pointsAdded));
 
     return pointsAdded;
   }
@@ -99,8 +101,8 @@ public class Army extends Entidade implements WorkpostInterface{
 
   @Override
   public String toString() {
-    return "{" + super.toString() + " | " + String.format("Army #%d | Empire %d %s | Armory level: %d| Soldiers amount: %d | Hiring cost: %d | Hiring level: %d}",
-      super.getId(), getEmpireId(), empire.getName(), armoryLevel, hiringLevel, hiringCost, soldiersAmount, hiringCost, hiringLevel);
+    return String.format("Army #%d | Empire %d %s | Armory level: %d | Soldiers amount: %d | Hiring cost: %d | Hiring level: %d",
+            super.getId(), getEmpireId(), empire.getName(), armoryLevel, soldiersAmount, hiringCost, hiringLevel);
   }
 
   // --- INNER CLASSES

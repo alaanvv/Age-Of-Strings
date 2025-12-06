@@ -5,21 +5,18 @@ import persistencia.BancoDeDados;
 
 public class Interface extends JFrame {
 
-    private MenuManager menuManager;
-    private BancoDeDados db;
+    private static final int WINDOW_WIDTH = 1200;
+    private static final int WINDOW_HEIGHT = 900;
 
-
-    //tamanho da janela (padrão: 1920x1080)
-    private int WIDTH = 1200, HEIGHT = 900;
+    private final MenuManager menuManager;
 
     // ----------------------------------------------------------------------------
     // ----------------------------- construtor -----------------------------------
     // ----------------------------------------------------------------------------
     public Interface(BancoDeDados db) {
         super("Age of Strings");
-        this.db = db;
 
-        setSize(WIDTH, HEIGHT);
+        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         setResizable(false);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

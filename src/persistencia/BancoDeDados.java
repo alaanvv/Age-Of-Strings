@@ -18,38 +18,19 @@ import modelo.Empire;
  * the generation of unique IDs for new entities.
  */
 public class BancoDeDados {
-  private Persistente battles;
-  private Persistente empires;
-  private Persistente lumbers;
-  private Persistente armies;
-  private Persistente farms;
-  private Persistente mines;
+  private final Persistente battles;
+  private final Persistente empires;
+  private final Persistente lumbers;
+  private final Persistente armies;
+  private final Persistente farms;
+  private final Persistente mines;
 
-  /**
-   * Counter to generate a unique ID for the next Battle entity.
-   * It's incremented each time a new battle is created.
-   */
-  private int cBattles = 1;
-  /**
-   * Counter to generate a unique ID for the next Empire entity.
-   */
-  private int cEmpires = 1;
-  /**
-   * Counter to generate a unique ID for the next Lumber entity.
-   */
-  private int cLumbers = 1;
-  /**
-   * Counter to generate a unique ID for the next Army entity.
-   */
-  private int cArmies = 1;
-  /**
-   * Counter to generate a unique ID for the next Farm entity.
-   */
-  private int cFarms = 1;
-  /**
-   * Counter to generate a unique ID for the next Mine entity.
-   */
-  private int cMines = 1;
+  private int battleIdSequence = 1;
+  private int empireIdSequence = 1;
+  private int lumberIdSequence = 1;
+  private int armyIdSequence = 1;
+  private int farmIdSequence = 1;
+  private int mineIdSequence = 1;
 
   public BancoDeDados() {
     this.battles = new Persistente();
@@ -64,12 +45,12 @@ public class BancoDeDados {
    * @return new empire id
   */
   public int createEmpire(String name){
-    Empire e = new Empire(name, this.nextEmpire());
-    empires.insert(e);
-    e.getLumber().setId(this.nextLumber());
-    lumbers.insert(e.getLumber());
+    Empire empire = new Empire(name, this.nextEmpire());
+    empires.insert(empire);
+    empire.getLumber().setId(this.nextLumber());
+    lumbers.insert(empire.getLumber());
     
-    return e.getId();
+    return empire.getId();
   }
 
   /** Create a battle and insert into the database
@@ -78,9 +59,9 @@ public class BancoDeDados {
   public int createBattle(int attackerId, int defenderId){
     Army attackerArmy = (Army)armies.findById(attackerId);
     Army defenderArmy = (Army)armies.findById(defenderId);
-    Battle b = new Battle(attackerArmy, defenderArmy, this.nextBattle());
-    battles.insert(b);
-    return b.getId();
+    Battle battle = new Battle(attackerArmy, defenderArmy, this.nextBattle());
+    battles.insert(battle);
+    return battle.getId();
   }
 
   /**
@@ -154,43 +135,17 @@ public class BancoDeDados {
   }
 
 
-  /**
-   * Generates and returns the next available unique ID for a Battle.
-   * This method uses a post-increment operation, ensuring each call returns
-   * a sequential and unique identifier (0, 1, 2, ...).
-   * @return The next unique integer ID for a battle.
-   */
-  public int nextBattle() { return cBattles++; }
+  public int nextBattle() { return battleIdSequence++; }
 
-  /**
-   * Generates and returns the next available unique ID for an Empire.
-   * @return The next unique integer ID for an empire.
-   */
-  public int nextEmpire() { return cEmpires++; }
+  public int nextEmpire() { return empireIdSequence++; }
 
-  /**
-   * Generates and returns the next available unique ID for a Lumber mill.
-   * @return The next unique integer ID for a lumber mill.
-   */
-  public int nextLumber() { return cLumbers++; }
+  public int nextLumber() { return lumberIdSequence++; }
 
-  /**
-   * Generates and returns the next available unique ID for an Army.
-   * @return The next unique integer ID for an army.
-   */
-  public int nextArmy() { return cArmies++; }
+  public int nextArmy() { return armyIdSequence++; }
 
-  /**
-   * Generates and returns the next available unique ID for a Farm.
-   * @return The next unique integer ID for a farm.
-   */
-  public int nextFarm() { return cFarms++; }
+  public int nextFarm() { return farmIdSequence++; }
 
-  /**
-   * Generates and returns the next available unique ID for a Mine.
-   * @return The next unique integer ID for a mine.
-   */
-  public int nextMine() { return cMines++; }
+  public int nextMine() { return mineIdSequence++; }
 
   public Persistente getLumbers() {
     return lumbers;
@@ -214,30 +169,6 @@ public class BancoDeDados {
 
   public Persistente getMines() {
     return mines;
-  }
-
-  public void setBattles(Persistente battles) {
-    this.battles = battles;
-  }
-
-  public void setEmpires(Persistente empires) {
-    this.empires = empires;
-  }
-
-  public void setArmies(Persistente armies) {
-    this.armies = armies;
-  }
-
-  public void setLumbers(Persistente lumbers) {
-    this.lumbers = lumbers;
-  }
-
-  public void setFarms(Persistente farms) {
-    this.farms = farms;
-  }
-
-  public void setMines(Persistente mines) {
-    this.mines = mines;
   }
 
   public boolean hasLumber() {

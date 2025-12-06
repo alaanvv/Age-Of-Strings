@@ -2,7 +2,7 @@ package modelo;
 
 public class Lumber extends Entidade implements WorkpostInterface{
   private int workers = 0;
-  Empire empire;
+  private final Empire empire;
 
 
   // ---

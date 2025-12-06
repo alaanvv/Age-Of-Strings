@@ -4,7 +4,7 @@ public class Mine extends Entidade implements WorkpostInterface{
   private int iron;
   private int gold;
   private int workers = 0;
-  private Empire empire;
+  private final Empire empire;
 
 
   // ---

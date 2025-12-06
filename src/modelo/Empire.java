@@ -13,10 +13,10 @@ public class Empire extends Entidade {
   private int wood = 50;
   private String name;
 
-  private Map<Integer, Army> armies = new TreeMap<>();
-  private Map<Integer, Farm> farms = new TreeMap<>();
-  private Map<Integer, Mine> mines = new TreeMap<>();
-  private Lumber lumber;
+  private final Map<Integer, Army> armies = new TreeMap<>();
+  private final Map<Integer, Farm> farms = new TreeMap<>();
+  private final Map<Integer, Mine> mines = new TreeMap<>();
+  private final Lumber lumber;
 
   public Empire(String name, int id) {
     super(id);
@@ -93,10 +93,10 @@ public class Empire extends Entidade {
   // ---
 
   public int sendWorkers(int amount, WorkpostInterface workpost){
-    amount = workpost.sendWorkers(Math.min(amount, population));
-    population -= amount;
-    workers += amount;
-    return amount;
+    int sent = workpost.sendWorkers(Math.min(amount, population));
+    population -= sent;
+    workers += sent;
+    return sent;
   }
 
   public int sendWorkersToLumber(int amount) {
@@ -177,36 +177,36 @@ public class Empire extends Entidade {
     armies.forEach((key, army) -> army.timeUpdateArmy(this));
 
     // Consumindo pontos de comida
-    int consumed = population + workers;
-    food -= consumed;
+    int consumedFood = population + workers;
+    food -= consumedFood;
     if (food < 0) {
       int dead = -food;
-      float perc = (float) dead / (population + workers);
+      float deathRatio = (float) dead / (population + workers);
       output.append(String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.getId(), dead));
       JOptionPane.showMessageDialog(null, String.format("! Imperio #%d: %d pessoas morreram de fome.\n", super.getId(), dead));
       food = 0;
 
-      int removed = lumber.takeWorkers((int) Math.ceil(lumber.getWorkers() * perc));
+      int removed = lumber.takeWorkers((int) Math.ceil(lumber.getWorkers() * deathRatio));
       workers -= removed;
       dead -= removed;
 
       for (Army army : armies.values()) {
         if (dead <= 0) break;
-        removed = army.takeWorkers((int) Math.ceil(army.getWorkers() * perc));
+        removed = army.takeWorkers((int) Math.ceil(army.getWorkers() * deathRatio));
         workers -= removed;
         dead -= removed;
       }
 
       for (Mine mine : mines.values()) {
         if (dead <= 0) break;
-        removed = mine.takeWorkers((int) Math.ceil(mine.getWorkers() * perc));
+        removed = mine.takeWorkers((int) Math.ceil(mine.getWorkers() * deathRatio));
         workers -= removed;
         dead -= removed;
       }
 
       for (Farm farm : farms.values()) {
         if (dead <= 0) break;
-        removed = farm.takeWorkers((int) Math.ceil(farm.getWorkers() * perc));
+        removed = farm.takeWorkers((int) Math.ceil(farm.getWorkers() * deathRatio));
         workers -= removed;
         dead -= removed;
       }

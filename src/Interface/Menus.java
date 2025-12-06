@@ -10,134 +10,107 @@ import java.awt.*;
 
 public class Menus {
 
-    // Painel para os botões
-    private JPanel centrPanel; 
-    private JPanel topPanel;
+    private static final Color BACKGROUND_COLOR = new Color(25, 30, 35);
+    private static final Color BUTTON_DEFAULT_COLOR = new Color(50, 50, 50);
+    private static final Color BUTTON_DESTROY_COLOR = new Color(150, 50, 50);
 
-    // cores
-    Color bgColor = new Color(25,30,35);
-    Color btnColor = new Color(50, 50, 50);
+    private final JPanel centerPanel;
+    private final JPanel topPanel;
+    private final Buttons buttons = new Buttons();
 
-    private Buttons buttons = new Buttons();
-
-    
-    // -----------------------------------------------------------------------------------
-    // -------------------------------- Construtor ---------------------------------------
-    // -----------------------------------------------------------------------------------
     public Menus() {
-        // Painel superior
         topPanel = new JPanel();
         topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        topPanel.setBackground(bgColor); 
+        topPanel.setBackground(BACKGROUND_COLOR);
 
-        // painel central com FlowLayout
-        centrPanel = new JPanel();
-        centrPanel.setLayout(new GridLayout(0, 4, 10, 10));
-        centrPanel.setBackground(bgColor); 
+        centerPanel = new JPanel();
+        centerPanel.setLayout(new GridLayout(0, 4, 10, 10));
+        centerPanel.setBackground(BACKGROUND_COLOR);
     }
 
-    // -----------------------------------------------------------------------------------
-    // --------------------------------- Display Empires ---------------------------------
-    // -----------------------------------------------------------------------------------
-    private void displayEmpires(BancoDeDados db) {
-        centrPanel.removeAll();
-        
-        if (db.hasEmpire()) {
-            for (Entidade e : db.getEmpires().getEntidades().values()) {
-                if (e instanceof Empire empire) {
+    private void displayEmpires(BancoDeDados database) {
+        centerPanel.removeAll();
+
+        if (database.hasEmpire()) {
+            for (Entidade entity : database.getEmpires().getEntidades().values()) {
+                if (entity instanceof Empire empire) {
                     String empireName = empire.getName();
+                    JButton empireButton = new JButton(empireName);
 
-                    JButton btnEmpire = new JButton(empireName);
-
-                    btnEmpire.addActionListener(ae -> {
-
-                        if (buttons.getIsDestroyMode()) {
-                            db.destroyEmpire(empire);
-                            buttons.switchDestroyMode();
-                            displayEmpires(db);
-                            updateMainMenu(db);
+                    empireButton.addActionListener(actionEvent -> {
+                        if (buttons.isDestroyMode()) {
+                            database.destroyEmpire(empire);
+                            buttons.toggleDestroyMode();
+                            displayEmpires(database);
+                            updateMainMenu(database);
                             System.out.println("Destroyed empire: " + empireName);
                         } else {
                             System.out.println("Open empire menu: " + empireName);
                         }
                     });
 
-                    btnEmpire.setBackground(btnColor);
-                    btnEmpire.setForeground(Color.WHITE);
+                    empireButton.setBackground(BUTTON_DEFAULT_COLOR);
+                    empireButton.setForeground(Color.WHITE);
 
-                    centrPanel.add(btnEmpire);
+                    centerPanel.add(empireButton);
                 }
             }
         }
 
-    centrPanel.revalidate();
-    centrPanel.repaint();
-    
-}
-    // -----------------------------------------------------------------------------------
-    // ------------------------------- Atualiza o mainMenu -------------------------------
-    // -----------------------------------------------------------------------------------
-    private void updateMainMenu(BancoDeDados db) {
+        centerPanel.revalidate();
+        centerPanel.repaint();
+    }
+
+    private void updateMainMenu(BancoDeDados database) {
         topPanel.removeAll();
 
-        // --- Botão New Empire --- 
-        JButton btnNew = new JButton("New Empire");
-        btnNew.setBackground(btnColor);
-        btnNew.setForeground(Color.WHITE);
-        btnNew.addActionListener(e -> {
-            buttons.createNewEmpireButton(db);
-            displayEmpires(db);
-            updateMainMenu(db);
+        JButton newEmpireButton = new JButton("New Empire");
+        newEmpireButton.setBackground(BUTTON_DEFAULT_COLOR);
+        newEmpireButton.setForeground(Color.WHITE);
+        newEmpireButton.addActionListener(actionEvent -> {
+            buttons.createEmpire(database);
+            displayEmpires(database);
+            updateMainMenu(database);
         });
-        topPanel.add(btnNew);
+        topPanel.add(newEmpireButton);
 
-        if (db.sizeEmpires() >= 1) {
-            // --- Botão Destroy Empire --- 
-            JButton btnDestroy = new JButton("Destroy Empire");
-            if (buttons.getIsDestroyMode()) {
-                btnColor = new Color(150, 50, 50);
-            } else {
-                btnColor = new Color(50, 50, 50);
-            }
-            btnDestroy.setBackground(btnColor);
-            btnDestroy.setForeground(Color.WHITE);
-            btnDestroy.addActionListener(e -> {
-                buttons.switchDestroyMode();
-                displayEmpires(db);
-                updateMainMenu(db);
+        if (database.sizeEmpires() >= 1) {
+            JButton destroyEmpireButton = new JButton("Destroy Empire");
+            Color destroyButtonColor = buttons.isDestroyMode() ? BUTTON_DESTROY_COLOR : BUTTON_DEFAULT_COLOR;
+            destroyEmpireButton.setBackground(destroyButtonColor);
+            destroyEmpireButton.setForeground(Color.WHITE);
+            destroyEmpireButton.addActionListener(actionEvent -> {
+                buttons.toggleDestroyMode();
+                displayEmpires(database);
+                updateMainMenu(database);
             });
-            topPanel.add(btnDestroy);
-            btnColor = new Color(50, 50, 50);
+            topPanel.add(destroyEmpireButton);
 
-            // --- Botao RunTurn ---
-            JButton btnRun = new JButton("Run Turn");
-            btnRun.setBackground(btnColor);
-            btnRun.setForeground(Color.WHITE);
-            btnRun.addActionListener(e -> {
-                buttons.btnRunTurn(db);
-                updateMainMenu(db);
+            JButton runTurnButton = new JButton("Run Turn");
+            runTurnButton.setBackground(BUTTON_DEFAULT_COLOR);
+            runTurnButton.setForeground(Color.WHITE);
+            runTurnButton.addActionListener(actionEvent -> {
+                buttons.runTurn(database);
+                updateMainMenu(database);
             });
-            topPanel.add(btnRun);
-
+            topPanel.add(runTurnButton);
         }
 
         topPanel.revalidate();
         topPanel.repaint();
     }
-    
-    // -----------------------------------------------------------------------------------
-    // -------------------------------- Main Menu ----------------------------------------
-    // -----------------------------------------------------------------------------------
-    public void MainMenu(BancoDeDados db, JFrame frame) {
 
-        // Layout do frame
+    public void renderMainMenu(BancoDeDados database, JFrame frame) {
         frame.setLayout(new BorderLayout());
         frame.add(topPanel, BorderLayout.NORTH);
-        frame.add(new JScrollPane(centrPanel), BorderLayout.CENTER);
+        frame.add(new JScrollPane(centerPanel), BorderLayout.CENTER);
 
-        // Inicializa os paineis conforme estado atual do DB
-        updateMainMenu(db);
-        displayEmpires(db);
+        updateMainMenu(database);
+        displayEmpires(database);
+    }
+
+    public void MainMenu(BancoDeDados database, JFrame frame) {
+        renderMainMenu(database, frame);
     }
 }
 

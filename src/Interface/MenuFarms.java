@@ -11,8 +11,8 @@ import persistencia.BancoDeDados;
 
 public class MenuFarms extends MenuBase {
 
-    private MenuManager manager;
-    private Empire empire;
+    private final MenuManager manager;
+    private final Empire empire;
 
     public MenuFarms(BancoDeDados db, MenuManager manager, Empire empire) {
         super(db);
@@ -30,12 +30,12 @@ public class MenuFarms extends MenuBase {
         // ############
         // BOTAO VOLTAR
         // ############
-        JButton btnBack = new JButton("Return");
-        btnBack.setBackground(btnColor);
-        btnBack.setForeground(Color.WHITE);
-        btnBack.addActionListener(e -> manager.switchMenu(new MenuEmpire(db, manager, empire)));
+        JButton backButton = new JButton("Return");
+        backButton.setBackground(btnColor);
+        backButton.setForeground(Color.WHITE);
+        backButton.addActionListener(e -> manager.switchMenu(new MenuEmpire(db, manager, empire)));
 
-        topPanel.add(btnBack);
+        topPanel.add(backButton);
 
         
         // ###################

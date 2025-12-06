@@ -6,11 +6,13 @@ import persistencia.BancoDeDados;
 
 public abstract class MenuBase {
 
-    protected JPanel topPanel;
-    protected JPanel centerPanel;
-    protected JPanel leftPanel;
-    protected Color bgColor = new Color(25,30,35);
-    protected Color btnColor = new Color(50,50,50);
+    protected static final Color BACKGROUND_COLOR = new Color(25, 30, 35);
+    protected static final Color BUTTON_COLOR = new Color(50, 50, 50);
+
+    protected final JPanel topPanel;
+    protected final JPanel centerPanel;
+    protected final JPanel leftPanel;
+    protected Color btnColor = BUTTON_COLOR;
 
     protected BancoDeDados db;
 
@@ -23,14 +25,14 @@ public abstract class MenuBase {
         this.db = db;
         
         topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        topPanel.setBackground(bgColor);
+        topPanel.setBackground(BACKGROUND_COLOR);
 
         centerPanel = new JPanel(new GridLayout(0, 4, 10, 10));
-        centerPanel.setBackground(bgColor);
+        centerPanel.setBackground(BACKGROUND_COLOR);
 
         leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.setBackground(bgColor);
+        leftPanel.setBackground(BACKGROUND_COLOR);
         leftPanel.setPreferredSize(new Dimension(200, 0)); 
     }
 

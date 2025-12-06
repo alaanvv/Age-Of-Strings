@@ -9,7 +9,7 @@ import persistencia.BancoDeDados;
 public class MenuMain extends MenuBase {
 
     private final MenuManager manager;
-    private Buttons buttons;
+    private final Buttons buttons;
 
 
     // -----------------------------------------------------------------------------------
@@ -34,47 +34,47 @@ public class MenuMain extends MenuBase {
         // ################
         // BOTÃO NEW EMPIRE
         // ################
-        JButton btnNew = new JButton("New Empire");
-        btnNew.setBackground(btnColor);
-        btnNew.setForeground(Color.WHITE);
-        btnNew.addActionListener(e -> {
-            buttons.createNewEmpireButton(db);
-            manager.switchMenu(new MenuMain(db, manager)); // recarregar
+        JButton newEmpireButton = new JButton("New Empire");
+        newEmpireButton.setBackground(btnColor);
+        newEmpireButton.setForeground(Color.WHITE);
+        newEmpireButton.addActionListener(e -> {
+            buttons.createEmpire(db);
+            manager.switchMenu(new MenuMain(db, manager));
         });
-        topPanel.add(btnNew);
+        topPanel.add(newEmpireButton);
 
         if (db.sizeEmpires() >= 1) {
 
             // ####################
             // BOTAO DESTROY EMPIRE
             // ####################
-            JButton btnDestroy = new JButton("Destroy Empire");
+            JButton destroyEmpireButton = new JButton("Destroy Empire");
 
-            Color destroyColor = buttons.getIsDestroyMode()
-                    ? new Color(150, 50, 50)     // modo ON
-                    : new Color(50, 50, 50);     // modo OFF
+                Color destroyColor = buttons.isDestroyMode()
+                    ? new Color(150, 50, 50)
+                    : BUTTON_COLOR;
 
-            btnDestroy.setBackground(destroyColor);
-            btnDestroy.setForeground(Color.WHITE);
+            destroyEmpireButton.setBackground(destroyColor);
+            destroyEmpireButton.setForeground(Color.WHITE);
 
-            btnDestroy.addActionListener(e -> {
-                buttons.switchDestroyMode();
-                manager.switchMenu(new MenuMain(db, manager)); // recarregar
+            destroyEmpireButton.addActionListener(e -> {
+                buttons.toggleDestroyMode();
+                manager.switchMenu(new MenuMain(db, manager));
             });
 
-            topPanel.add(btnDestroy);
+            topPanel.add(destroyEmpireButton);
 
             // ##############
             // BOTAO RUN TURN
             // ##############
-            JButton btnRun = new JButton("Run Turn");
-            btnRun.setBackground(btnColor);
-            btnRun.setForeground(Color.WHITE);
-            btnRun.addActionListener(e -> {
-                buttons.btnRunTurn(db);
+            JButton runTurnButton = new JButton("Run Turn");
+            runTurnButton.setBackground(btnColor);
+            runTurnButton.setForeground(Color.WHITE);
+            runTurnButton.addActionListener(e -> {
+                buttons.runTurn(db);
                 manager.switchMenu(new MenuMain(db, manager));
             });
-            topPanel.add(btnRun);
+            topPanel.add(runTurnButton);
         }
         // ###########
         // BOTÃO EXIT
@@ -101,13 +101,13 @@ public class MenuMain extends MenuBase {
         for (Entidade e : db.getEmpires().getEntidades().values()) {
             if (e instanceof Empire empire) {
 
-                JButton btnEmpire = new JButton(empire.getName());
-                btnEmpire.setBackground(btnColor);
-                btnEmpire.setForeground(Color.WHITE);
+                JButton empireButton = new JButton(empire.getName());
+                empireButton.setBackground(btnColor);
+                empireButton.setForeground(Color.WHITE);
 
-                if (buttons.getIsDestroyMode()) {
+                if (buttons.isDestroyMode()) {
                     // ------------------- MODO DESTRUIR --------------------
-                    btnEmpire.addActionListener(ae -> {
+                    empireButton.addActionListener(ae -> {
 
                         int op = JOptionPane.showConfirmDialog(
                                 null,
@@ -117,20 +117,20 @@ public class MenuMain extends MenuBase {
                         );
 
                         if (op == JOptionPane.YES_OPTION) {
-                            db.destroyEmpire(empire); // remove por ID
-                            buttons.switchDestroyMode();      // volta ao normal
+                        db.destroyEmpire(empire);
+                        buttons.toggleDestroyMode();
                             manager.switchMenu(new MenuMain(db, manager));
                         }
                     });
 
                 } else {
                     // ------------------- MODO NORMAL -----------------------
-                    btnEmpire.addActionListener(ae ->
+                    empireButton.addActionListener(ae ->
                             manager.switchMenu(new MenuEmpire(db, manager, empire))
                     );
                 }
 
-                centerPanel.add(btnEmpire);
+                centerPanel.add(empireButton);
             }
         }
 

@@ -22,8 +22,8 @@ public class Terminal {
    * Messages are logged here and then printed to the console all at once
    * during the next input cycle in the {@link #read()} method.
    */
-  private static StringBuilder logs = new StringBuilder();
-  public static Scanner sc = new Scanner(System.in);
+  private static StringBuilder logBuffer = new StringBuilder();
+  public static Scanner scanner = new Scanner(System.in);
 
   /**
    * Appends a message to the log buffer to be displayed later.
@@ -33,7 +33,7 @@ public class Terminal {
    */
   private static void log(String text) {
     if (text.equals("")) return;
-    logs.append(text).append("\n");
+    logBuffer.append(text).append("\n");
   }
 
   /**
@@ -60,14 +60,14 @@ public class Terminal {
    * @return An array of strings, split from the user's input line.
    */
   private static String[] read() {
-    if (logs.length() > 0) {
+    if (logBuffer.length() > 0) {
       System.out.println();
-      System.out.print(logs);
-      logs.setLength(0); // Clear the buffer after printing
+      System.out.print(logBuffer);
+      logBuffer.setLength(0); // Clear the buffer after printing
     }
 
     System.out.print("\n:");
-    String line = sc.nextLine();
+    String line = scanner.nextLine();
 
     // ANSI escape codes to clear the screen.
     // \033[H moves the cursor to the top-left corner.
@@ -129,7 +129,7 @@ public class Terminal {
         log("Turno rodado.");
         break;
       case "exit":
-        sc.close();
+        scanner.close();
         return; // Exits the recursive loop
     }
 
