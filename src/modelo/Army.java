@@ -1,5 +1,10 @@
 package modelo;
 
+/**
+ * Workforce-backed military unit belonging to an {@link Empire}.
+ * Tracks soldiers, upkeep (hiring funds), armory upgrades, and exposes hooks
+ * to join battles or accept worker assignments as a workpost.
+ */
 public class Army extends Entidade implements WorkpostInterface{
 
   private static final int ARMORY_IRON_COST = 25;

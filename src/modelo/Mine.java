@@ -1,5 +1,10 @@
 package modelo;
 
+/**
+ * Mineral-producing workpost for an {@link Empire}.
+ * Tracks finite iron/gold reserves, enforces worker cap, and extracts
+ * resources each turn with diminishing returns.
+ */
 public class Mine extends Entidade implements WorkpostInterface{
   private int iron;
   private int gold;

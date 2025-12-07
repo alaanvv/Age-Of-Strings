@@ -1,5 +1,10 @@
 package modelo;
 
+/**
+ * Food-producing workpost tied to an {@link Empire}.
+ * Caps workers, computes food yield per turn, and supports worker assignment
+ * via the shared workpost contract.
+ */
 public class Farm extends Entidade implements WorkpostInterface {
   private int workers = 0;
   private final Empire empire;

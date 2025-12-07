@@ -9,6 +9,11 @@ import javax.swing.JLabel;
 import modelo.Empire;
 import persistencia.BancoDeDados;
 
+/**
+ * Focused menu for farm management inside an empire.
+ * Presents status and navigation back to the owning empire view; intended to
+ * later host worker assignment controls.
+ */
 public class MenuFarms extends MenuBase {
 
     private final MenuManager manager;

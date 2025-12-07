@@ -1,5 +1,10 @@
 package modelo;
 
+/**
+ * Base entity carrying an auto-managed identifier and ordering contract.
+ * Every domain object persisted in memory inherits from this to get a common
+ * id field and comparability for sorted collections.
+ */
 public abstract class Entidade implements Comparable<Entidade>{
   private Integer id;
 

@@ -1,11 +1,14 @@
 import gui.Interface;
 import persistencia.BancoDeDados;
-import visao.Terminal;
 
+/**
+ * Application entry point. Builds the in-memory database and boots the GUI
+ * (or CLI if uncommented) for the Age of Empires simulation.
+ */
 public class Programa {
   public static void main(String[] args) {
     BancoDeDados database = new BancoDeDados();
     //Terminal.mainMenu(database);
-    Interface game = new Interface(database);
+    new Interface(database);
   }
 }

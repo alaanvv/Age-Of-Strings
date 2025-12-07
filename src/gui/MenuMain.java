@@ -6,6 +6,11 @@ import modelo.Empire;
 import modelo.Entidade;
 import persistencia.BancoDeDados;
 
+/**
+ * Landing menu aggregating high-level empire actions.
+ * Provides entry points to create/destroy empires, advance turns, exit, and
+ * open specific empire dashboards, while reflecting destroy-mode state.
+ */
 public class MenuMain extends MenuBase {
 
     private final MenuManager manager;

@@ -3,6 +3,11 @@ package gui;
 import javax.swing.*;
 import persistencia.BancoDeDados;
 
+/**
+ * Swing bootstrap window for the game.
+ * Configures the frame shell (size, title, layout) and delegates all screen
+ * composition to {@link MenuManager}, starting with the main menu.
+ */
 public class Interface extends JFrame {
 
     private static final int WINDOW_WIDTH = 1200;

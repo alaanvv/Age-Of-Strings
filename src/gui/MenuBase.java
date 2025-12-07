@@ -4,6 +4,12 @@ import java.awt.*;
 import javax.swing.*;
 import persistencia.BancoDeDados;
 
+/**
+ * Base scaffold for every GUI menu screen.
+ * Prepares the common layout regions (top, center, left) and color palette,
+ * injects shared database access, and forces subclasses to implement
+ * {@link #render()} to populate the panels.
+ */
 public abstract class MenuBase {
 
     protected static final Color BACKGROUND_COLOR = new Color(25, 30, 35);
@@ -14,7 +20,7 @@ public abstract class MenuBase {
     protected final JPanel leftPanel;
     protected Color btnColor = BUTTON_COLOR;
 
-    protected BancoDeDados db;
+    protected final BancoDeDados db;
 
     protected Buttons buttons;
 

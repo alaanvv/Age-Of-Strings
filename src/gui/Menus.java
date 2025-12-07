@@ -8,6 +8,11 @@ import modelo.Entidade;
 
 import java.awt.*;
 
+/**
+ * Legacy menu renderer that builds a minimal main menu inline.
+ * Manages center/top panels directly, reusing {@link Buttons} for actions and
+ * repainting Swing components after each change.
+ */
 public class Menus {
 
     private static final Color BACKGROUND_COLOR = new Color(25, 30, 35);

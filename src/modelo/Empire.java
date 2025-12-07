@@ -4,6 +4,12 @@ import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JOptionPane;
 
+/**
+ * Core aggregate representing a player's realm.
+ * Holds resources, population, worker allocations, and owned structures
+ * (farms, mines, lumber) plus armies. Provides turn resolution logic and
+ * helper methods to build or manage dependents.
+ */
 public class Empire extends Entidade {
   private int population = 30;
   private int food = 100;

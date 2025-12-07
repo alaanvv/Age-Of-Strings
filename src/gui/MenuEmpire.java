@@ -5,6 +5,12 @@ import javax.swing.*;
 import modelo.Empire;
 import persistencia.BancoDeDados;
 
+/**
+ * Detailed view for a single empire.
+ * Shows empire stats and action buttons (housing, farms, mines, army) while
+ * reusing shared buttons logic and delegating navigation back to
+ * {@link MenuManager}.
+ */
 public class MenuEmpire extends MenuBase {
 
     private final MenuManager manager;

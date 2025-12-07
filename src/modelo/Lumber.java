@@ -1,5 +1,10 @@
 package modelo;
 
+/**
+ * Wood-harvesting workpost for an {@link Empire}.
+ * Maintains worker count, can be torn down returning population, and produces
+ * wood each turn based on worker-driven efficiency.
+ */
 public class Lumber extends Entidade implements WorkpostInterface{
   private int workers = 0;
   private final Empire empire;

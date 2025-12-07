@@ -6,6 +6,11 @@ import modelo.Empire;
 import modelo.Entidade;
 import persistencia.BancoDeDados;
 
+/**
+ * Centralizes Swing dialog flows for user-triggered actions.
+ * Acts as a lightweight controller shared across menus so listeners reuse
+ * the same business logic (create empire, run turn, adjust workers, etc.).
+ */
 public class Buttons {
 
     private boolean destroyMode = false;
