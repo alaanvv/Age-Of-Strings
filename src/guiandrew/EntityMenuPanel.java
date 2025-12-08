@@ -2,36 +2,47 @@ package guiandrew;
 
 import javax.swing.*;
 import java.awt.*;
+
 import persistencia.*;
 
-/* Modelo do painel:
-            \center left label estático
-\top left botões add, remover, editar, buscar
 
-\center.fill tabela com cada subentidade e suas informações
-*/
-
+/**
+ * Esta classe abstrata é um molde para todos os outros menus. <p>
+ * O molde consiste em um painel superior, que contém o título do menu no topo e os botões padrões
+ * (add, remover, etc.) em baixo, como um FlowLayout. <p>
+ * Também um painel à esquerda (JLabel), para colocar informações envolvendo o menu. <p>
+ * Finalmente, no centro, um JScrollPane para colocar o conteúdo principal do menu.
+ */
 public abstract class EntityMenuPanel<T extends modelo.Entidade> extends JPanel{
    
    
-   modelo.Empire empireViewing;
-   BancoDeDados db;
-   Persistente<T> persistency;
+   // Data attributes
+   protected BancoDeDados db;
+   protected modelo.Empire empireViewing;
+   protected Persistente<T> persistency;
    
-   JPanel topPanelMenuNameButtons;
-   JPanel topButtonsPanel;
-   JLabel infoLeftLabel;
-   JScrollPane contentCenterPanel;
+   // -- Top Panel components
+   protected JPanel topPanelMenuNameButtons;
+   protected JPanel buttonsPanel;
+   protected JLabel panelTitleLabel;
+   
+   // -- Left Panel component --
+   protected JLabel infoLeftLabel;
 
+   // -- Center Panel component
+   protected JScrollPane contentCenterPanel;
+   
    // === BUTTONS ===
-   JButton add;
-   JButton remove;
-   JButton edit;
-   JButton search;
+   protected JButton addButton;
+   protected JButton removeButton;
+   protected JButton editButton;
+   protected JButton searchButton;
+
 
    public EntityMenuPanel(
       BancoDeDados db,
       JLabel infoLeftLabel,
+      String panelTitle,
       Persistente<T> persistency
    ){
       super(new BorderLayout());
@@ -39,34 +50,49 @@ public abstract class EntityMenuPanel<T extends modelo.Entidade> extends JPanel{
       this.db = db;
       this.persistency = persistency;
       this.infoLeftLabel = infoLeftLabel;
+
+      add(infoLeftLabel, BorderLayout.WEST);
       
       // === CRIAÇÃO BASE DOS BOTÕES ===
-      add = new JButton("Adicionar");
-      add.addActionListener(e -> {add();});
+      addButton = new JButton("Adicionar");
+      addButton.addActionListener(e -> {addAction();});
 
-      remove = new JButton("Remover");
-      remove.addActionListener(e -> {remove();});
+      removeButton = new JButton("Remover");
+      removeButton.addActionListener(e -> {removeAction();});
 
-      edit = new JButton("Editar selecionado");
-      edit.addActionListener(e -> {edit();});
+      editButton = new JButton("Editar selecionado");
+      editButton.addActionListener(e -> {editAction();});
 
-      search = new JButton("Pesquisar entidade por ID");
-      search.addActionListener(e -> search());
+      searchButton = new JButton("Pesquisar entidade por ID");
+      searchButton.addActionListener(e -> searchAction());
 
-      topButtonsPanel = new JPanel(new FlowLayout());
+      buttonsPanel = new JPanel(new FlowLayout());
       
-      topButtonsPanel.add(add);
-      topButtonsPanel.add(remove);
-      topButtonsPanel.add(edit);
-      topButtonsPanel.add(search);
+      buttonsPanel.add(addButton);
+      buttonsPanel.add(removeButton);
+      buttonsPanel.add(editButton);
+      buttonsPanel.add(searchButton);
+
+      // === CRIAÇÃO PAINEL SUPERIOR ===
+      topPanelMenuNameButtons = new JPanel(new BoxLayout(topPanelMenuNameButtons, BoxLayout.Y_AXIS));
+      
+      panelTitleLabel = new JLabel(panelTitle);
+      topPanelMenuNameButtons.add(panelTitleLabel);
+
+      topPanelMenuNameButtons.add(buttonsPanel);
+
+      add(topPanelMenuNameButtons);
+
+      // === CRIAÇÃO DO PAINEL CENTRAL ===
+      createCentralPanel();
    }
 
-   public abstract void add();
-   public abstract void remove();
-   public abstract void edit();
+   public abstract void addAction();
+   public abstract void removeAction();
+   public abstract void editAction();
 
    /**Finds any entity of type {@link T} by ID.  */
-   public void search(){
+   public void searchAction(){
       int id = auxiliar.Input.getIntDialogue(this, "Insira o ID a buscar");
       
       try{
@@ -80,4 +106,6 @@ public abstract class EntityMenuPanel<T extends modelo.Entidade> extends JPanel{
    public abstract void update();
    public abstract void updateLeftLabel();
    public abstract void updateContent();
+
+   public abstract void createCentralPanel();
 }
