@@ -6,12 +6,13 @@ import java.awt.*;
 
 public class Frame extends JFrame{
 
-   CardLayout cardLayout = new CardLayout();
-   JPanel menusPanel = new JPanel(cardLayout);
+   CardLayout cardLayout;
+   JPanel menusPanel;
    
 
    public Frame(){
-
+      cardLayout = new CardLayout();
+      menusPanel = new JPanel(cardLayout);
    }
 
 }

@@ -13,7 +13,7 @@ import persistencia.*;
  * Também um painel à esquerda (JLabel), para colocar informações envolvendo o menu. <p>
  * Finalmente, no centro, um JScrollPane para colocar o conteúdo principal do menu.
  */
-public abstract class EntityMenuPanel<T extends modelo.Entidade> extends JPanel{
+public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends JPanel{
    
    
    // Data attributes
@@ -39,7 +39,7 @@ public abstract class EntityMenuPanel<T extends modelo.Entidade> extends JPanel{
    protected JButton searchButton;
 
 
-   public EntityMenuPanel(
+   public AbstractEntityMenuPanel(
       BancoDeDados db,
       JLabel infoLeftLabel,
       String panelTitle,
@@ -87,12 +87,12 @@ public abstract class EntityMenuPanel<T extends modelo.Entidade> extends JPanel{
       createCentralPanel();
    }
 
-   public abstract void addAction();
-   public abstract void removeAction();
-   public abstract void editAction();
+   protected abstract void addAction();
+   protected abstract void removeAction();
+   protected abstract void editAction();
 
    /**Finds any entity of type {@link T} by ID.  */
-   public void searchAction(){
+   protected void searchAction(){
       int id = auxiliar.Input.getIntDialogue(this, "Insira o ID a buscar");
       
       try{
@@ -103,9 +103,9 @@ public abstract class EntityMenuPanel<T extends modelo.Entidade> extends JPanel{
       }
    }
    
-   public abstract void update();
-   public abstract void updateLeftLabel();
-   public abstract void updateContent();
+   protected abstract void update();
+   protected abstract void updateLeftLabel();
+   protected abstract void updateContent();
 
-   public abstract void createCentralPanel();
+   protected abstract void createCentralPanel();
 }

@@ -18,6 +18,7 @@ public class Empire extends Entidade {
   private int gold = 100;
   private int wood = 50;
   private String name;
+  private int battleCount = 0;
 
   private final Map<Integer, Army> armies = new TreeMap<>();
   private final Map<Integer, Farm> farms = new TreeMap<>();
@@ -40,6 +41,8 @@ public class Empire extends Entidade {
   public int getFood() { return food; }
   public int getIron() { return iron; }
   public int getGold() { return gold; }
+  public int getWood() { return wood; }
+  public int getBattleCount() { return battleCount; }
 
   public void setPopulation(int population) { this.population = population; }
   public void setWorkers(int workers) { this.workers = workers; }

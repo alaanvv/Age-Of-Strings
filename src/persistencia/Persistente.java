@@ -2,8 +2,7 @@ package persistencia;
 
 import modelo.Entidade;
 import java.util.Map;
-import java.util.HashMap;
-
+import java.util.TreeMap;
 /**
  * A generic, in-memory repository to manage a collection of {@link T} objects.
  * <p>
@@ -18,7 +17,7 @@ public class Persistente<T extends Entidade> {
   private final Map<Integer, T> entidades;
 
   public Persistente() {
-    this.entidades = new HashMap<>();
+    this.entidades = new TreeMap<>();
   }
 
   public void insert(T entity) {
