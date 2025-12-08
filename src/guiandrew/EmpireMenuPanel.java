@@ -10,7 +10,7 @@ import modelo.Empire;
 
 import persistencia.BancoDeDados;
 
-public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
+public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
    
    // === CENTER PANEL ===
    JTable empiresTable;
@@ -21,8 +21,8 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
    // === EMPIRE BUTTONS ===
    JButton acessButton;
 
-   public EmpireMenu(BancoDeDados db, persistencia.Persistente<Empire> persistency, JLabel leftLabel, String panelTitle, JPanel externalCardPanel, Gui gui){
-      super(db, leftLabel, panelTitle, persistency, externalCardPanel, gui);
+   public EmpireMenuPanel(BancoDeDados db, persistencia.Persistente<Empire> persistency, String panelTitle, JPanel externalCardPanel, Gui gui){
+      super(db, panelTitle, persistency, externalCardPanel, gui);
 
       empireInTableRow = new ArrayList<Empire>();
 
@@ -35,6 +35,8 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
 
    @Override
    protected void createCentralPanel() {
+      
+      //Colunas da tabela de impérios
       String[] columns = {"ID", "Nome", "Madeira", "Ferro", "Ouro", "Comida",  "População livre", "Trabalhadores", "Batalhas"};
       header = columns;
 
@@ -54,7 +56,6 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
       empiresTable = new JTable(tableModel);
 
       contentCentralPanel = new JScrollPane(empiresTable);
-      
    }
 
    
@@ -155,7 +156,7 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
 
    @Override
    protected void updateLeftLabel(){
-      String labelText = "<html>Bem-vindo ao <b>Age of Strings!</b><p>Quantidade de impérios: " + db.getEmpires().getSize() + ".</html>";
+      String labelText = "<html><center>Bem-vindo ao <b>Age of Strings!</b><p>Quantidade de impérios: " + db.getEmpires().getSize() + ".</center></html>";
       infoLeftLabel.setText(labelText);
    };
 

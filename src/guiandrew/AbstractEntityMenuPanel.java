@@ -1,8 +1,6 @@
 package guiandrew;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-
 import java.awt.*;
 
 import persistencia.*;
@@ -33,7 +31,7 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
    protected JPanel mainPanel;
    
    // -- Left Panel component --
-   protected JLabel infoLeftLabel;
+   protected InfoLabel infoLeftLabel;
 
    // -- Center Panel component
    protected JScrollPane contentCentralPanel;
@@ -49,7 +47,6 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
 
    public AbstractEntityMenuPanel(
       BancoDeDados db,
-      JLabel infoLeftLabel,
       String panelTitle,
       Persistente<T> persistency,
       JPanel externalCardPanel,
@@ -60,7 +57,7 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
       this.gui = gui;
       this.db = db;
       this.persistency = persistency;
-      this.infoLeftLabel = infoLeftLabel;
+      this.infoLeftLabel = new InfoLabel();
       this.externalCardPanel = externalCardPanel;
 
       
@@ -107,22 +104,23 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
       mainPanel.add(contentCentralPanel);
    }
    
-   protected abstract void addAction();
-   protected abstract void removeAction();
-   protected abstract void editAction();
-
+   
    /**Finds any entity of type {@link T} by ID.  */
    protected void searchAction(){
       int id = auxiliar.Input.getIntDialogue(this, "Insira o ID a buscar");
       
       try{
           T entityFound = persistency.findById(id);
-         JOptionPane.showMessageDialog(this, "Entidade: " + entityFound);
+          JOptionPane.showMessageDialog(this, "Entidade: " + entityFound);
       } catch(persistencia.InexistentIdException e){
          JOptionPane.showMessageDialog(this, "ID inexistente.");
       }
    }
    
+   protected abstract void addAction();
+   protected abstract void removeAction();
+   protected abstract void editAction();
+
    protected abstract void updatePanel();
    protected abstract void updateLeftLabel();
 

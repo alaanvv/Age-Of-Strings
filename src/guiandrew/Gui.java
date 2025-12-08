@@ -9,7 +9,9 @@ import modelo.Empire;
 public class Gui extends JFrame{
 
    public BancoDeDados db;
-
+   
+   private modelo.Empire empireViewing;
+   
    // === CARD LAYOUT ===
    /** Panel names: <p>
     * - empireMenu <p>
@@ -21,11 +23,8 @@ public class Gui extends JFrame{
     */
    private final CardLayout cardLayout;
    private final JPanel menusPanel;
-   private final EmpireMenu empireMenu;
+   private final EmpireMenuPanel empireMenu;
    
-
-   
-   private modelo.Empire empireViewing;
    
 
    public Gui(BancoDeDados db){
@@ -34,7 +33,7 @@ public class Gui extends JFrame{
       this.db = db;
       cardLayout = new CardLayout();
       menusPanel = new JPanel(cardLayout);
-      empireMenu = new EmpireMenu(db, db.getEmpires(), new JLabel("Loading..."), "Menu Império", menusPanel, this);
+      empireMenu = new EmpireMenuPanel(db, db.getEmpires(), "Menu Império", menusPanel, this);
       empireMenu.updatePanel();
 
       // === CARD LAYOUT PREP ===
@@ -54,17 +53,12 @@ public class Gui extends JFrame{
    // === MENU TRANSITION METHODS ===
    public void switchToMenuEmpire(){
       
-      JLabel leftEmpireMenuLabel = new JLabel();
-
-      String labelText = "Bem-vindo ao <b>Age of Strings!</b><p>Quantidade de impérios: " + db.getEmpires().getSize() + ".";
-
-      leftEmpireMenuLabel.setText(labelText);
+      empireMenu.updatePanel();
+      cardLayout.show(menusPanel, "empireMenu");
    }
 
    public void switchToMenuManageEmpire(Empire empire){
       empireViewing = empire;
-
-      
    }
 
 }
