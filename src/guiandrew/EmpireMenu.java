@@ -1,8 +1,10 @@
 package guiandrew;
 
 import javax.swing.*;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 import modelo.Empire;
 
@@ -14,9 +16,18 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
    JTable empiresTable;
    DefaultTableModel tableModel;
    String[] header;
+   ArrayList<Empire> empireInTableRow = new ArrayList<Empire>();
 
-   public EmpireMenu(BancoDeDados db, JLabel leftLabel, String panelTitle){
-      super(db, leftLabel, panelTitle, db.getEmpires());
+   // === EMPIRE BUTTONS ===
+   JButton acessButton;
+
+   public EmpireMenu(BancoDeDados db, JLabel leftLabel, String panelTitle, JPanel externalCardPanel, Gui gui){
+      super(db, leftLabel, panelTitle, db.getEmpires(), externalCardPanel, gui);
+
+      // Adiciona o botão que acessa o menu do império selecionado
+      acessButton = new JButton("Gerenciar império");
+      acessButton.addActionListener(e -> {acessAction();});
+      buttonsPanel.add(acessButton);
 
    }
 
@@ -25,6 +36,7 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
       String[] columns = {"ID", "Nome", "Madeira", "Ferro", "Ouro", "Comida",  "População livre", "População empregada", "Batalhas"};
       header = columns;
 
+      //Cria uma tabela em que todas as células são não editáveis.
       tableModel = new DefaultTableModel(){
          @Override
          public boolean isCellEditable(int row, int column){
@@ -35,14 +47,87 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
       tableModel.setColumnIdentifiers(header);
       
       updateEmpireTable();
+      
+      empiresTable = new JTable(tableModel);
+      
    }
 
+   
+   private Empire getSelectedEmpire(){
+      int selected = empiresTable.getSelectedRow();
+
+      if(selected == -1){
+         JOptionPane.showMessageDialog(this, "Selecione um império!");
+         return null;
+      }
+
+      return empireInTableRow.get(selected);
+   }
+
+   // === BUTTONS ACTIONS ===
+
+   @Override
+   protected void addAction(){
+      String name = JOptionPane.showInputDialog(this, "Nome do império:");
+
+      db.createEmpire(name);
+
+      JOptionPane.showInputDialog("Império criado com sucesso!");
+   };
+   
+   @Override
+   protected void removeAction(){
+
+      Empire removingEmpire = getSelectedEmpire();
+      if (removingEmpire == null) return;
+
+      db.destroyEmpire(removingEmpire);
+      empireInTableRow.remove(removingEmpire);
+      
+      updatePanel();
+   };
+   
+   @Override
+   protected void editAction(){
+      Empire selectedEmpire = getSelectedEmpire();
+      if (selectedEmpire == null) return;
+
+      String newEmpireName = JOptionPane.showInputDialog("Digite o novo nome:");
+      newEmpireName = newEmpireName.trim();
+      
+      if(newEmpireName.isEmpty()){
+         JOptionPane.showMessageDialog(this, "Insira um nome válido.");
+         return;
+      }
+
+      selectedEmpire.setName(newEmpireName);
+      
+      updatePanel();
+   };
+
+   private void acessAction(){
+      Empire selectedEmpire = getSelectedEmpire();
+      if (selectedEmpire == null) return;
+
+      gui.switchToMenuManageEmpire(selectedEmpire);
+   }
+   
+
+   // === UPDATE METHODS ===
+   @Override
+   protected void updatePanel(){
+      updateEmpireTable();
+      updateLeftLabel();
+   };
+   
    private void updateEmpireTable(){
       tableModel.setRowCount(0);
+      empireInTableRow.clear();
 
       for(Empire e: persistency.getEntidades().values()){
          Object[] rowEmpire = new Object[header.length];
-
+         empireInTableRow.add(e);
+         
          rowEmpire[0] = e.getId();
          rowEmpire[1] = e.getName();
          rowEmpire[2] = e.getWood();
@@ -58,23 +143,11 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
          tableModel.addRow(rowEmpire);
       }
    }
-   
+
    @Override
-   protected void addAction(){};
-   
-   @Override
-   protected void removeAction(){};
-   
-   @Override
-   protected void editAction(){};
-   
-   @Override
-   protected void update(){};
-   
-   @Override
-   protected void updateLeftLabel(){};
-   
-   @Override
-   protected void updateContent(){};
+   protected void updateLeftLabel(){
+      String labelText = "Bem-vindo ao <b>Age of Strings!</b><p>Quantidade de impérios: " + db.getEmpires().getSize() + ".";
+      infoLeftLabel.setText(labelText);
+   };
 
 }

@@ -15,7 +15,8 @@ import persistencia.*;
  */
 public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends JPanel{
    
-   
+   Gui gui;
+
    // Data attributes
    protected BancoDeDados db;
    protected modelo.Empire empireViewing;
@@ -38,18 +39,24 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
    protected JButton editButton;
    protected JButton searchButton;
 
+   // === EXTERNAL CONTROL ===
+   JPanel externalCardPanel;
 
    public AbstractEntityMenuPanel(
       BancoDeDados db,
       JLabel infoLeftLabel,
       String panelTitle,
-      Persistente<T> persistency
+      Persistente<T> persistency,
+      JPanel externalCardPanel,
+      Gui gui
    ){
       super(new BorderLayout());
       
+      this.gui = gui;
       this.db = db;
       this.persistency = persistency;
       this.infoLeftLabel = infoLeftLabel;
+      this.externalCardPanel = externalCardPanel;
 
       add(infoLeftLabel, BorderLayout.WEST);
       
@@ -103,9 +110,8 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
       }
    }
    
-   protected abstract void update();
+   protected abstract void updatePanel();
    protected abstract void updateLeftLabel();
-   protected abstract void updateContent();
 
    protected abstract void createCentralPanel();
 }
