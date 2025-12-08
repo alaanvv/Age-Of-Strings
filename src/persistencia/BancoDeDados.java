@@ -56,10 +56,24 @@ public class BancoDeDados {
   /** Create a battle and insert into the database
    * @return the battle id
   */
-  public int createBattle(int attackerId, int defenderId){
-    Army attackerArmy = (Army)armies.findById(attackerId);
-    Army defenderArmy = (Army)armies.findById(defenderId);
-    Battle battle = new Battle(attackerArmy, defenderArmy, this.nextBattle());
+  public int createBattle(int attackerId, int defenderId) throws InexistentIdException{
+    Battle battle;
+    Army attackerArmy = null;
+    Army defenderArmy = null;
+
+    try{
+      attackerArmy = (Army)armies.findById(attackerId);
+      defenderArmy = (Army)armies.findById(defenderId);
+      battle = new Battle(attackerArmy, defenderArmy, this.nextBattle());
+      
+    } catch(InexistentIdException e){
+      if (attackerArmy == null){
+        throw new InexistentIdException("Id do exército atacante não existe");
+      }else{
+        throw new InexistentIdException("Id do exército defensor não existe");
+      }
+    }
+    
     battles.insert(battle);
     return battle.getId();
   }
@@ -69,7 +83,7 @@ public class BancoDeDados {
    * @param empireId The empire that will own the army.
    * @return the army id if it was sucessfully created, or -1 if creation failed (due to lack of resources).
     */
-  public int createArmy(int empireId){
+  public int createArmy(int empireId) throws InexistentIdException{
     Empire empire = (Empire)empires.findById(empireId);
     Army army = empire.createArmy(this.nextArmy());
     
@@ -79,7 +93,7 @@ public class BancoDeDados {
     return army.getId();
   }
 
-  public int createFarm(int empireId){
+  public int createFarm(int empireId) throws InexistentIdException{
     Empire empire = (Empire)empires.findById(empireId);
     Farm farm = empire.buildFarm(this.nextFarm());
 
@@ -89,7 +103,7 @@ public class BancoDeDados {
     return farm.getId();
   }
 
-  public int createMine(int empireId){
+  public int createMine(int empireId) throws InexistentIdException{
     Empire empire = (Empire)empires.findById(empireId);
     Mine mine = empire.buildMine(this.nextMine());
 

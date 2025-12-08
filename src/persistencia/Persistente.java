@@ -64,7 +64,11 @@ public class Persistente<T extends Entidade> {
     return true;
   }
 
-  public T findById(int id) {
+  public T findById(int id) throws InexistentIdException{
+    T ret = entidades.get(id);
+    if (ret == null){
+      throw new InexistentIdException();
+    }
     return entidades.get(id);
   }
 
