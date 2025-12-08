@@ -34,7 +34,7 @@ public class Battle extends Entidade {
 
     for (int i = 0; i < attacker.getSoldiersAmount(); i++) {
       attackerSoldiers.add(attacker.new Soldier(attackerGeneral));
-      attackerSoldiers.getLast().morale += 5;
+      attackerSoldiers.get(attackerSoldiers.size() - 1).morale += 5;
     }
     attackerSoldiersAlive = attackerSoldiers.size();
 

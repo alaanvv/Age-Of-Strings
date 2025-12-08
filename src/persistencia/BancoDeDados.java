@@ -115,15 +115,21 @@ public class BancoDeDados {
 
   /** Destroy any type of Entity, removing of its respective persistency.*/
   public void destroyEntity(Entidade entity) throws RuntimeException{
-    switch(entity){
-        case Battle b -> battles.remove(b.getId());
-        case Empire e -> throw new RuntimeException("Objeto tipo Empire deve ser destruído em sua função apropriada (destroyEmpire).");
-        case Lumber l -> lumbers.remove(l.getId());
-        case Army a -> armies.remove(a.getId());
-        case Farm f -> farms.remove(f.getId());
-        case Mine m -> mines.remove(m.getId());
-        default -> {throw new RuntimeException("Um tipo de entidade inesperada foi recebida em destroyEntity: " + entity.getClass().getName());}
-      }
+    if(entity instanceof Battle){
+      battles.remove(entity.getId());
+    } else if(entity instanceof Empire){
+      throw new RuntimeException("Objeto tipo Empire deve ser destruído em sua função apropriada (destroyEmpire).");
+    } else if(entity instanceof Lumber){
+      lumbers.remove(entity.getId());
+    } else if(entity instanceof Army){
+      armies.remove(entity.getId());
+    } else if(entity instanceof Farm){
+      farms.remove(entity.getId());
+    } else if(entity instanceof Mine){
+      mines.remove(entity.getId());
+    } else {
+      throw new RuntimeException("Um tipo de entidade inesperada foi recebida em destroyEntity: " + entity.getClass().getName());
+    }
   }
 
   /** Destroy a list of Entidade, removing of its respective persistency */
