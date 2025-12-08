@@ -3,7 +3,7 @@ package guiandrew;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import java.awt.*;
+//import java.awt.*;
 import java.util.ArrayList;
 
 import modelo.Empire;
@@ -21,8 +21,8 @@ public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
    // === EMPIRE BUTTONS ===
    JButton acessButton;
 
-   public EmpireMenuPanel(BancoDeDados db, persistencia.Persistente<Empire> persistency, String panelTitle, JPanel externalCardPanel, Gui gui){
-      super(db, panelTitle, persistency, externalCardPanel, gui);
+   public EmpireMenuPanel(BancoDeDados db, persistencia.Persistente<Empire> persistency, JPanel externalCardPanel, Gui gui){
+      super(db, "Menu Império", persistency, externalCardPanel, gui);
 
       empireInTableRow = new ArrayList<Empire>();
 
@@ -49,7 +49,6 @@ public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
       };
       
       tableModel.setColumnIdentifiers(header);
-      tableModel.addRow(columns);
       
       updateEmpireTable();
       
@@ -144,11 +143,9 @@ public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
          rowEmpire[3] = e.getIron();
          rowEmpire[4] = e.getGold();
          rowEmpire[5] = e.getFood();
-         rowEmpire[5] = e.getPopulation();
-         rowEmpire[6] = e.getWorkers();
-         rowEmpire[7] = e.getBattleCount();
-
-         assert(header.length == 8);
+         rowEmpire[6] = e.getPopulation();
+         rowEmpire[7] = e.getWorkers();
+         rowEmpire[8] = e.getBattleCount();
 
          tableModel.addRow(rowEmpire);
       }

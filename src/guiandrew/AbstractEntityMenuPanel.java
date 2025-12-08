@@ -96,12 +96,12 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
       
       // === CRIAÇÃO DO PAINEL CENTRAL ===
       mainPanel = new JPanel(new BorderLayout());
-      add(mainPanel);
+      add(mainPanel, BorderLayout.CENTER);
 
       mainPanel.add(infoLeftLabel, BorderLayout.WEST);
       
       createCentralPanel();
-      mainPanel.add(contentCentralPanel);
+      mainPanel.add(contentCentralPanel, BorderLayout.CENTER);
    }
    
    
