@@ -1,4 +1,3 @@
-import gui.Interface;
 import persistencia.BancoDeDados;
 
 /**
@@ -9,6 +8,6 @@ public class Programa {
   public static void main(String[] args) {
     BancoDeDados database = new BancoDeDados();
     //Terminal.mainMenu(database);
-    new Interface(database);
+    //new Interface(database);
   }
 }
