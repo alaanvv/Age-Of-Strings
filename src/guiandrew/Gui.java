@@ -44,7 +44,7 @@ public class Gui extends JFrame{
       // === WINDOW SETUP ===
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       setContentPane(menusPanel);
-      setSize(800, 600);
+      setSize(1600, 1200);
       setLocationRelativeTo(null);
       
       cardLayout.show(menusPanel, "empireMenu");
@@ -57,6 +57,7 @@ public class Gui extends JFrame{
       JLabel leftEmpireMenuLabel = new JLabel();
 
       String labelText = "Bem-vindo ao <b>Age of Strings!</b><p>Quantidade de impérios: " + db.getEmpires().getSize() + ".";
+
       leftEmpireMenuLabel.setText(labelText);
    }
 
