@@ -27,7 +27,7 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
       empireInTableRow = new ArrayList<Empire>();
 
       // Adiciona o botão que acessa o menu do império selecionado
-      acessButton = new JButton("Gerenciar império");
+      acessButton = new JButton("Gerenciar Império");
       acessButton.addActionListener(e -> {acessAction();});
       buttonsPanel.add(acessButton);
 
@@ -35,7 +35,7 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
 
    @Override
    protected void createCentralPanel() {
-      String[] columns = {"ID", "Nome", "Madeira", "Ferro", "Ouro", "Comida",  "População livre", "População empregada", "Batalhas"};
+      String[] columns = {"ID", "Nome", "Madeira", "Ferro", "Ouro", "Comida",  "População livre", "Trabalhadores", "Batalhas"};
       header = columns;
 
       //Cria uma tabela em que todas as células são não editáveis.
@@ -47,10 +47,13 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
       };
       
       tableModel.setColumnIdentifiers(header);
+      tableModel.addRow(columns);
       
       updateEmpireTable();
       
       empiresTable = new JTable(tableModel);
+
+      contentCentralPanel = new JScrollPane(empiresTable);
       
    }
 
@@ -74,7 +77,8 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
 
       db.createEmpire(name);
 
-      JOptionPane.showInputDialog("Império criado com sucesso!");
+      JOptionPane.showMessageDialog(this, "Império criado com sucesso!");
+      updatePanel();
    };
    
    @Override

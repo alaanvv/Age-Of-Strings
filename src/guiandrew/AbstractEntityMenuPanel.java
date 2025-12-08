@@ -1,6 +1,8 @@
 package guiandrew;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+
 import java.awt.*;
 
 import persistencia.*;
@@ -26,12 +28,15 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
    protected JPanel topPanelMenuNameButtons;
    protected JPanel buttonsPanel;
    protected JLabel panelTitleLabel;
+
+   // -- Main Panel --
+   protected JPanel mainPanel;
    
    // -- Left Panel component --
    protected JLabel infoLeftLabel;
 
    // -- Center Panel component
-   protected JScrollPane contentCenterPanel;
+   protected JScrollPane contentCentralPanel;
    
    // === BUTTONS ===
    protected JButton addButton;
@@ -58,7 +63,6 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
       this.infoLeftLabel = infoLeftLabel;
       this.externalCardPanel = externalCardPanel;
 
-      add(infoLeftLabel, BorderLayout.WEST);
       
       // === CRIAÇÃO BASE DOS BOTÕES ===
       addButton = new JButton("Adicionar");
@@ -69,7 +73,7 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
 
       editButton = new JButton("Editar selecionado");
       editButton.addActionListener(e -> {editAction();});
-
+      
       searchButton = new JButton("Pesquisar entidade por ID");
       searchButton.addActionListener(e -> searchAction());
 
@@ -86,15 +90,23 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
       
       panelTitleLabel = new JLabel(panelTitle);
       topPanelMenuNameButtons.add(panelTitleLabel);
-
-      topPanelMenuNameButtons.add(buttonsPanel);
-
-      add(topPanelMenuNameButtons);
-
+      
+      JPanel toLeftButtonsPanel = new JPanel(new BorderLayout());
+      toLeftButtonsPanel.add(buttonsPanel, BorderLayout.WEST);
+      topPanelMenuNameButtons.add(toLeftButtonsPanel);
+      
+      add(topPanelMenuNameButtons, BorderLayout.NORTH);
+      
       // === CRIAÇÃO DO PAINEL CENTRAL ===
-      createCentralPanel();
-   }
+      mainPanel = new JPanel(new BorderLayout());
+      add(mainPanel);
 
+      mainPanel.add(infoLeftLabel, BorderLayout.WEST);
+      
+      createCentralPanel();
+      mainPanel.add(contentCentralPanel);
+   }
+   
    protected abstract void addAction();
    protected abstract void removeAction();
    protected abstract void editAction();

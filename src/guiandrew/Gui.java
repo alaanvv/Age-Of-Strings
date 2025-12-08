@@ -44,7 +44,7 @@ public class Gui extends JFrame{
       // === WINDOW SETUP ===
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       setContentPane(menusPanel);
-      setSize(1600, 1200);
+      setSize(1150, 800);
       setLocationRelativeTo(null);
       
       cardLayout.show(menusPanel, "empireMenu");
