@@ -11,15 +11,30 @@ import persistencia.*;
 \center.fill tabela com cada subentidade e suas informações
 */
 
-public abstract class SubEntityMenuPanel extends JPanel{
+public abstract class SubEntityMenuPanel<T extends modelo.Entidade> extends JPanel{
    
-   Persistente subEntityPersistency;
+   Persistente<T> subEntityPersistency;
    JPanel topButtonsPanel;
-   JLabel infoLeftPanel;
+   JLabel infoLeftLabel;
    JScrollPane contentCenterPanel;
 
-   public SubEntityMenuPanel(String subentityName, Persistente persistency){
+   // === BUTTONS ===
+   JButton add;
+   JButton remove;
+   JButton edit;
+   JButton search;
+
+   public SubEntityMenuPanel(String subentityName, Persistente<T> persistency, JLabel infoLeftLabel){
       super(new BorderLayout());
+      
+      subEntityPersistency = persistency;
+
+      this.infoLeftLabel = infoLeftLabel; //Label estático recebido na criação do painel.
+
+
+
+
+
    }
    
 }

@@ -18,12 +18,12 @@ import modelo.Empire;
  * the generation of unique IDs for new entities.
  */
 public class BancoDeDados {
-  private final Persistente battles;
-  private final Persistente empires;
-  private final Persistente lumbers;
-  private final Persistente armies;
-  private final Persistente farms;
-  private final Persistente mines;
+  private final Persistente<Battle> battles;
+  private final Persistente<Empire> empires;
+  private final Persistente<Lumber> lumbers;
+  private final Persistente<Army> armies;
+  private final Persistente<Farm> farms;
+  private final Persistente<Mine> mines;
 
   private int battleIdSequence = 1;
   private int empireIdSequence = 1;
@@ -33,12 +33,12 @@ public class BancoDeDados {
   private int mineIdSequence = 1;
 
   public BancoDeDados() {
-    this.battles = new Persistente();
-    this.empires = new Persistente();
-    this.lumbers = new Persistente();
-    this.armies = new Persistente();
-    this.farms = new Persistente();
-    this.mines = new Persistente();
+    this.battles = new Persistente<Battle>();
+    this.empires = new Persistente<Empire>();
+    this.lumbers = new Persistente<Lumber>();
+    this.armies = new Persistente<Army>();
+    this.farms = new Persistente<Farm>();
+    this.mines = new Persistente<Mine>();
   }
   
   /** Create an empire and insert into the database
@@ -147,27 +147,27 @@ public class BancoDeDados {
 
   public int nextMine() { return mineIdSequence++; }
 
-  public Persistente getLumbers() {
+  public Persistente<Lumber> getLumbers() {
     return lumbers;
   }
 
-  public Persistente getBattles() {
+  public Persistente<Battle> getBattles() {
     return battles;
   }
 
-  public Persistente getEmpires() {
+  public Persistente<Empire> getEmpires() {
     return empires;
   }
 
-  public Persistente getArmies() {
+  public Persistente<Army> getArmies() {
     return armies;
   }
 
-  public Persistente getFarms() {
+  public Persistente<Farm> getFarms() {
     return farms;
   }
 
-  public Persistente getMines() {
+  public Persistente<Mine> getMines() {
     return mines;
   }
 

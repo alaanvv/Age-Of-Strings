@@ -5,23 +5,23 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- * A generic, in-memory repository to manage a collection of {@link Entidade} objects.
+ * A generic, in-memory repository to manage a collection of {@link T} objects.
  * <p>
  * This class acts as a simple data access layer, providing basic CRUD
  * (Create, Read, Update, Delete) operations on a list of entities. It is not
  * thread-safe.
  */
-public class Persistente {
+public class Persistente<T extends Entidade> {
   /**
    * The internal list that stores all managed entities.
    */
-  private final Map<Integer, Entidade> entidades;
+  private final Map<Integer, T> entidades;
 
   public Persistente() {
     this.entidades = new HashMap<>();
   }
 
-  public void insert(Entidade entity) {
+  public void insert(T entity) {
     this.entidades.put(entity.getId(), entity);
   }
 
@@ -33,7 +33,7 @@ public class Persistente {
    * @return {@code true} if an entity with the given ID was found and updated,
    * {@code false} otherwise.
    */
-  public Boolean update(int id, Entidade entity) {
+  public Boolean update(int id, T entity) {
     if(!entidades.containsKey(id)) return false;
     entidades.put(id, entity);
     return true;
@@ -64,7 +64,7 @@ public class Persistente {
     return true;
   }
 
-  public Entidade findById(int id) {
+  public T findById(int id) {
     return entidades.get(id);
   }
 
@@ -80,16 +80,16 @@ public class Persistente {
    * affect the internal state of this {@code Persistente} object, bypassing its
    * methods. This can break encapsulation and lead to unpredictable behavior.
    *
-   * @return The internal list of {@code Entidade} objects.
+   * @return The internal list of {@code T} objects.
    */
-  public Map<Integer, Entidade> getEntidades() {
+  public Map<Integer, T> getEntidades() {
     return entidades;
   }
 
   @Override
   public String toString() {
     StringBuilder s = new StringBuilder();
-    for (Entidade entidade : entidades.values())
+    for (T entidade : entidades.values())
       s.append(entidade.toString()).append("\n");
     return s.toString();
   }
