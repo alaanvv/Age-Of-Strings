@@ -1,0 +1,143 @@
+package guiandrew;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+
+import modelo.Army;
+import modelo.Empire;
+import persistencia.BancoDeDados;
+import persistencia.InexistentIdException;
+
+public class ArmyMenuPanel extends AbstractEntityMenuPanel<Army>{
+
+   JTable armiesTable;
+   DefaultTableModel tableModel;
+   String[] header;
+   ArrayList<Army> armiesInTableRow;
+
+   public ArmyMenuPanel(BancoDeDados db, persistencia.Persistente<Army> persistency, JPanel externalCardPanel, Gui gui){
+      super(db, "Exércitos", persistency, externalCardPanel, gui);
+      armiesInTableRow = new ArrayList<>();
+      JButton backButton = new JButton("Voltar");
+      backButton.addActionListener(e -> gui.switchToMenuManageEmpire(gui.getViewingEmpire()));
+      buttonsPanel.add(backButton);
+   }
+
+   @Override
+   protected void createCentralPanel() {
+      header = new String[]{"ID", "Soldados", "Nível Recrutamento", "Custo", "Em batalha?"};
+
+      tableModel = new DefaultTableModel(){
+         @Override
+         public boolean isCellEditable(int row, int column){
+            return false;
+         }
+      };
+
+      tableModel.setColumnIdentifiers(header);
+      armiesTable = new JTable(tableModel);
+      contentCentralPanel = new JScrollPane(armiesTable);
+   }
+
+   private Army getSelectedArmy(){
+      int selected = armiesTable.getSelectedRow();
+      if(selected == -1){
+         JOptionPane.showMessageDialog(this, "Selecione um exército!");
+         return null;
+      }
+      return armiesInTableRow.get(selected);
+   }
+
+   @Override
+   protected void addAction(){
+      Empire empire = gui.getViewingEmpire();
+      if(empire == null){
+         JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
+         return;
+      }
+      try{
+         int armyId = db.createArmy(empire.getId());
+         if(armyId == 0){
+            JOptionPane.showMessageDialog(this, "Recursos insuficientes para criar exército.");
+         }
+      }catch(InexistentIdException e){
+         JOptionPane.showMessageDialog(this, "Império inexistente.");
+      }
+      updatePanel();
+   }
+
+   @Override
+   protected void removeAction(){
+      Army removingArmy = getSelectedArmy();
+      if(removingArmy == null) return;
+      Empire empire = gui.getViewingEmpire();
+      if(empire == null){
+         JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
+         return;
+      }
+      empire.getArmies().remove(removingArmy.getId());
+      db.destroyEntity(removingArmy);
+      updatePanel();
+   }
+
+   @Override
+   protected void editAction(){
+      Army army = getSelectedArmy();
+      if(army == null) return;
+      String pointsStr = JOptionPane.showInputDialog(this, "Quantos pontos adicionar na armaria?");
+      if(pointsStr == null) return;
+      try{
+         int points = Integer.parseInt(pointsStr.trim());
+         if(points <= 0){
+            JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+            return;
+         }
+         int added = army.upgradeArmory(points, gui.getViewingEmpire());
+         JOptionPane.showMessageDialog(this, "Pontos adicionados: " + added);
+      }catch(NumberFormatException e){
+         JOptionPane.showMessageDialog(this, "Entrada inválida.");
+      }
+      updatePanel();
+   }
+
+   @Override
+   protected void updatePanel(){
+      updateArmyTable();
+      updateLeftLabel();
+   }
+
+   private void updateArmyTable(){
+      tableModel.setRowCount(0);
+      armiesInTableRow.clear();
+      Empire empire = gui.getViewingEmpire();
+      if(empire == null) return;
+
+      for(Army a : persistency.getEntidades().values()){
+         if(a.getEmpireId() != empire.getId()) continue;
+         Object[] row = new Object[header.length];
+         armiesInTableRow.add(a);
+         row[0] = a.getId();
+         row[1] = a.getSoldiersAmount();
+         row[2] = a.getHiringLevel();
+         row[3] = a.getHiringCost();
+         row[4] = a.isBattling();
+         tableModel.addRow(row);
+      }
+   }
+
+   @Override
+   protected void updateLeftLabel(){
+      Empire empire = gui.getViewingEmpire();
+      if(empire == null){
+         infoLeftLabel.setText("<html><center>Nenhum império selecionado.</center></html>");
+         return;
+      }
+      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>Exércitos: " + empire.getArmies().size() + "</center></html>";
+      infoLeftLabel.setText(labelText);
+   }
+}
