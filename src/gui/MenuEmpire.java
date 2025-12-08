@@ -94,7 +94,7 @@ public class MenuEmpire extends MenuBase {
         JButton farmButton = new JButton("Farms");
         farmButton.setBackground(btnColor);
         farmButton.setForeground(Color.WHITE);
-        farmButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        farmButton.addActionListener(e -> manager.switchMenu(new MenuFarms(db, manager, empire)));
 
         centerPanel.add(farmButton);
 
@@ -105,7 +105,7 @@ public class MenuEmpire extends MenuBase {
         JButton mineButton = new JButton("Mines");
         mineButton.setBackground(btnColor);
         mineButton.setForeground(Color.WHITE);
-        mineButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        mineButton.addActionListener(e -> manager.switchMenu(new MenuMines(db, manager, empire)));
 
         centerPanel.add(mineButton);
 
@@ -130,7 +130,7 @@ public class MenuEmpire extends MenuBase {
         JButton armyButton = new JButton("Army");
         armyButton.setBackground(btnColor);
         armyButton.setForeground(Color.WHITE);
-        armyButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        armyButton.addActionListener(e -> manager.switchMenu(new MenuArmy(db, manager, empire)));
 
         centerPanel.add(armyButton);
 
@@ -141,7 +141,7 @@ public class MenuEmpire extends MenuBase {
         JButton warButton = new JButton("Wars");
         warButton.setBackground(btnColor);
         warButton.setForeground(Color.WHITE);
-        warButton.addActionListener(e -> manager.switchMenu(new MenuMain(db, manager)));
+        warButton.addActionListener(e -> manager.switchMenu(new MenuBattles(db, manager, empire)));
 
         centerPanel.add(warButton);
 
