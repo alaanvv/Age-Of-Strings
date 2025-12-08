@@ -1,158 +1,141 @@
 package persistencia;
 
-import modelo.Entidade;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import modelo.Entidade;
 
-// Uma classe mock simples que estende Entidade para usar nos testes.
+// ---
+
 class MockEntidade extends Entidade {
-    private String nome;
-
-    public MockEntidade(int id, String nome) {
-        super(id);
-        this.nome = nome;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-        MockEntidade that = (MockEntidade) obj;
-        return getId().equals(that.getId()) && nome.equals(that.nome);
-    }
+  public MockEntidade(int id) {
+    super(id);
+  }
 }
+
+// ---
 
 public class PersistenteTest {
 
-    private Persistente<MockEntidade> persistente;
-    private MockEntidade entidade1;
-    private MockEntidade entidade2;
+  private Persistente<MockEntidade> persistente;
+  private MockEntidade entidade1;
+  private MockEntidade entidade2;
 
-    @BeforeEach
-    void setUp() {
-        persistente = new Persistente<>();
-        entidade1 = new MockEntidade(1, "Entidade Um");
-        entidade2 = new MockEntidade(2, "Entidade Dois");
-    }
+  @BeforeEach
+  void setUp() {
+    persistente = new Persistente<>();
+    entidade1 = new MockEntidade(1);
+    entidade2 = new MockEntidade(2);
+  }
 
-    //region Testes de Inserir
-    @Test
-    void testInserir_IdNaoExistente() throws InexistentIdException {
-        assertEquals(0, persistente.getSize());
-        persistente.insert(entidade1);
-        assertEquals(1, persistente.getSize());
-        assertEquals(entidade1, persistente.findById(1));
-    }
+  // um caso de teste que insere uma entidade com id ainda não existente
+  @Test
+  void testeInserirIdNaoExistente() throws InexistentIdException {
+    assertEquals(0, persistente.getSize());
+    persistente.insert(entidade1);
+    assertEquals(1, persistente.getSize());
+    assertEquals(entidade1, persistente.findById(1));
+  }
 
-    @Test
-    void testInserir_IdJaExistente() throws InexistentIdException {
-        persistente.insert(entidade1);
-        assertEquals(1, persistente.getSize());
+  // um caso de teste que insere uma entidade com id já existente
+  @Test
+  void testeInserirIdJaExistente() throws InexistentIdException {
+    persistente.insert(entidade1);
+    assertEquals(1, persistente.getSize());
 
-        // Inserindo uma nova entidade com o mesmo ID
-        MockEntidade entidadeDuplicada = new MockEntidade(1, "Entidade Duplicada");
-        persistente.insert(entidadeDuplicada);
+    // Nova entidade com o mesmo ID
+    MockEntidade entidadeDuplicada = new MockEntidade(1);
+    persistente.insert(entidadeDuplicada);
 
-        // O tamanho deve continuar 1, e o valor antigo deve ser substituído
-        assertEquals(1, persistente.getSize());
-        assertEquals(entidadeDuplicada, persistente.findById(1));
-    }
-    //endregion
+    assertEquals(1, persistente.getSize());
+    assertEquals(entidadeDuplicada, persistente.findById(1));
+  }
 
-    //region Testes de Alterar
-    @Test
-    void testAlterar_IdNaoExistente() {
-        persistente.insert(entidade1);
-        MockEntidade entidadeParaAlterar = new MockEntidade(99, "Entidade Nao Existente");
+  // um caso de teste que altera uma entidade com id não existente
+  @Test
+  void testeAlterarIdNaoExistente() {
+    persistente.insert(entidade1);
+    MockEntidade entidadeParaAlterar = new MockEntidade(99);
 
-        Boolean resultado = persistente.update(99, entidadeParaAlterar);
+    Boolean resultado = persistente.update(99, entidadeParaAlterar);
 
-        assertFalse(resultado);
-        assertEquals(1, persistente.getSize());
-    }
+    assertFalse(resultado);
+    assertEquals(1, persistente.getSize());
+  }
 
-    @Test
-    void testAlterar_IdExistente() throws InexistentIdException {
-        persistente.insert(entidade1);
-        MockEntidade entidadeAlterada = new MockEntidade(1, "Entidade Um Alterada");
+  // um caso de teste que altera uma entidade com id existente
+  @Test
+  void testeAlterarIdExistente() throws InexistentIdException {
+    persistente.insert(entidade1);
+    MockEntidade entidadeAlterada = new MockEntidade(1);
 
-        Boolean resultado = persistente.update(1, entidadeAlterada);
+    Boolean resultado = persistente.update(1, entidadeAlterada);
 
-        assertTrue(resultado);
-        assertEquals("Entidade Um Alterada", persistente.findById(1).getNome());
-    }
-    //endregion
+    assertTrue(resultado);
+    assertEquals(entidadeAlterada, persistente.findById(1));
+  }
 
-    //region Testes de Apagar
-    @Test
-    void testApagar_IdNaoExistente() {
-        persistente.insert(entidade1);
-        assertEquals(1, persistente.getSize());
+  // region Testes de Apagar
+  @Test
+  void testeApagarIdNaoExistente() {
+    persistente.insert(entidade1);
+    assertEquals(1, persistente.getSize());
 
-        Boolean resultado = persistente.remove(99);
+    Boolean resultado = persistente.remove(99);
 
-        assertFalse(resultado);
-        assertEquals(1, persistente.getSize());
-    }
+    assertFalse(resultado);
+    assertEquals(1, persistente.getSize());
+  }
 
-    @Test
-    void testApagar_IdExistente() {
-        persistente.insert(entidade1);
-        assertEquals(1, persistente.getSize());
+  @Test
+  void testeApagarIdExistente() {
+    persistente.insert(entidade1);
+    assertEquals(1, persistente.getSize());
 
-        Boolean resultado = persistente.remove(1);
+    Boolean resultado = persistente.remove(1);
 
-        assertTrue(resultado);
-        assertEquals(0, persistente.getSize());
-    }
-    //endregion
+    assertTrue(resultado);
+    assertEquals(0, persistente.getSize());
+  }
+  // endregion
 
-    //region Testes de Buscar
-    @Test
-    void testBuscar_IdNaoExistente() {
-        persistente.insert(entidade1);
-        assertThrows(InexistentIdException.class, () -> {
-            persistente.findById(99);
-        });
-    }
+  // region Testes de Buscar
+  @Test
+  void testeBuscarIdNaoExistente() {
+    persistente.insert(entidade1);
+    assertThrows(InexistentIdException.class, () -> {
+      persistente.findById(99);
+    });
+  }
 
-    @Test
-    void testBuscar_IdExistente() throws InexistentIdException {
-        persistente.insert(entidade1);
-        persistente.insert(entidade2);
+  @Test
+  void testeBuscarIdExistente() throws InexistentIdException {
+    persistente.insert(entidade1);
+    persistente.insert(entidade2);
 
-        MockEntidade entidadeEncontrada = persistente.findById(2);
+    MockEntidade entidadeEncontrada = persistente.findById(2);
 
-        assertNotNull(entidadeEncontrada);
-        assertEquals(entidade2, entidadeEncontrada);
-    }
-    //endregion
+    assertNotNull(entidadeEncontrada);
+    assertEquals(entidade2, entidadeEncontrada);
+  }
+  // endregion
 
-    //region Testes de Exists
-    @Test
-    void testExists_QuandoIdExiste() {
-        persistente.insert(entidade1); // Adiciona uma entidade com ID 1
-        assertTrue(persistente.exists(1), "Deve retornar true para um ID existente.");
-    }
+  // region Testes de Exists
+  @Test
+  void testeExistsQuandoIdExiste() {
+    persistente.insert(entidade1); // Adiciona uma entidade com ID 1
+    assertTrue(persistente.exists(1), "Deve retornar true para um ID existente.");
+  }
 
-    @Test
-    void testExists_QuandoIdNaoExiste() {
-        persistente.insert(entidade1); // Adiciona ID 1
-        assertFalse(persistente.exists(99), "Deve retornar false para um ID que não existe.");
-    }
+  @Test
+  void testeExistsQuandoIdNaoExiste() {
+    persistente.insert(entidade1); // Adiciona ID 1
+    assertFalse(persistente.exists(99), "Deve retornar false para um ID que não existe.");
+  }
 
-    @Test
-    void testExists_EmColecaoVazia() {
-        assertFalse(persistente.exists(1), "Deve retornar false para qualquer ID em uma coleção vazia.");
-    }
-    //endregion
+  @Test
+  void testeExistsEmColecaoVazia() {
+    assertFalse(persistente.exists(1), "Deve retornar false para qualquer ID em uma coleção vazia.");
+  }
+  // endregion
 }
