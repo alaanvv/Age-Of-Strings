@@ -79,12 +79,18 @@ public class Terminal {
 
   /**
    * A simple utility wrapper for Integer.parseInt to keep the main code cleaner.
+   * Returns -1 if the string cannot be parsed as an integer.
    *
    * @param n The string to be parsed into an integer.
-   * @return The integer value of the string.
+   * @return The integer value of the string, or -1 if parsing fails.
    */
   private static int parseInt(String n) {
-    return Integer.parseInt(n);
+    try {
+      return Integer.parseInt(n);
+    } catch (NumberFormatException e) {
+      log("Erro: valor invalido. Um numero inteiro era esperado.");
+      return -1;
+    }
   }
 
   /**
@@ -108,29 +114,47 @@ public class Terminal {
     print("exit", "Sair do jogo");
     String[] cmd = read();
 
-    switch (cmd[0]) {
-      case "new":
-        Empire empire = new Empire(cmd[1], db.nextEmpire());
-        db.getEmpires().insert(empire);
-        break;
-      case "control":
-        empire = (Empire) db.getEmpires().findById(parseInt(cmd[1]));
-        if (empire == null) log("Imperio nao encontrado.");
-        else empireMenu(empire, db);
-        break;
-      case "destroy":
-        empire = (Empire) db.getEmpires().findById(parseInt(cmd[1]));
-        if (empire == null) log("Imperio inexistente.");
-        else db.destroyEmpire(empire);
-        break;
-      case "run":
-        for (Entidade e : db.getEmpires().getEntidades().values())
-          log(((Empire) e).runTurn());
-        log("Turno rodado.");
-        break;
-      case "exit":
-        scanner.close();
-        return; // Exits the recursive loop
+    try {
+      switch (cmd[0]) {
+        case "new":
+          if (cmd.length < 2) {
+            log("Erro: comando incompleto. Use: new <name>");
+            break;
+          }
+          Empire empire = new Empire(cmd[1], db.nextEmpire());
+          db.getEmpires().insert(empire);
+          break;
+        case "control":
+          if (cmd.length < 2) {
+            log("Erro: comando incompleto. Use: control <id>");
+            break;
+          }
+          int id = parseInt(cmd[1]);
+          if (id < 0) break;
+          empire = (Empire) db.getEmpires().findById(id);
+          empireMenu(empire, db);
+          break;
+        case "destroy":
+          if (cmd.length < 2) {
+            log("Erro: comando incompleto. Use: destroy <id>");
+            break;
+          }
+          id = parseInt(cmd[1]);
+          if (id < 0) break;
+          empire = (Empire) db.getEmpires().findById(id);
+          db.destroyEmpire(empire);
+          break;
+        case "run":
+          for (Entidade e : db.getEmpires().getEntidades().values())
+            log(((Empire) e).runTurn());
+          log("Turno rodado.");
+          break;
+        case "exit":
+          scanner.close();
+          return; // Exits the recursive loop
+      }
+    } catch (persistencia.InexistentIdException e) {
+      log("Imperio nao encontrado ou inexistente.");
     }
 
     mainMenu(db); // Recursive call to show the menu again
@@ -234,30 +258,60 @@ public class Terminal {
     print("back", "Voltar pro menu anterior");
     String[] cmd = read();
 
-    switch (cmd[0]) {
-      case "build":
-        log(db.createFarm(empire.getId()) != 0 ? "Fazenda construida." : "Recursos insuficientes.");
-        break;
-      case "send":
-        Farm farm = (Farm) db.getFarms().findById(parseInt(cmd[2]));
-        if (farm == null)
-          log("Fazenda inexistente.");
-        else if (farm.getEmpireId() != empire.getId())
-          log("Essa fazenda nao pertence a esse imperio.");
-        else
-          log(String.format("%d trabalhadores enviados.", empire.sendWorkers(parseInt(cmd[1]), farm)));
-        break;
-      case "take":
-        farm = (Farm) db.getFarms().findById(parseInt(cmd[2]));
-        if (farm == null)
-          log("Fazenda inexistente.");
-        else if (farm.getEmpireId() != empire.getId())
-          log("Essa fazenda nao pertence a esse imperio.");
-        else
-          log(String.format("%d trabalhadores retirados.", empire.takeWorkers(parseInt(cmd[1]), farm)));
-        break;
-      case "back":
-        return;
+    try {
+      switch (cmd[0]) {
+        case "build":
+          try {
+            log(db.createFarm(empire.getId()) != 0 ? "Fazenda construida." : "Recursos insuficientes.");
+          } catch (persistencia.InexistentIdException e) {
+            log("Erro: imperio nao encontrado.");
+          }
+          break;
+        case "send":
+          if (cmd.length < 3) {
+            log("Erro: comando incompleto. Use: send <amount> <id>");
+            break;
+          }
+          int amount = parseInt(cmd[1]);
+          int id = parseInt(cmd[2]);
+          if (amount < 0 || id < 0) break;
+          try {
+            Farm farm = (Farm) db.getFarms().findById(id);
+            if (farm == null)
+              log("Fazenda inexistente.");
+            else if (farm.getEmpireId() != empire.getId())
+              log("Essa fazenda nao pertence a esse imperio.");
+            else
+              log(String.format("%d trabalhadores enviados.", empire.sendWorkers(amount, farm)));
+          } catch (persistencia.InexistentIdException e) {
+            log("Fazenda inexistente.");
+          }
+          break;
+        case "take":
+          if (cmd.length < 3) {
+            log("Erro: comando incompleto. Use: take <amount> <id>");
+            break;
+          }
+          amount = parseInt(cmd[1]);
+          id = parseInt(cmd[2]);
+          if (amount < 0 || id < 0) break;
+          try {
+            Farm farm = (Farm) db.getFarms().findById(id);
+            if (farm == null)
+              log("Fazenda inexistente.");
+            else if (farm.getEmpireId() != empire.getId())
+              log("Essa fazenda nao pertence a esse imperio.");
+            else
+              log(String.format("%d trabalhadores retirados.", empire.takeWorkers(amount, farm)));
+          } catch (persistencia.InexistentIdException e) {
+            log("Fazenda inexistente.");
+          }
+          break;
+        case "back":
+          return;
+      }
+    } catch (ArrayIndexOutOfBoundsException e) {
+      log("Erro: comando incompleto.");
     }
 
     farmMenu(empire, db);
@@ -287,30 +341,60 @@ public class Terminal {
 
     String[] cmd = read();
 
-    switch (cmd[0]) {
-      case "build":
-        log(db.createMine(empire.getId()) != 0 ? "Mina construida." : "Recursos insuficientes.");
-        break;
-      case "send":
-        Mine mine = (Mine) db.getMines().findById(parseInt(cmd[2]));
-        if (mine == null)
-          log("Mina inexistente.");
-        else if (mine.getEmpireId() != empire.getId())
-          log("Essa mina nao pertence a esse imperio.");
-        else
-          log(String.format("%d trabalhadores enviados.", empire.sendWorkers(parseInt(cmd[1]), mine)));
-        break;
-      case "take":
-        mine = (Mine) db.getMines().findById(parseInt(cmd[2]));
-        if (mine == null)
-          log("Mina inexistente.");
-        else if (mine.getEmpireId() != empire.getId())
-          log("Essa mina nao pertence a esse imperio.");
-        else
-          log(String.format("%d trabalhadores retirados.", empire.takeWorkers(parseInt(cmd[1]), mine)));
-        break;
-      case "back":
-        return;
+    try {
+      switch (cmd[0]) {
+        case "build":
+          try {
+            log(db.createMine(empire.getId()) != 0 ? "Mina construida." : "Recursos insuficientes.");
+          } catch (persistencia.InexistentIdException e) {
+            log("Erro: imperio nao encontrado.");
+          }
+          break;
+        case "send":
+          if (cmd.length < 3) {
+            log("Erro: comando incompleto. Use: send <amount> <id>");
+            break;
+          }
+          int amount = parseInt(cmd[1]);
+          int id = parseInt(cmd[2]);
+          if (amount < 0 || id < 0) break;
+          try {
+            Mine mine = (Mine) db.getMines().findById(id);
+            if (mine == null)
+              log("Mina inexistente.");
+            else if (mine.getEmpireId() != empire.getId())
+              log("Essa mina nao pertence a esse imperio.");
+            else
+              log(String.format("%d trabalhadores enviados.", empire.sendWorkers(amount, mine)));
+          } catch (persistencia.InexistentIdException e) {
+            log("Mina inexistente.");
+          }
+          break;
+        case "take":
+          if (cmd.length < 3) {
+            log("Erro: comando incompleto. Use: take <amount> <id>");
+            break;
+          }
+          amount = parseInt(cmd[1]);
+          id = parseInt(cmd[2]);
+          if (amount < 0 || id < 0) break;
+          try {
+            Mine mine = (Mine) db.getMines().findById(id);
+            if (mine == null)
+              log("Mina inexistente.");
+            else if (mine.getEmpireId() != empire.getId())
+              log("Essa mina nao pertence a esse imperio.");
+            else
+              log(String.format("%d trabalhadores retirados.", empire.takeWorkers(amount, mine)));
+          } catch (persistencia.InexistentIdException e) {
+            log("Mina inexistente.");
+          }
+          break;
+        case "back":
+          return;
+      }
+    } catch (ArrayIndexOutOfBoundsException e) {
+      log("Erro: comando incompleto.");
     }
 
     mineMenu(empire, db);
@@ -377,63 +461,124 @@ public class Terminal {
 
     String[] cmd = read();
 
-    switch (cmd[0]) {
-      case "view":
-        for (Army a : empire.getArmies().values())
-          log(a.toString());
-        break;
-      case "viewany":
-        Army army = (Army) db.getArmies().findById(parseInt(cmd[1]));
-        if (army == null) log("Exercito inexistente.");
-        else log(army.toString());
-        break;
-      case "viewall":
-        for (Entidade a : db.getArmies().getEntidades().values())
-          log(a.toString());
-        break;
-      case "new":
-        log(db.createArmy(empire.getId()) != 0 ? "Exercito criado." : "Recursos insuficientes.");
-        break;
-      case "destroy":
-        army = (Army) db.getArmies().findById(parseInt(cmd[1]));
-        if (army == null) log("Exercito inexistente.");
-        else {
-          db.destroyEntity(army);
-          log(army.toString());
-        }
-        break;
-      case "send":
-        army = (Army) db.getArmies().findById(parseInt(cmd[2]));
-        if (army == null)
-          log("Esse exercito nao existe.");
-        else if (army.getEmpireId() != empire.getId())
-          log("Esse exercito nao pertence a esse imperio.");
-        else
-          log(String.format("%d trabalhadores se tornaram soldados.", empire.sendWorkers(parseInt(cmd[1]), army)));
-        break;
-      case "take":
-        army = (Army) db.getArmies().findById(parseInt(cmd[2]));
-        if (army == null)
-          log("Esse exercito nao existe.");
-        else if (army.getEmpireId() != empire.getId())
-          log("Esse exercito nao pertence a esse imperio.");
-        else
-          log(String.format("%d tropas retiradas.", empire.takeWorkers(parseInt(cmd[1]), army)));
-        break;
-      case "upgrade":
-        army = (Army) db.getArmies().findById(parseInt(cmd[2]));
-        if (army == null)
-          log("Esse exercito nao existe.");
-        else if (army.getEmpireId() != empire.getId())
-          log("Esse exercito nao pertence a esse imperio.");
-        else {
-          int pontos = army.upgradeArmory(parseInt(cmd[1]), empire);
-          log(pontos > 0 ? String.format("Armadura melhorada em %d ponto(s).", pontos) :
-            "Recursos insuficientes para esta melhoria.");
-        }
-        break;
-      case "back":
-        return;
+    try {
+      switch (cmd[0]) {
+        case "view":
+          for (Army a : empire.getArmies().values())
+            log(a.toString());
+          break;
+        case "viewany":
+          if (cmd.length < 2) {
+            log("Erro: comando incompleto. Use: viewany <id>");
+            break;
+          }
+          int id = parseInt(cmd[1]);
+          if (id < 0) break;
+          try {
+            Army army = (Army) db.getArmies().findById(id);
+            if (army == null) log("Exercito inexistente.");
+            else log(army.toString());
+          } catch (persistencia.InexistentIdException e) {
+            log("Exercito inexistente.");
+          }
+          break;
+        case "viewall":
+          for (Entidade a : db.getArmies().getEntidades().values())
+            log(a.toString());
+          break;
+        case "new":
+          try {
+            log(db.createArmy(empire.getId()) != 0 ? "Exercito criado." : "Recursos insuficientes.");
+          } catch (persistencia.InexistentIdException e) {
+            log("Erro: imperio nao encontrado.");
+          }
+          break;
+        case "destroy":
+          if (cmd.length < 2) {
+            log("Erro: comando incompleto. Use: destroy <id>");
+            break;
+          }
+          id = parseInt(cmd[1]);
+          if (id < 0) break;
+          try {
+            Army army = (Army) db.getArmies().findById(id);
+            if (army == null) log("Exercito inexistente.");
+            else {
+              db.destroyEntity(army);
+              log(army.toString());
+            }
+          } catch (persistencia.InexistentIdException e) {
+            log("Exercito inexistente.");
+          }
+          break;
+        case "send":
+          if (cmd.length < 3) {
+            log("Erro: comando incompleto. Use: send <amount> <id>");
+            break;
+          }
+          int amount = parseInt(cmd[1]);
+          id = parseInt(cmd[2]);
+          if (amount < 0 || id < 0) break;
+          try {
+            Army army = (Army) db.getArmies().findById(id);
+            if (army == null)
+              log("Esse exercito nao existe.");
+            else if (army.getEmpireId() != empire.getId())
+              log("Esse exercito nao pertence a esse imperio.");
+            else
+              log(String.format("%d trabalhadores se tornaram soldados.", empire.sendWorkers(amount, army)));
+          } catch (persistencia.InexistentIdException e) {
+            log("Esse exercito nao existe.");
+          }
+          break;
+        case "take":
+          if (cmd.length < 3) {
+            log("Erro: comando incompleto. Use: take <amount> <id>");
+            break;
+          }
+          amount = parseInt(cmd[1]);
+          id = parseInt(cmd[2]);
+          if (amount < 0 || id < 0) break;
+          try {
+            Army army = (Army) db.getArmies().findById(id);
+            if (army == null)
+              log("Esse exercito nao existe.");
+            else if (army.getEmpireId() != empire.getId())
+              log("Esse exercito nao pertence a esse imperio.");
+            else
+              log(String.format("%d tropas retiradas.", empire.takeWorkers(amount, army)));
+          } catch (persistencia.InexistentIdException e) {
+            log("Esse exercito nao existe.");
+          }
+          break;
+        case "upgrade":
+          if (cmd.length < 3) {
+            log("Erro: comando incompleto. Use: upgrade <amount> <id>");
+            break;
+          }
+          amount = parseInt(cmd[1]);
+          id = parseInt(cmd[2]);
+          if (amount < 0 || id < 0) break;
+          try {
+            Army army = (Army) db.getArmies().findById(id);
+            if (army == null)
+              log("Esse exercito nao existe.");
+            else if (army.getEmpireId() != empire.getId())
+              log("Esse exercito nao pertence a esse imperio.");
+            else {
+              int pontos = army.upgradeArmory(amount, empire);
+              log(pontos > 0 ? String.format("Armadura melhorada em %d ponto(s).", pontos) :
+                "Recursos insuficientes para esta melhoria.");
+            }
+          } catch (persistencia.InexistentIdException e) {
+            log("Esse exercito nao existe.");
+          }
+          break;
+        case "back":
+          return;
+      }
+    } catch (ArrayIndexOutOfBoundsException e) {
+      log("Erro: comando incompleto.");
     }
 
     armyMenu(empire, db);
@@ -456,47 +601,90 @@ public class Terminal {
     print("back", "Voltar pro menu anterior");
     String[] cmd = read();
 
-    switch (cmd[0]) {
-      case "view":
-        for (int i = db.getBattles().getSize() - 1; i >= 0; i--) {
-          Battle batalhas = (Battle) db.getBattles().findById(i);
-          String attackerName = "Army #" + batalhas.getAttacker().getId();
-          String defenderName = "Army #" + batalhas.getDefender().getId();
-          log("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
-          log("Soldados Atacantes vivos: " + batalhas.getAttackerSoldiersAlive());
-          log("Soldados Defensores vivos: " + batalhas.getDefenderSoldiersAlive());
-        }
-        break;
-      case "viewany":
-        Battle battle = (Battle) db.getBattles().findById(parseInt(cmd[1]));
-        if (battle == null) log("Batalha inexistente.");
-        else log(battle.toString());
-        break;
-      case "new":
-        Army attackerArmy = (Army) db.getArmies().findById(parseInt(cmd[1]));
-        if (attackerArmy == null || attackerArmy.getEmpireId() != empire.getId()) {
-          log("Tropa atacante invalida ou nao pertence ao seu imperio.");
-        } else {
-          Army defenderArmy = (Army) db.getArmies().findById(parseInt(cmd[2]));
-          if (defenderArmy == null || defenderArmy.getEmpireId() == empire.getId()) {
-            log("Tropa defensora invalida ou pertence ao seu imperio.");
-          } else {
-            Battle newBattle = new Battle(attackerArmy, defenderArmy, db.nextBattle());
-            db.getBattles().insert(newBattle);
-            log("Batalha iniciada!");
+    try {
+      switch (cmd[0]) {
+        case "view":
+          for (int i = db.getBattles().getSize() - 1; i >= 0; i--) {
+            try {
+              Battle batalhas = (Battle) db.getBattles().findById(i);
+              String attackerName = "Army #" + batalhas.getAttacker().getId();
+              String defenderName = "Army #" + batalhas.getDefender().getId();
+              log("\nBatalha: " + attackerName + " (Atacante) vs " + defenderName + " (Defensor)");
+              log("Soldados Atacantes vivos: " + batalhas.getAttackerSoldiersAlive());
+              log("Soldados Defensores vivos: " + batalhas.getDefenderSoldiersAlive());
+            } catch (persistencia.InexistentIdException e) {
+              log("Erro ao acessar batalha: " + e.getMessage());
+            }
           }
-        }
-        break;
-      case "destroy":
-        battle = (Battle) db.getBattles().findById(parseInt(cmd[1]));
-        if (battle == null) log("Batalha inexistente.");
-        else {
-          db.destroyEntity(battle);
-          log(battle.toString());
-        }
-        break;
-      case "back":
-        return;
+          break;
+        case "viewany":
+          if (cmd.length < 2) {
+            log("Erro: comando incompleto. Use: viewany <id>");
+            break;
+          }
+          int id = parseInt(cmd[1]);
+          if (id < 0) break;
+          try {
+            Battle battle = (Battle) db.getBattles().findById(id);
+            if (battle == null) log("Batalha inexistente.");
+            else log(battle.toString());
+          } catch (persistencia.InexistentIdException e) {
+            log("Batalha inexistente.");
+          }
+          break;
+        case "new":
+          if (cmd.length < 3) {
+            log("Erro: comando incompleto. Use: new <atk_id> <dfn_id>");
+            break;
+          }
+          int atkId = parseInt(cmd[1]);
+          int dfnId = parseInt(cmd[2]);
+          if (atkId < 0 || dfnId < 0) break;
+          try {
+            Army attackerArmy = (Army) db.getArmies().findById(atkId);
+            if (attackerArmy == null || attackerArmy.getEmpireId() != empire.getId()) {
+              log("Tropa atacante invalida ou nao pertence ao seu imperio.");
+            } else {
+              try {
+                Army defenderArmy = (Army) db.getArmies().findById(dfnId);
+                if (defenderArmy == null || defenderArmy.getEmpireId() == empire.getId()) {
+                  log("Tropa defensora invalida ou pertence ao seu imperio.");
+                } else {
+                  Battle newBattle = new Battle(attackerArmy, defenderArmy, db.nextBattle());
+                  db.getBattles().insert(newBattle);
+                  log("Batalha iniciada!");
+                }
+              } catch (persistencia.InexistentIdException e) {
+                log("Tropa defensora invalida.");
+              }
+            }
+          } catch (persistencia.InexistentIdException e) {
+            log("Tropa atacante invalida.");
+          }
+          break;
+        case "destroy":
+          if (cmd.length < 2) {
+            log("Erro: comando incompleto. Use: destroy <id>");
+            break;
+          }
+          id = parseInt(cmd[1]);
+          if (id < 0) break;
+          try {
+            Battle battle = (Battle) db.getBattles().findById(id);
+            if (battle == null) log("Batalha inexistente.");
+            else {
+              db.destroyEntity(battle);
+              log(battle.toString());
+            }
+          } catch (persistencia.InexistentIdException e) {
+            log("Batalha inexistente.");
+          }
+          break;
+        case "back":
+          return;
+      }
+    } catch (ArrayIndexOutOfBoundsException e) {
+      log("Erro: comando incompleto.");
     }
 
     warMenu(empire, db);

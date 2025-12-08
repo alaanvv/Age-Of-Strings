@@ -7,7 +7,7 @@ import persistencia.BancoDeDados;
 public class Programa {
   public static void main(String[] args) {
     BancoDeDados database = new BancoDeDados();
-    //Terminal.mainMenu(database);
+    visao.Terminal.mainMenu(database);
     //new Interface(database);
   }
 }
