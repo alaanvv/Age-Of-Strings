@@ -31,7 +31,7 @@ public class BattleMenuPanel extends AbstractEntityMenuPanel<Battle>{
 
    @Override
    protected void createCentralPanel() {
-      header = new String[]{"ID", "Atacante", "Defensor"};
+      header = new String[]{"ID Batalha", "ID Atacante", "ID Defensor"};
 
       tableModel = new DefaultTableModel(){
          @Override
@@ -42,6 +42,14 @@ public class BattleMenuPanel extends AbstractEntityMenuPanel<Battle>{
 
       tableModel.setColumnIdentifiers(header);
       battlesTable = new JTable(tableModel);
+      
+      // Centralizar valores na tabela
+      javax.swing.table.DefaultTableCellRenderer centerRenderer = new javax.swing.table.DefaultTableCellRenderer();
+      centerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+      for(int i = 0; i < header.length; i++){
+         battlesTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+      }
+      
       contentCentralPanel = new JScrollPane(battlesTable);
    }
 
@@ -61,12 +69,88 @@ public class BattleMenuPanel extends AbstractEntityMenuPanel<Battle>{
          JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
          return;
       }
-      int attackerId = auxiliar.Input.getIntDialogue(this, "ID do exército atacante");
-      int defenderId = auxiliar.Input.getIntDialogue(this, "ID do exército defensor");
+      
+      // Mostrar lista de exércitos do império atual para selecionar atacante
+      java.util.ArrayList<Army> currentEmpireArmies = new java.util.ArrayList<>();
+      for(Army a : db.getArmies().getEntidades().values()){
+         if(a.getEmpireId() == empire.getId() && !a.isBattling()){
+            currentEmpireArmies.add(a);
+         }
+      }
+      
+      if(currentEmpireArmies.isEmpty()){
+         JOptionPane.showMessageDialog(this, "Nenhum exército disponível para atacar (sem batalha).");
+         return;
+      }
+      
+      // Criar lista de opções para atacante
+      String[] attackerOptions = new String[currentEmpireArmies.size()];
+      for(int i = 0; i < currentEmpireArmies.size(); i++){
+         Army a = currentEmpireArmies.get(i);
+         attackerOptions[i] = "ID " + a.getId() + " - Soldados: " + a.getSoldiersAmount();
+      }
+      
+      String attackerChoice = (String) JOptionPane.showInputDialog(
+         this,
+         "Selecione o exército atacante:",
+         "Escolher Atacante",
+         JOptionPane.QUESTION_MESSAGE,
+         null,
+         attackerOptions,
+         attackerOptions[0]
+      );
+      
+      if(attackerChoice == null) return;
+      
+      int attackerIndex = java.util.Arrays.asList(attackerOptions).indexOf(attackerChoice);
+      Army attackerArmy = currentEmpireArmies.get(attackerIndex);
+      
+      // Mostrar lista de exércitos de outros impérios para selecionar defensor
+      java.util.ArrayList<Army> otherEmpireArmies = new java.util.ArrayList<>();
+      for(Army a : db.getArmies().getEntidades().values()){
+         if(a.getEmpireId() != empire.getId() && !a.isBattling()){
+            otherEmpireArmies.add(a);
+         }
+      }
+      
+      if(otherEmpireArmies.isEmpty()){
+         JOptionPane.showMessageDialog(this, "Nenhum exército inimigo disponível para batalha.");
+         return;
+      }
+      
+      // Criar lista de opções para defensor
+      String[] defenderOptions = new String[otherEmpireArmies.size()];
+      for(int i = 0; i < otherEmpireArmies.size(); i++){
+         Army a = otherEmpireArmies.get(i);
+         try{
+            modelo.Empire armyEmpire = db.getEmpires().findById(a.getEmpireId());
+            defenderOptions[i] = "ID " + a.getId() + " (Império: " + armyEmpire.getName() + ") - Soldados: " + a.getSoldiersAmount();
+         }catch(InexistentIdException e){
+            defenderOptions[i] = "ID " + a.getId() + " - Soldados: " + a.getSoldiersAmount();
+         }
+      }
+      
+      String defenderChoice = (String) JOptionPane.showInputDialog(
+         this,
+         "Selecione o exército defensor:",
+         "Escolher Defensor",
+         JOptionPane.QUESTION_MESSAGE,
+         null,
+         defenderOptions,
+         defenderOptions[0]
+      );
+      
+      if(defenderChoice == null) return;
+      
+      int defenderIndex = java.util.Arrays.asList(defenderOptions).indexOf(defenderChoice);
+      Army defenderArmy = otherEmpireArmies.get(defenderIndex);
+      
       try{
-         int battleId = db.createBattle(attackerId, defenderId);
+         int battleId = db.createBattle(attackerArmy.getId(), defenderArmy.getId());
          if(battleId == 0){
             JOptionPane.showMessageDialog(this, "Não foi possível criar batalha.");
+         }else{
+            JOptionPane.showMessageDialog(this, "Batalha criada com sucesso! ID: " + battleId);
          }
       }catch(InexistentIdException e){
          JOptionPane.showMessageDialog(this, e.getMessage());
@@ -121,7 +205,11 @@ public class BattleMenuPanel extends AbstractEntityMenuPanel<Battle>{
          infoLeftLabel.setText("<html><center>Nenhum império selecionado.</center></html>");
          return;
       }
-      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>Batalhas ligadas: " + tableModel.getRowCount() + "</center></html>";
+      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>" +
+         "Batalhas ligadas: " + tableModel.getRowCount() + "<p>" +
+         "<b>Informações:</b><br>" +
+         "Exércitos em batalha não podem<br>ser atacados novamente<br><br>" +
+         "Batalhas envolvem um atacante<br>e um defensor</center></html>";
       infoLeftLabel.setText(labelText);
    }
 }

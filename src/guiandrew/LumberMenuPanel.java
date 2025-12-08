@@ -29,7 +29,7 @@ public class LumberMenuPanel extends AbstractEntityMenuPanel<Lumber>{
 
    @Override
    protected void createCentralPanel() {
-      header = new String[]{"ID", "Trabalhadores", "Império"};
+      header = new String[]{"ID Lenhadores", "Trabalhadores", "ID Império"};
 
       tableModel = new DefaultTableModel(){
          @Override
@@ -40,6 +40,14 @@ public class LumberMenuPanel extends AbstractEntityMenuPanel<Lumber>{
 
       tableModel.setColumnIdentifiers(header);
       lumberTable = new JTable(tableModel);
+      
+      // Centralizar valores na tabela
+      javax.swing.table.DefaultTableCellRenderer centerRenderer = new javax.swing.table.DefaultTableCellRenderer();
+      centerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+      for(int i = 0; i < header.length; i++){
+         lumberTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+      }
+      
       contentCentralPanel = new JScrollPane(lumberTable);
    }
 
@@ -55,7 +63,62 @@ public class LumberMenuPanel extends AbstractEntityMenuPanel<Lumber>{
 
    @Override
    protected void editAction(){
-      JOptionPane.showMessageDialog(this, "Edição não disponível para lenhadores.");
+      Empire empire = gui.getViewingEmpire();
+      if(empire == null){
+         JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
+         return;
+      }
+      Lumber lumber = empire.getLumber();
+      if(lumber == null){
+         JOptionPane.showMessageDialog(this, "Campo de lenhadores não encontrado.");
+         return;
+      }
+
+      // Criar popup com botões de adicionar e remover trabalhadores
+      JPanel panel = new JPanel(new java.awt.GridLayout(2, 1, 5, 5));
+      JButton addWorkersButton = new JButton("Adicionar trabalhadores");
+      JButton removeWorkersButton = new JButton("Remover trabalhadores");
+      
+      addWorkersButton.addActionListener(e -> {
+         String amountStr = JOptionPane.showInputDialog(this, "Quantos trabalhadores adicionar?");
+         if(amountStr == null) return;
+         try{
+            int amount = Integer.parseInt(amountStr.trim());
+            if(amount <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int sent = empire.sendWorkersToLumber(amount);
+            JOptionPane.showMessageDialog(this, "Trabalhadores adicionados: " + sent);
+            updatePanel();
+            gui.empireManagementMenu.updateInfoLabel();
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+      
+      removeWorkersButton.addActionListener(e -> {
+         String amountStr = JOptionPane.showInputDialog(this, "Quantos trabalhadores remover?");
+         if(amountStr == null) return;
+         try{
+            int amount = Integer.parseInt(amountStr.trim());
+            if(amount <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int taken = empire.takeWorkersFromLumber(amount);
+            JOptionPane.showMessageDialog(this, "Trabalhadores removidos: " + taken);
+            updatePanel();
+            gui.empireManagementMenu.updateInfoLabel();
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+      
+      panel.add(addWorkersButton);
+      panel.add(removeWorkersButton);
+      
+      JOptionPane.showMessageDialog(this, panel, "Gerenciar trabalhadores - Campo de Lenhadores", JOptionPane.PLAIN_MESSAGE);
    }
 
    @Override
@@ -86,7 +149,15 @@ public class LumberMenuPanel extends AbstractEntityMenuPanel<Lumber>{
          infoLeftLabel.setText("<html><center>Nenhum império selecionado.</center></html>");
          return;
       }
-      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>Campo de lenhadores</center></html>";
+      Lumber lumber = empire.getLumber();
+      int workers = lumber != null ? lumber.getWorkers() : 0;
+      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>" +
+         "Campo de lenhadores<p>" +
+         "Trabalhadores: " + workers + "<p>" +
+         "<b>Informações:</b><br>" +
+         "Cada império possui um<br>campo de lenhadores inicial<br><br>" +
+         "Sem limite de trabalhadores<br><br>" +
+         "Produção de madeira:<br>baseada em log(trabalhadores+1)</center></html>";
       infoLeftLabel.setText(labelText);
    }
 }

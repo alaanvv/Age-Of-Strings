@@ -25,7 +25,7 @@ public class Gui extends JFrame{
    private final CardLayout cardLayout;
    private final JPanel menusPanel;
    private final EmpireMenuPanel empireMenu;
-   private final EmpireManagementMenu empireManagementMenu;
+   final EmpireManagementMenu empireManagementMenu;
       private final FarmMenuPanel farmMenu;
       private final MineMenuPanel mineMenu;
       private final ArmyMenuPanel armyMenu;
