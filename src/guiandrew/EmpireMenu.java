@@ -16,13 +16,15 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
    JTable empiresTable;
    DefaultTableModel tableModel;
    String[] header;
-   ArrayList<Empire> empireInTableRow = new ArrayList<Empire>();
+   ArrayList<Empire> empireInTableRow;
 
    // === EMPIRE BUTTONS ===
    JButton acessButton;
 
-   public EmpireMenu(BancoDeDados db, JLabel leftLabel, String panelTitle, JPanel externalCardPanel, Gui gui){
-      super(db, leftLabel, panelTitle, db.getEmpires(), externalCardPanel, gui);
+   public EmpireMenu(BancoDeDados db, persistencia.Persistente<Empire> persistency, JLabel leftLabel, String panelTitle, JPanel externalCardPanel, Gui gui){
+      super(db, leftLabel, panelTitle, persistency, externalCardPanel, gui);
+
+      empireInTableRow = new ArrayList<Empire>();
 
       // Adiciona o botão que acessa o menu do império selecionado
       acessButton = new JButton("Gerenciar império");
@@ -122,6 +124,9 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
    
    private void updateEmpireTable(){
       tableModel.setRowCount(0);
+
+      if(empireInTableRow == null) return;
+
       empireInTableRow.clear();
 
       for(Empire e: persistency.getEntidades().values()){
@@ -146,7 +151,7 @@ public class EmpireMenu extends AbstractEntityMenuPanel<modelo.Empire>{
 
    @Override
    protected void updateLeftLabel(){
-      String labelText = "Bem-vindo ao <b>Age of Strings!</b><p>Quantidade de impérios: " + db.getEmpires().getSize() + ".";
+      String labelText = "<html>Bem-vindo ao <b>Age of Strings!</b><p>Quantidade de impérios: " + db.getEmpires().getSize() + ".</html>";
       infoLeftLabel.setText(labelText);
    };
 

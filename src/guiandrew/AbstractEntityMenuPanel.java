@@ -81,7 +81,8 @@ public abstract class AbstractEntityMenuPanel<T extends modelo.Entidade> extends
       buttonsPanel.add(searchButton);
 
       // === CRIAÇÃO PAINEL SUPERIOR ===
-      topPanelMenuNameButtons = new JPanel(new BoxLayout(topPanelMenuNameButtons, BoxLayout.Y_AXIS));
+      topPanelMenuNameButtons = new JPanel();
+      topPanelMenuNameButtons.setLayout(new BoxLayout(topPanelMenuNameButtons, BoxLayout.Y_AXIS));
       
       panelTitleLabel = new JLabel(panelTitle);
       topPanelMenuNameButtons.add(panelTitleLabel);

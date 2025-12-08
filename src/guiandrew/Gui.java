@@ -34,11 +34,12 @@ public class Gui extends JFrame{
       this.db = db;
       cardLayout = new CardLayout();
       menusPanel = new JPanel(cardLayout);
-      empireMenu = new EmpireMenu(db, new JLabel("Loading..."), "Menu Império", menusPanel, this);
+      empireMenu = new EmpireMenu(db, db.getEmpires(), new JLabel("Loading..."), "Menu Império", menusPanel, this);
       empireMenu.updatePanel();
 
       // === CARD LAYOUT PREP ===
       cardLayout.addLayoutComponent(empireMenu, "empireMenu");
+      menusPanel.add(empireMenu, "empireMenu");
 
       // === WINDOW SETUP ===
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
