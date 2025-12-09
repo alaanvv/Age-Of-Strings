@@ -30,7 +30,7 @@ public class MineMenuPanel extends AbstractEntityMenuPanel<Mine>{
 
    @Override
    protected void createCentralPanel() {
-      header = new String[]{"ID", "Trabalhadores", "Império"};
+      header = new String[]{"ID Mina", "Trabalhadores", "ID Império"};
 
       tableModel = new DefaultTableModel(){
          @Override
@@ -41,6 +41,14 @@ public class MineMenuPanel extends AbstractEntityMenuPanel<Mine>{
 
       tableModel.setColumnIdentifiers(header);
       minesTable = new JTable(tableModel);
+      
+      // Centralizar valores na tabela
+      javax.swing.table.DefaultTableCellRenderer centerRenderer = new javax.swing.table.DefaultTableCellRenderer();
+      centerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+      for(int i = 0; i < header.length; i++){
+         minesTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+      }
+      
       contentCentralPanel = new JScrollPane(minesTable);
    }
 
@@ -87,7 +95,59 @@ public class MineMenuPanel extends AbstractEntityMenuPanel<Mine>{
 
    @Override
    protected void editAction(){
-      JOptionPane.showMessageDialog(this, "Edição não disponível para minas.");
+      Mine mine = getSelectedMine();
+      if(mine == null) return;
+      Empire empire = gui.getViewingEmpire();
+      if(empire == null){
+         JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
+         return;
+      }
+
+      // Criar popup com botões de adicionar e remover trabalhadores
+      JPanel panel = new JPanel(new java.awt.GridLayout(2, 1, 5, 5));
+      JButton addWorkersButton = new JButton("Adicionar trabalhadores");
+      JButton removeWorkersButton = new JButton("Remover trabalhadores");
+      
+      addWorkersButton.addActionListener(e -> {
+         String amountStr = JOptionPane.showInputDialog(this, "Quantos trabalhadores adicionar? (Máx: 20 total)");
+         if(amountStr == null) return;
+         try{
+            int amount = Integer.parseInt(amountStr.trim());
+            if(amount <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int sent = empire.sendWorkersToMine(amount, mine.getId());
+            JOptionPane.showMessageDialog(this, "Trabalhadores adicionados: " + sent);
+            updatePanel();
+            gui.empireManagementMenu.updateInfoLabel();
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+      
+      removeWorkersButton.addActionListener(e -> {
+         String amountStr = JOptionPane.showInputDialog(this, "Quantos trabalhadores remover?");
+         if(amountStr == null) return;
+         try{
+            int amount = Integer.parseInt(amountStr.trim());
+            if(amount <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int taken = empire.takeWorkersFromMine(amount, mine.getId());
+            JOptionPane.showMessageDialog(this, "Trabalhadores removidos: " + taken);
+            updatePanel();
+            gui.empireManagementMenu.updateInfoLabel();
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+      
+      panel.add(addWorkersButton);
+      panel.add(removeWorkersButton);
+      
+      JOptionPane.showMessageDialog(this, panel, "Gerenciar trabalhadores - Mina #" + mine.getId(), JOptionPane.PLAIN_MESSAGE);
    }
 
    @Override
@@ -120,7 +180,12 @@ public class MineMenuPanel extends AbstractEntityMenuPanel<Mine>{
          infoLeftLabel.setText("<html><center>Nenhum império selecionado.</center></html>");
          return;
       }
-      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>Minas: " + empire.getMines().size() + "</center></html>";
+      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>" +
+         "Minas: " + empire.getMines().size() + "<p>" +
+         "<b>Informações:</b><br>" +
+         "Custo de nova mina:<br>15 madeira, 5 ouro<br><br>" +
+         "Máx trabalhadores por mina: 20<br><br>" +
+         "Produção: ferro e ouro<br>baseada em log(trabalhadores+1)</center></html>";
       infoLeftLabel.setText(labelText);
    }
 }

@@ -30,7 +30,7 @@ public class ArmyMenuPanel extends AbstractEntityMenuPanel<Army>{
 
    @Override
    protected void createCentralPanel() {
-      header = new String[]{"ID", "Soldados", "Nível Recrutamento", "Custo", "Em batalha?"};
+      header = new String[]{"ID Exército", "Soldados", "Nível Recrutamento", "Custo", "Em batalha?"};
 
       tableModel = new DefaultTableModel(){
          @Override
@@ -41,6 +41,14 @@ public class ArmyMenuPanel extends AbstractEntityMenuPanel<Army>{
 
       tableModel.setColumnIdentifiers(header);
       armiesTable = new JTable(tableModel);
+      
+      // Centralizar valores na tabela
+      javax.swing.table.DefaultTableCellRenderer centerRenderer = new javax.swing.table.DefaultTableCellRenderer();
+      centerRenderer.setHorizontalAlignment(javax.swing.JLabel.CENTER);
+      for(int i = 0; i < header.length; i++){
+         armiesTable.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+      }
+      
       contentCentralPanel = new JScrollPane(armiesTable);
    }
 
@@ -137,7 +145,12 @@ public class ArmyMenuPanel extends AbstractEntityMenuPanel<Army>{
          infoLeftLabel.setText("<html><center>Nenhum império selecionado.</center></html>");
          return;
       }
-      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>Exércitos: " + empire.getArmies().size() + "</center></html>";
+      String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>" +
+         "Exércitos: " + empire.getArmies().size() + "<p>" +
+         "<b>Informações:</b><br>" +
+         "Custo de novo exército:<br>50 ferro, 20 ouro<br><br>" +
+         "Custo de melhoria armaria:<br>25 ferro, 5 ouro por nível<br><br>" +
+         "Soldados custam ouro por turno</center></html>";
       infoLeftLabel.setText(labelText);
    }
 }

@@ -5,6 +5,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.SwingConstants;
 
+import modelo.Lumber;
+
 public class EmpireManagementMenu extends JPanel{
    Gui gui;
 
@@ -118,7 +120,64 @@ public class EmpireManagementMenu extends JPanel{
       gui.switchToBattleMenu();
    }
    private void lumberButtonAction(){
-      gui.switchToLumberMenu();
+      modelo.Empire empire = gui.getViewingEmpire();
+      if(empire == null){
+         JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
+         return;
+      }
+      Lumber lumber = empire.getLumber();
+      if(lumber == null){
+         JOptionPane.showMessageDialog(this, "Campo de lenhadores não encontrado.");
+         return;
+      }
+
+      // Criar popup com botões de adicionar e remover trabalhadores
+      JPanel panel = new JPanel(new java.awt.GridLayout(3, 1, 5, 5));
+      JLabel infoLabel = new JLabel("<html><center>Campo de Lenhadores<br>Trabalhadores atuais: " + lumber.getWorkers() + "</center></html>");
+      JButton addWorkersButton = new JButton("Adicionar trabalhadores");
+      JButton removeWorkersButton = new JButton("Remover trabalhadores");
+      
+      addWorkersButton.addActionListener(e -> {
+         String amountStr = JOptionPane.showInputDialog(this, "Quantos trabalhadores adicionar?");
+         if(amountStr == null) return;
+         try{
+            int amount = Integer.parseInt(amountStr.trim());
+            if(amount <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int sent = empire.sendWorkersToLumber(amount);
+            JOptionPane.showMessageDialog(this, "Trabalhadores adicionados: " + sent);
+            updateInfoLabel();
+            infoLabel.setText("<html><center>Campo de Lenhadores<br>Trabalhadores atuais: " + lumber.getWorkers() + "</center></html>");
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+      
+      removeWorkersButton.addActionListener(e -> {
+         String amountStr = JOptionPane.showInputDialog(this, "Quantos trabalhadores remover?");
+         if(amountStr == null) return;
+         try{
+            int amount = Integer.parseInt(amountStr.trim());
+            if(amount <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int taken = empire.takeWorkersFromLumber(amount);
+            JOptionPane.showMessageDialog(this, "Trabalhadores removidos: " + taken);
+            updateInfoLabel();
+            infoLabel.setText("<html><center>Campo de Lenhadores<br>Trabalhadores atuais: " + lumber.getWorkers() + "</center></html>");
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+      
+      panel.add(infoLabel);
+      panel.add(addWorkersButton);
+      panel.add(removeWorkersButton);
+      
+      JOptionPane.showMessageDialog(this, panel, "Gerenciar Produção de Madeira", JOptionPane.PLAIN_MESSAGE);
    }
    private void houseButtonAction(){
       modelo.Empire empire = gui.getViewingEmpire();
