@@ -119,25 +119,33 @@ public class BancoDeDados {
 
   /** Destroy any type of Entity, removing of its respective persistency.*/
   public void destroyEntity(Entidade entity) throws RuntimeException{
-    if(entity instanceof Battle){
-      battles.remove(entity.getId());
-    } else if(entity instanceof Empire){
-      throw new RuntimeException("Objeto tipo Empire deve ser destruído em sua função apropriada (destroyEmpire).");
-    } else if(entity instanceof Lumber){
-      lumbers.remove(entity.getId());
-    } else if(entity instanceof Army){
-      armies.remove(entity.getId());
-        try {
-          Empire owner = empires.findById(((Army) entity).getEmpireId());
-          owner.getArmies().remove(entity.getId());
-        } catch (InexistentIdException ignored) {}
-    } else if(entity instanceof Farm){
-      farms.remove(entity.getId());
-    } else if(entity instanceof Mine){
-      mines.remove(entity.getId());
-    } else {
-      throw new RuntimeException("Um tipo de entidade inesperada foi recebida em destroyEntity: " + entity.getClass().getName());
+    try {
+      if(entity instanceof Battle){
+        battles.remove(entity.getId());
+      
+      } else if(entity instanceof Empire){
+        throw new RuntimeException("Objeto tipo Empire deve ser destruído em sua função apropriada (destroyEmpire).");
+      
+      } else if(entity instanceof Lumber){
+        lumbers.remove(entity.getId());
+      
+      } else if(entity instanceof Army){
+        armies.remove(entity.getId());
+            Empire owner = empires.findById(((Army) entity).getEmpireId());
+            owner.getArmies().remove(entity.getId());
+      } else if(entity instanceof Farm){
+        farms.remove(entity.getId());
+      
+      } else if(entity instanceof Mine){
+        mines.remove(entity.getId());
+      
+      } else {
+        throw new RuntimeException("Um tipo de entidade inesperada foi recebida em destroyEntity: " + entity.getClass().getName());
+      }
     }
+    catch (InexistentIdException ignored) {}
+    catch (RuntimeException e) {throw e;}
+      
   }
 
   /** Destroy a list of Entidade, removing of its respective persistency */
@@ -159,7 +167,9 @@ public class BancoDeDados {
     entities.add(empire.getLumber());
 
     destroyEntities(entities);
-    empires.remove(empire.getId());
+    try{
+      empires.remove(empire.getId());
+    } catch (InexistentIdException ignored){}
   }
 
 

@@ -32,9 +32,10 @@ public class PersistenteTest {
   @Test
   void testeInserirIdNaoExistente() throws InexistentIdException {
     assertEquals(0, persistente.getSize());
-    persistente.insert(entidade1);
+    boolean saida = persistente.insert(entidade1);
     assertEquals(1, persistente.getSize());
     assertEquals(entidade1, persistente.findById(1));
+    assertTrue(saida);
   }
 
   // um caso de teste que insere uma entidade com id já existente
@@ -45,22 +46,25 @@ public class PersistenteTest {
 
     // Nova entidade com o mesmo ID
     MockEntidade entidadeDuplicada = new MockEntidade(1);
-    persistente.insert(entidadeDuplicada);
+    boolean saida = persistente.insert(entidadeDuplicada);
 
     assertEquals(1, persistente.getSize());
-    assertEquals(entidadeDuplicada, persistente.findById(1));
+    assertEquals(entidade1, persistente.findById(1));
+    assertFalse(saida);
   }
 
   // um caso de teste que altera uma entidade com id não existente
   @Test
-  void testeAlterarIdNaoExistente() {
+  void testeAlterarIdNaoExistente() throws InexistentIdException {
     persistente.insert(entidade1);
     MockEntidade entidadeParaAlterar = new MockEntidade(99);
 
-    Boolean resultado = persistente.update(99, entidadeParaAlterar);
+    assertThrows(InexistentIdException.class, () -> {
+      persistente.update(99, entidadeParaAlterar);
+    });
 
-    assertFalse(resultado);
     assertEquals(1, persistente.getSize());
+    assertEquals(entidade1, persistente.findById(1));
   }
 
   // um caso de teste que altera uma entidade com id existente
@@ -81,14 +85,15 @@ public class PersistenteTest {
     persistente.insert(entidade1);
     assertEquals(1, persistente.getSize());
 
-    Boolean resultado = persistente.remove(99);
+    assertThrows(InexistentIdException.class, () -> {
+      persistente.remove(99);
+    });
 
-    assertFalse(resultado);
     assertEquals(1, persistente.getSize());
   }
 
   @Test
-  void testeApagarIdExistente() {
+  void testeApagarIdExistente() throws InexistentIdException {
     persistente.insert(entidade1);
     assertEquals(1, persistente.getSize());
 
