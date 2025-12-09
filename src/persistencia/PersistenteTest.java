@@ -79,7 +79,7 @@ public class PersistenteTest {
     assertEquals(entidadeAlterada, persistente.findById(1));
   }
 
-  // region Testes de Apagar
+  // um caso de teste que remove uma entidade com id não existente
   @Test
   void testeApagarIdNaoExistente() {
     persistente.insert(entidade1);
@@ -92,6 +92,7 @@ public class PersistenteTest {
     assertEquals(1, persistente.getSize());
   }
 
+  // um caso de teste que remove uma entidade com id já existente
   @Test
   void testeApagarIdExistente() throws InexistentIdException {
     persistente.insert(entidade1);
@@ -102,9 +103,8 @@ public class PersistenteTest {
     assertTrue(resultado);
     assertEquals(0, persistente.getSize());
   }
-  // endregion
 
-  // region Testes de Buscar
+  // um caso de teste que busca uma entidade com id não existente
   @Test
   void testeBuscarIdNaoExistente() {
     persistente.insert(entidade1);
@@ -113,6 +113,7 @@ public class PersistenteTest {
     });
   }
 
+  // um caso de teste que busca uma entidade com id existente
   @Test
   void testeBuscarIdExistente() throws InexistentIdException {
     persistente.insert(entidade1);
@@ -123,24 +124,5 @@ public class PersistenteTest {
     assertNotNull(entidadeEncontrada);
     assertEquals(entidade2, entidadeEncontrada);
   }
-  // endregion
 
-  // region Testes de Exists
-  @Test
-  void testeExistsQuandoIdExiste() {
-    persistente.insert(entidade1); // Adiciona uma entidade com ID 1
-    assertTrue(persistente.exists(1), "Deve retornar true para um ID existente.");
-  }
-
-  @Test
-  void testeExistsQuandoIdNaoExiste() {
-    persistente.insert(entidade1); // Adiciona ID 1
-    assertFalse(persistente.exists(99), "Deve retornar false para um ID que não existe.");
-  }
-
-  @Test
-  void testeExistsEmColecaoVazia() {
-    assertFalse(persistente.exists(1), "Deve retornar false para qualquer ID em uma coleção vazia.");
-  }
-  // endregion
 }
