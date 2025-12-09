@@ -1,13 +1,9 @@
 package guiandrew;
 
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
-//import java.awt.*;
-import java.util.ArrayList;
-
 import modelo.Empire;
-
 import persistencia.BancoDeDados;
 
 public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
@@ -74,6 +70,10 @@ public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
    @Override
    protected void addAction(){
       String name = JOptionPane.showInputDialog(this, "Nome do império:");
+
+      if (name == null) return;
+
+      if (name.equals("")) return;
 
       db.createEmpire(name);
 
