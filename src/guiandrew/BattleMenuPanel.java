@@ -31,7 +31,7 @@ public class BattleMenuPanel extends AbstractEntityMenuPanel<Battle>{
 
    @Override
    protected void createCentralPanel() {
-      header = new String[]{"ID Batalha", "ID Atacante", "ID Defensor"};
+      header = new String[]{"ID Batalha", "ID Atacante", "ID Defensor", "Soldados Atk (vivos/inicial)", "Soldados Def (vivos/inicial)", "General Atk vivo?", "General Def vivo?", "Turnos", "Vencedor"};
 
       tableModel = new DefaultTableModel(){
          @Override
@@ -194,6 +194,12 @@ public class BattleMenuPanel extends AbstractEntityMenuPanel<Battle>{
          row[0] = b.getId();
          row[1] = attacker.getId();
          row[2] = defender.getId();
+         row[3] = b.getAttackerSoldiersAlive() + "/" + b.getInitialAttackerSoldiers();
+         row[4] = b.getDefenderSoldiersAlive() + "/" + b.getInitialDefenderSoldiers();
+         row[5] = b.isAttackerGeneralAlive() ? "Sim" : "Não";
+         row[6] = b.isDefenderGeneralAlive() ? "Sim" : "Não";
+         row[7] = b.getTurnCount();
+         row[8] = b.getWinner() == 1 ? "Atacante" : (b.getWinner() == -1 ? "Defensor" : "Em andamento");
          tableModel.addRow(row);
       }
    }
@@ -208,8 +214,11 @@ public class BattleMenuPanel extends AbstractEntityMenuPanel<Battle>{
       String labelText = "<html><center>Império: <b>" + empire.getName() + "</b><p>" +
          "Batalhas ligadas: " + tableModel.getRowCount() + "<p>" +
          "<b>Informações:</b><br>" +
-         "Exércitos em batalha não podem<br>ser atacados novamente<br><br>" +
-         "Batalhas envolvem um atacante<br>e um defensor</center></html>";
+         "Exércitos em batalha não podem<br>ser atacados novamente<br>" +
+         "Exército derrotado é destruído.<br>" +
+         "General vivo influencia moral.<br>" +
+         "Turnos simulados até o fim." +
+         "</center></html>";
       infoLeftLabel.setText(labelText);
    }
 }

@@ -24,6 +24,6 @@ public class InfoLabel extends JLabel{
       setMaximumSize(new Dimension(WIDTH, Integer.MAX_VALUE)); // permite crescer
       setHorizontalAlignment(SwingConstants.CENTER);
       setVerticalAlignment(SwingConstants.CENTER);
-      setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+      setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 5));
    }
 }

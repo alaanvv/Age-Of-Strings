@@ -29,6 +29,14 @@ public class Army extends Entidade implements WorkpostInterface{
     return inBattle;
   }
 
+  public void setInBattle(boolean inBattle) {
+    this.inBattle = inBattle;
+  }
+
+  public void setCurrentBattle(Battle battle) {
+    this.currentBattle = battle;
+  }
+
   public int getWorkers() {
     return soldiersAmount;
   }
@@ -206,7 +214,7 @@ public class Army extends Entidade implements WorkpostInterface{
       else return false;
     }
 
-    protected void receiveDamage(int damage) {
+    protected void receiveDamage(int damage) throws IllegalArgumentException{
       if (damage < 0) {
         throw new IllegalArgumentException("It's not possible to receive negative damage.");
       }

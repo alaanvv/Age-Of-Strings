@@ -20,6 +20,7 @@ public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
 
    // === EMPIRE BUTTONS ===
    JButton acessButton;
+   JButton runTurnButton;
 
    public EmpireMenuPanel(BancoDeDados db, persistencia.Persistente<Empire> persistency, JPanel externalCardPanel, Gui gui){
       super(db, "Menu Império", persistency, externalCardPanel, gui);
@@ -30,6 +31,10 @@ public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
       acessButton = new JButton("Gerenciar Império");
       acessButton.addActionListener(e -> {acessAction();});
       buttonsPanel.add(acessButton);
+
+      runTurnButton = new JButton("Rodar Turno");
+      runTurnButton.addActionListener(e -> runTurnAction());
+      buttonsPanel.add(runTurnButton);
 
    }
 
@@ -69,13 +74,66 @@ public class EmpireMenuPanel extends AbstractEntityMenuPanel<modelo.Empire>{
       return empireInTableRow.get(selected);
    }
 
+   private void runTurnAction(){
+      StringBuilder log = new StringBuilder();
+
+      // Recursos/população
+      for(Empire e : db.getEmpires().getEntidades().values()){
+         String result = e.runTurn();
+         if(!result.isEmpty()) log.append(result);
+      }
+
+      // Batalhas: roda um turno para cada e aplica vencedor
+      java.util.List<modelo.Battle> battlesSnapshot = new java.util.ArrayList<>(db.getBattles().getEntidades().values());
+      for(modelo.Battle b : battlesSnapshot){
+         int res = b.processTurn(db);
+         if(res != 0){
+            // Gera relatório detalhado
+            modelo.Army winnerArmy = res == 1 ? b.getAttacker() : b.getDefender();
+            modelo.Army loserArmy = res == 1 ? b.getDefender() : b.getAttacker();
+            String winnerSide = res == 1 ? "Atacante" : "Defensor";
+            
+            try{
+               modelo.Empire winnerEmpire = db.getEmpires().findById(winnerArmy.getEmpireId());
+               modelo.Empire loserEmpire = db.getEmpires().findById(loserArmy.getEmpireId());
+               
+               log.append(String.format("%n===== BATALHA #%d CONCLUÍDA =====%n", b.getId()));
+               log.append(String.format("Vencedor: %s (Exército #%d do Império %s)%n", 
+                  winnerSide, winnerArmy.getId(), winnerEmpire.getName()));
+               log.append(String.format("Perdedor: Exército #%d do Império %s (DESTRUÍDO)%n", 
+                  loserArmy.getId(), loserEmpire.getName()));
+               log.append(String.format("Soldados vencedores sobreviventes: %d de %d iniciais%n", 
+                  res == 1 ? b.getAttackerSoldiersAlive() : b.getDefenderSoldiersAlive(),
+                  res == 1 ? b.getInitialAttackerSoldiers() : b.getInitialDefenderSoldiers()));
+               log.append(String.format("Turnos de batalha: %d%n", b.getTurnCount()));
+               log.append("============================\n\n");
+            }catch(persistencia.InexistentIdException ignored){
+               log.append(String.format("Batalha #%d terminou. Vencedor: %s.%n", b.getId(), winnerSide));
+            }
+            
+            db.destroyEntity(b);
+         }
+      }
+
+      updatePanel();
+      if(log.length() > 0){
+         JOptionPane.showMessageDialog(this, log.toString());
+      } else {
+         JOptionPane.showMessageDialog(this, "Turno concluído.");
+      }
+   }
+
    // === BUTTONS ACTIONS ===
 
    @Override
    protected void addAction(){
       String name = JOptionPane.showInputDialog(this, "Nome do império:");
+      
+      if(name == null || name.trim().isEmpty()){
+         return;
+      }
 
-      db.createEmpire(name);
+      db.createEmpire(name.trim());
 
       JOptionPane.showMessageDialog(this, "Império criado com sucesso!");
       updatePanel();

@@ -65,6 +65,10 @@ public class BancoDeDados {
       attackerArmy = (Army)armies.findById(attackerId);
       defenderArmy = (Army)armies.findById(defenderId);
       battle = new Battle(attackerArmy, defenderArmy, this.nextBattle());
+      attackerArmy.setInBattle(true);
+      defenderArmy.setInBattle(true);
+      attackerArmy.setCurrentBattle(battle);
+      defenderArmy.setCurrentBattle(battle);
       
     } catch(InexistentIdException e){
       if (attackerArmy == null){
@@ -123,6 +127,10 @@ public class BancoDeDados {
       lumbers.remove(entity.getId());
     } else if(entity instanceof Army){
       armies.remove(entity.getId());
+        try {
+          Empire owner = empires.findById(((Army) entity).getEmpireId());
+          owner.getArmies().remove(entity.getId());
+        } catch (InexistentIdException ignored) {}
     } else if(entity instanceof Farm){
       farms.remove(entity.getId());
     } else if(entity instanceof Mine){

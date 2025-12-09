@@ -30,7 +30,7 @@ public class MineMenuPanel extends AbstractEntityMenuPanel<Mine>{
 
    @Override
    protected void createCentralPanel() {
-      header = new String[]{"ID Mina", "Trabalhadores", "ID Império"};
+      header = new String[]{"ID Mina", "Trabalhadores", "Ferro (extraído/total)", "Ouro (extraído/total)", "ID Império"};
 
       tableModel = new DefaultTableModel(){
          @Override
@@ -168,7 +168,9 @@ public class MineMenuPanel extends AbstractEntityMenuPanel<Mine>{
          minesInTableRow.add(m);
          row[0] = m.getId();
          row[1] = m.getWorkers();
-         row[2] = m.getEmpireId();
+         row[2] = m.getExtractedIron() + "/" + m.getInitialIron();
+         row[3] = m.getExtractedGold() + "/" + m.getInitialGold();
+         row[4] = m.getEmpireId();
          tableModel.addRow(row);
       }
    }
@@ -184,8 +186,10 @@ public class MineMenuPanel extends AbstractEntityMenuPanel<Mine>{
          "Minas: " + empire.getMines().size() + "<p>" +
          "<b>Informações:</b><br>" +
          "Custo de nova mina:<br>15 madeira, 5 ouro<br><br>" +
-         "Máx trabalhadores por mina: 20<br><br>" +
-         "Produção: ferro e ouro<br>baseada em log(trabalhadores+1)</center></html>";
+         "Máx trabalhadores por mina: 20<br>" +
+         "Produção/turno: ~log(trab+1)* (ferro x3, ouro x2)<br>" +
+         "Total extraível mostrado na tabela (ferro/ouro)." +
+         "</center></html>";
       infoLeftLabel.setText(labelText);
    }
 }

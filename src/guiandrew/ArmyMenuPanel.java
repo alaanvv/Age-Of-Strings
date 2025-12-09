@@ -97,20 +97,73 @@ public class ArmyMenuPanel extends AbstractEntityMenuPanel<Army>{
    protected void editAction(){
       Army army = getSelectedArmy();
       if(army == null) return;
-      String pointsStr = JOptionPane.showInputDialog(this, "Quantos pontos adicionar na armaria?");
-      if(pointsStr == null) return;
-      try{
-         int points = Integer.parseInt(pointsStr.trim());
-         if(points <= 0){
-            JOptionPane.showMessageDialog(this, "Insira um número positivo.");
-            return;
-         }
-         int added = army.upgradeArmory(points, gui.getViewingEmpire());
-         JOptionPane.showMessageDialog(this, "Pontos adicionados: " + added);
-      }catch(NumberFormatException e){
-         JOptionPane.showMessageDialog(this, "Entrada inválida.");
+      Empire empire = gui.getViewingEmpire();
+      if(empire == null){
+         JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
+         return;
       }
-      updatePanel();
+
+      JPanel panel = new JPanel(new java.awt.GridLayout(3, 1, 5, 5));
+      JButton upgradeArmory = new JButton("Aumentar armoria");
+      JButton addWorkersButton = new JButton("Adicionar soldados");
+      JButton removeWorkersButton = new JButton("Remover soldados");
+
+      upgradeArmory.addActionListener(e -> {
+         String pointsStr = JOptionPane.showInputDialog(this, "Quantos pontos adicionar na armoria?");
+         if(pointsStr == null) return;
+         try{
+            int points = Integer.parseInt(pointsStr.trim());
+            if(points <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int added = army.upgradeArmory(points, empire);
+            JOptionPane.showMessageDialog(this, "Pontos adicionados: " + added);
+            updatePanel();
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+
+      addWorkersButton.addActionListener(e -> {
+         String amountStr = JOptionPane.showInputDialog(this, "Quantos soldados adicionar?");
+         if(amountStr == null) return;
+         try{
+            int amount = Integer.parseInt(amountStr.trim());
+            if(amount <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int sent = empire.sendWorkersToArmy(amount, army.getId());
+            JOptionPane.showMessageDialog(this, "Soldados adicionados: " + sent);
+            updatePanel();
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+
+      removeWorkersButton.addActionListener(e -> {
+         String amountStr = JOptionPane.showInputDialog(this, "Quantos soldados remover?");
+         if(amountStr == null) return;
+         try{
+            int amount = Integer.parseInt(amountStr.trim());
+            if(amount <= 0){
+               JOptionPane.showMessageDialog(this, "Insira um número positivo.");
+               return;
+            }
+            int taken = empire.takeWorkersFromArmy(amount, army.getId());
+            JOptionPane.showMessageDialog(this, "Soldados removidos: " + taken);
+            updatePanel();
+         }catch(NumberFormatException ex){
+            JOptionPane.showMessageDialog(this, "Entrada inválida.");
+         }
+      });
+
+      panel.add(upgradeArmory);
+      panel.add(addWorkersButton);
+      panel.add(removeWorkersButton);
+
+      JOptionPane.showMessageDialog(this, panel, "Gerenciar Exército #" + army.getId(), JOptionPane.PLAIN_MESSAGE);
    }
 
    @Override

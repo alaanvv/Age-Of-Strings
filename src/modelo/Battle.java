@@ -10,6 +10,11 @@ import java.util.PriorityQueue;
 public class Battle extends Entidade {
   private Army attacker, defender;
 
+  private final int initialAttackerSoldiers;
+  private final int initialDefenderSoldiers;
+  private int turnCount = 0;
+   private int winner = 0; // 1 attacker, -1 defender, 0 ongoing
+
   private Army.General attackerGeneral;
   private Army.General defenderGeneral;
 
@@ -42,7 +47,17 @@ public class Battle extends Entidade {
       defenderSoldiers.add(defender.new Soldier(defenderGeneral));
     }
     defenderSoldiersAlive = defenderSoldiers.size();
+
+    initialAttackerSoldiers = attackerSoldiersAlive;
+    initialDefenderSoldiers = defenderSoldiersAlive;
   }
+
+  public int getTurnCount() { return turnCount; }
+  public boolean isAttackerGeneralAlive() { return !attackerGeneral.isDead(); }
+  public boolean isDefenderGeneralAlive() { return !defenderGeneral.isDead(); }
+  public int getInitialAttackerSoldiers() { return initialAttackerSoldiers; }
+  public int getInitialDefenderSoldiers() { return initialDefenderSoldiers; }
+  public int getWinner() { return winner; }
 
   public Army getAttacker() {
     return attacker;
@@ -102,11 +117,48 @@ public class Battle extends Entidade {
 
       //If someone won (last soldier of an army killed), return the winner (attacker 1, defender -1);
       if (battleStatus != 0) {
-        return battleStatus;
+          winner = battleStatus;
+          turnCount++;
+          return battleStatus;
       }
     }
+    turnCount++;
     return 0;
   }
+
+    /**Executa um turno de batalha; se houver vencedor aplica efeitos e retorna o resultado.*/
+    public int processTurn(persistencia.BancoDeDados db){
+      if(winner != 0) return winner;
+      int result = simulateRound();
+      if(result != 0){
+        applyWinner(db, result);
+      }
+      return winner;
+    }
+
+    private void applyWinner(persistencia.BancoDeDados db, int result){
+      winner = result;
+      Army winnerArmy = (winner == 1) ? attacker : defender;
+      Army loserArmy = (winner == 1) ? defender : attacker;
+      
+      // Atualiza população do vencedor: 70% das perdas viraram mortes, 30% só feridos
+      int initialSoldiers = (winner == 1) ? initialAttackerSoldiers : initialDefenderSoldiers;
+      int survivingSoldiers = (winner == 1) ? attackerSoldiersAlive : defenderSoldiersAlive;
+      int casualties = initialSoldiers - survivingSoldiers;
+      int deaths = (int)(casualties * 0.7);
+      
+      // Remove mortos do exército vencedor
+      if(deaths > 0){
+        int currentSoldiers = winnerArmy.getSoldiersAmount();
+        int newSoldiers = Math.max(1, currentSoldiers - deaths); // Mínimo 1 sobrevivente
+        winnerArmy.takeWorkers(currentSoldiers - newSoldiers);
+      }
+
+      winnerArmy.setInBattle(false);
+      winnerArmy.setCurrentBattle(null);
+
+      db.destroyEntity(loserArmy);
+    }
 
   private void populateQueue(PriorityQueue < TurnOrder > next) {
     attackerSoldiersAlive = 0;

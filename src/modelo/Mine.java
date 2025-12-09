@@ -8,6 +8,8 @@ package modelo;
 public class Mine extends Entidade implements WorkpostInterface{
   private int iron;
   private int gold;
+  private final int initialIron;
+  private final int initialGold;
   private int workers = 0;
   private final Empire empire;
 
@@ -17,13 +19,22 @@ public class Mine extends Entidade implements WorkpostInterface{
   public Mine(int id, Empire empire) {
     super(id);
     this.empire = empire;
-    iron = (int)(Math.random() * 250);
-    gold = (int)(Math.random() * 100);
+    initialIron = (int)(Math.random() * 250);
+    initialGold = (int)(Math.random() * 100);
+    iron = initialIron;
+    gold = initialGold;
   }
 
   public int getWorkers() {
     return workers;
   }
+
+  public int getRemainingIron() { return iron; }
+  public int getRemainingGold() { return gold; }
+  public int getInitialIron() { return initialIron; }
+  public int getInitialGold() { return initialGold; }
+  public int getExtractedIron() { return initialIron - iron; }
+  public int getExtractedGold() { return initialGold - gold; }
 
   // Retorna quantos trabalhadores entraram
   public int sendWorkers(int amount) {
