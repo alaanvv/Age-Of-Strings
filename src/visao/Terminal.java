@@ -503,7 +503,12 @@ public class Terminal {
           try {
             Army army = (Army) db.getArmies().findById(id);
             if (army == null) log("Exercito inexistente.");
-            else {
+            else if (army.isBattling()) {
+              log("Nao e possivel remover um exercito em batalha.");
+            } else {
+              // Devolve os trabalhadores para a população antes de remover
+              empire.takeWorkersFromArmy(army.getWorkers(), army.getId());
+              empire.getArmies().remove(army.getId());
               db.destroyEntity(army);
               log(army.toString());
             }
@@ -673,6 +678,17 @@ public class Terminal {
             Battle battle = (Battle) db.getBattles().findById(id);
             if (battle == null) log("Batalha inexistente.");
             else {
+              // Libera os exércitos participantes antes de remover a batalha
+              Army attackerArmy = battle.getAttacker();
+              Army defenderArmy = battle.getDefender();
+              if(attackerArmy != null){
+                attackerArmy.setInBattle(false);
+                attackerArmy.setCurrentBattle(null);
+              }
+              if(defenderArmy != null){
+                defenderArmy.setInBattle(false);
+                defenderArmy.setCurrentBattle(null);
+              }
               db.destroyEntity(battle);
               log(battle.toString());
             }

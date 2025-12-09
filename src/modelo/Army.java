@@ -105,6 +105,10 @@ public class Army extends Entidade implements WorkpostInterface{
     return empire.getId();
   }
 
+  public Empire getEmpire() {
+    return empire;
+  }
+
   public int getSoldiersAmount() {
     return soldiersAmount;
   }

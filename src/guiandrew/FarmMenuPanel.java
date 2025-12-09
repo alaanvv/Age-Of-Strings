@@ -88,6 +88,8 @@ public class FarmMenuPanel extends AbstractEntityMenuPanel<Farm>{
          JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
          return;
       }
+      // Devolve os trabalhadores para a população antes de remover
+      empire.takeWorkersFromFarm(removingFarm.getWorkers(), removingFarm.getId());
       empire.getFarms().remove(removingFarm.getId());
       db.destroyEntity(removingFarm);
       updatePanel();

@@ -7,6 +7,11 @@ made for a university project.
 
 Run `sh run.sh` ou cd into **src**, compile and run **Programa**
 
+## Membros
+Alan do Vale
+Andrew Farias
+Cristopher Resende
+Miguel do Carmo
 ---
 
 A simulação vai funcionar por turnos  

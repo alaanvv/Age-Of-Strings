@@ -157,6 +157,18 @@ public class Battle extends Entidade {
       winnerArmy.setInBattle(false);
       winnerArmy.setCurrentBattle(null);
 
+      // Devolve os trabalhadores sobreviventes do exército perdedor para a população
+      Empire loserEmpire = loserArmy.getEmpire();
+      int loserSurvivors = loserArmy.getSoldiersAmount();
+      loserArmy.takeWorkers(loserSurvivors);
+      loserEmpire.addPopulation(loserSurvivors);
+      loserEmpire.setWorkers(loserEmpire.getWorkers() - loserSurvivors);
+      
+      // Remove o exército perdedor do mapa do império
+      loserEmpire.getArmies().remove(loserArmy.getId());
+      loserArmy.setInBattle(false);
+      loserArmy.setCurrentBattle(null);
+
       db.destroyEntity(loserArmy);
     }
 

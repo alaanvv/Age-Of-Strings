@@ -88,6 +88,8 @@ public class MineMenuPanel extends AbstractEntityMenuPanel<Mine>{
          JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
          return;
       }
+      // Devolve os trabalhadores para a população antes de remover
+      empire.takeWorkersFromMine(removingMine.getWorkers(), removingMine.getId());
       empire.getMines().remove(removingMine.getId());
       db.destroyEntity(removingMine);
       updatePanel();

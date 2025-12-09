@@ -162,6 +162,17 @@ public class BattleMenuPanel extends AbstractEntityMenuPanel<Battle>{
    protected void removeAction(){
       Battle removingBattle = getSelectedBattle();
       if(removingBattle == null) return;
+      // Libera os exércitos participantes antes de remover a batalha
+      Army attacker = removingBattle.getAttacker();
+      Army defender = removingBattle.getDefender();
+      if(attacker != null){
+         attacker.setInBattle(false);
+         attacker.setCurrentBattle(null);
+      }
+      if(defender != null){
+         defender.setInBattle(false);
+         defender.setCurrentBattle(null);
+      }
       db.destroyEntity(removingBattle);
       updatePanel();
    }

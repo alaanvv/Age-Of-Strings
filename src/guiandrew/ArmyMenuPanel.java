@@ -88,6 +88,13 @@ public class ArmyMenuPanel extends AbstractEntityMenuPanel<Army>{
          JOptionPane.showMessageDialog(this, "Nenhum império selecionado.");
          return;
       }
+      // Impede remoção de exército em batalha
+      if(removingArmy.isBattling()){
+         JOptionPane.showMessageDialog(this, "Não é possível remover um exército em batalha.");
+         return;
+      }
+      // Devolve os trabalhadores para a população antes de remover
+      empire.takeWorkersFromArmy(removingArmy.getWorkers(), removingArmy.getId());
       empire.getArmies().remove(removingArmy.getId());
       db.destroyEntity(removingArmy);
       updatePanel();
